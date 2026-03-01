@@ -30,64 +30,6 @@ The export includes ready-to-use prompts designed to guide your coding agent thr
    - Product requirements that need clarification
    - Anything else needed before implementing
 5. Let the agent plan and implement everything
-
-### For Incremental Implementation
-
-Work through the instructions in order:
-
-1. **Shell** (`instructions/incremental/01-shell.md`) — Design tokens and application shell
-2. **Sections** (`instructions/incremental/02-*.md`, `03-*.md`, etc.) — Each feature, one at a time
-
-For each milestone:
-
-1. Open `product-plan/prompts/section-prompt.md`
-2. Fill in the section variables at the top:
-   - `SECTION_NAME` — Human-readable name (e.g., "Invoices")
-   - `SECTION_ID` — Folder name (e.g., "invoices")
-   - `NN` — Milestone number (e.g., "02" for first section)
-3. Add any section-specific notes
-4. Copy/paste the prompt into your coding agent
-5. Answer clarifying questions and let the agent implement
-6. Review and test before moving to the next milestone
-
-<Note>
-The prompts guide your agent to review all provided files and ask the right questions before starting. Don't skip this step—it prevents wasted work from misunderstandings.
-</Note>
-
-## Test-Driven Development
-
-Each section includes a `tests.md` file with detailed test-writing instructions. We recommend a TDD approach:
-
-1. **Read the test instructions** — Review `sections/[section-id]/tests.md`
-2. **Write failing tests** — Based on the user flows and assertions described
-3. **Implement the feature** — Make the tests pass
-4. **Refactor** — Clean up while keeping tests green
-
-### What's in tests.md
-
-The test instructions include:
-
-<Accordion title="User Flow Tests">
-**Success and failure paths** for key interactions:
-
-- Setup and preconditions
-- Step-by-step actions the user takes
-- Expected results with specific assertions
-- Validation errors and edge cases
-
-**Example:**
-```
-Flow: Create a New Invoice
-
-1. User clicks 'New Invoice' button
-2. User fills in client name and items
-3. User clicks 'Create' to save
-4. Expected: Invoice appears in the list
-
-Failure Path: Missing required field
-- User leaves client name empty
-- User clicks 'Create'
-- Expected: Error message 'Client name is required'
 ```
 </Accordion>
 
@@ -99,7 +41,7 @@ Failure Path: Missing required field
 - Transitions from empty to populated and back
 
 **Example:**
-```
+```bash
 Scenario: User has no invoices yet
 
 Setup:
@@ -110,7 +52,7 @@ Expected Results:
 - Shows text 'Create your first invoice to get started'
 - Shows button 'Create Invoice'
 - Clicking button opens the create form
-```
+```bash
 </Accordion>
 
 <Accordion title="Component Interaction Tests">
@@ -121,7 +63,7 @@ Expected Results:
 - Edge cases (long text, many items, etc.)
 
 **Example:**
-```
+```bash
 InvoiceRow Component
 
 Renders correctly:
@@ -132,13 +74,13 @@ Renders correctly:
 User interactions:
 - Clicking 'Edit' button calls onEdit with invoice id
 - Hovering row shows action buttons
-```
+```bash
 </Accordion>
 
 <Accordion title="Sample Test Data">
 **Ready-to-use test fixtures:**
 
-```typescript
+```javascript
 // Populated state
 const mockInvoice = {
   id: "test-1",
@@ -234,7 +176,7 @@ Components accept data and fire callbacks via props:
   onDelete={(id) => confirmDelete(id)}
   onCreate={() => navigate('/invoices/new')}
 />
-```
+```bash
 
 How you fulfill those contracts is an implementation decision. The components don't care about:
 

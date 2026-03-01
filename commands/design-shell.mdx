@@ -9,9 +9,9 @@ Designs the application shell - the persistent navigation and layout that wraps 
 
 ## Syntax
 
-```
+```bash
 /design-shell
-```
+```bash
 
 ## What It Does
 
@@ -117,7 +117,7 @@ Creates:
 
 Main wrapper component:
 
-```tsx
+```typescript
 interface AppShellProps {
   children: React.ReactNode
   navigationItems: Array<{
@@ -132,7 +132,7 @@ interface AppShellProps {
   onNavigate?: (href: string) => void
   onLogout?: () => void
 }
-```
+```bash
 
 ### MainNav.tsx
 
@@ -156,7 +156,7 @@ User menu with avatar and dropdown.
 
 ## Example Session
 
-```
+```bash
 User: /design-shell
 
 Assistant: I'm designing the shell for **InvoiceHub**. Based on your 
@@ -209,7 +209,7 @@ Assistant: I've designed the application shell for **InvoiceHub**.
 - `src/shell/ShellPreview.tsx`
 
 **Important:** Restart your dev server to see the changes.
-```
+```bash
 
 ## Shell Specification Format
 
@@ -238,7 +238,7 @@ The generated `spec.md`:
 
 ## Design Notes
 [Additional design decisions]
-```
+```bash
 
 ## How Shell Integrates
 

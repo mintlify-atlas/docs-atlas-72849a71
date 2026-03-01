@@ -9,9 +9,9 @@ Defines the specification for a section of your product through a conversational
 
 ## Syntax
 
-```
+```bash
 /shape-section
-```
+```bash
 
 ## What It Does
 
@@ -90,7 +90,7 @@ The generated `spec.md`:
 
 ## Configuration
 - shell: [true/false]
-```
+```bash
 
 <Accordion title="Configuration Options">
 - `shell: true` - Section displays inside app shell (default)
@@ -119,7 +119,7 @@ Every data.json includes a `_meta` section:
     // Sample records...
   ]
 }
-```
+```bash
 
 ### Sample Data Characteristics
 
@@ -155,13 +155,13 @@ export interface LineItem {
   quantity: number
   rate: number
 }
-```
+```bash
 
 ### Component Props Interface
 
 Includes data and callbacks:
 
-```typescript
+```tsx
 export interface InvoiceListProps {
   /** The list of invoices to display */
   invoices: Invoice[]
@@ -174,7 +174,7 @@ export interface InvoiceListProps {
   /** Called when user wants to create a new invoice */
   onCreate?: () => void
 }
-```
+```bash
 
 <Accordion title="Type Generation Rules">
 - PascalCase for interface names: `Invoice`, `LineItem`
@@ -186,7 +186,7 @@ export interface InvoiceListProps {
 
 ## Example Session
 
-```
+```bash
 User: /shape-section
 
 Assistant: Which section would you like to define?
@@ -221,7 +221,7 @@ Assistant: I've created the following for **Invoices**:
 Sample data includes: invoices (8), lineItems
 
 Review these files and let me know if you'd like adjustments.
-```
+```bash
 
 ## Global Data Shape Integration
 

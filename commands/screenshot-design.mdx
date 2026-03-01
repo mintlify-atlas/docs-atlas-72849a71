@@ -9,9 +9,9 @@ Captures screenshots of screen designs for documentation purposes. Screenshots a
 
 ## Syntax
 
-```
+```bash
 /screenshot-design
-```
+```bash
 
 ## What It Does
 
@@ -36,7 +36,7 @@ If prompted, run:
 
 ```bash
 claude mcp add playwright npx @playwright/mcp@latest
-```
+```bash
 
 Then restart your Claude Code session and run `/screenshot-design` again.
 
@@ -90,15 +90,15 @@ Screenshots are named:
 
 Design OS serves screen designs at:
 
-```
+```bash
 http://localhost:3000/sections/[section-id]/screen-designs/[screen-design-name]
-```
+```bash
 
 The command constructs this URL automatically.
 
 ## Example Session
 
-```
+```bash
 User: /screenshot-design
 
 Assistant: Which screen design would you like to screenshot?
@@ -127,7 +127,7 @@ For example:
 - Different states (empty, loading, etc.)
 
 User: No, that's all
-```
+```bash
 
 ## Multiple Screenshots
 
@@ -182,15 +182,15 @@ To capture mobile viewport:
 
 If you see:
 
-```
+```bash
 To capture screenshots, I need the Playwright MCP server installed.
-```
+```bash
 
 Run:
 
 ```bash
 claude mcp add playwright npx @playwright/mcp@latest
-```
+```bash
 
 Then restart Claude Code.
 

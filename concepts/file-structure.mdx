@@ -9,18 +9,18 @@ Design OS uses a well-organized directory structure that separates product plann
 
 Here's the complete directory structure of a Design OS project:
 
-```
+```plaintext
 project-root/
 ├── product/                           # Product definition (portable)
 ├── src/                               # Screen design components
 └── product-plan/                      # Export package (generated)
-```
+```plaintext
 
 ## The `product/` Directory
 
 This directory contains all your product planning files. These files are **portable**—they define your product independently of any code.
 
-```
+```plaintext
 product/
 ├── product-overview.md            # Product description, problems/solutions, features
 ├── product-roadmap.md             # List of sections with titles and descriptions
@@ -41,7 +41,7 @@ product/
         ├── data.json              # Sample data for screen designs
         ├── types.ts               # TypeScript interfaces
         └── *.png                  # Screenshots
-```
+```plaintext
 
 ### Key Files in `product/`
 
@@ -120,7 +120,7 @@ product/
 
 This directory contains all React components for your screen designs. These components use your design tokens and sample data to create realistic previews.
 
-```
+```plaintext
 src/
 ├── shell/                         # Shell design components
 │   ├── components/
@@ -136,7 +136,7 @@ src/
         │   ├── [Component].tsx
         │   └── index.ts
         └── [ViewName].tsx         # Preview wrapper
-```
+```plaintext
 
 ### Component Organization
 
@@ -171,7 +171,7 @@ src/
 
 This directory is generated when you run `/export-product`. It contains your complete handoff package for implementation.
 
-```
+```plaintext
 product-plan/                      # Export package (generated)
 ├── README.md                      # Quick start guide
 ├── product-overview.md            # Product summary
@@ -187,7 +187,7 @@ product-plan/                      # Export package (generated)
 ├── data-shapes/                   # UI data contracts (types components expect)
 ├── shell/                         # Shell components
 └── sections/                      # Section components (with tests.md each)
-```
+```plaintext
 
 ### What's in the Export
 

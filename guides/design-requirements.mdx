@@ -46,12 +46,12 @@ Avoid writing custom CSS. Stick to Tailwind's built-in utility classes.
   border-radius: 12px;
   padding: 24px;
 }
-```
+```bash
 
 **Good - Tailwind utilities:**
 ```tsx
 <div className="bg-gradient-to-r from-red-500 to-blue-500 rounded-xl p-6">
-```
+```bash
 
 </Accordion>
 
@@ -70,7 +70,7 @@ Do not define custom colors. Use Tailwind's built-in color palette.
 
 // Neutral color example (using stone)
 <div className="bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100">
-```
+```bash
 
 <Tip>
 When design tokens are defined, use the chosen palettes. For example, if primary is "lime", use `lime-500`, `lime-600`, etc.
@@ -102,7 +102,7 @@ Start with mobile layout (base classes), then add larger screen variants:
   lg:grid-cols-3     /* Desktop: 3 columns */
   gap-4
 ">
-```
+```bash
 
 ### Common Responsive Patterns
 
@@ -247,27 +247,27 @@ export function ProjectCard({ project }: { project: Project }) {
 **Neutral backgrounds:**
 ```tsx
 className="bg-stone-50 dark:bg-stone-950"
-```
+```bash
 
 **Card backgrounds:**
 ```tsx
 className="bg-white dark:bg-stone-900"
-```
+```bash
 
 **Primary text:**
 ```tsx
 className="text-stone-900 dark:text-stone-100"
-```
+```bash
 
 **Secondary text:**
 ```tsx
 className="text-stone-600 dark:text-stone-400"
-```
+```bash
 
 **Borders:**
 ```tsx
 className="border-stone-200 dark:border-stone-800"
-```
+```bash
 
 ### Testing Dark Mode
 
@@ -280,7 +280,7 @@ className="border-stone-200 dark:border-stone-800"
 Do not forget interactive states like hover, focus, and active. They need dark variants too:
 ```tsx
 className="hover:bg-gray-100 dark:hover:bg-gray-800"
-```
+```bash
 </Warning>
 
 ## Design Tokens
@@ -306,7 +306,7 @@ Design tokens define three color palettes:
 
 {/* Neutral backgrounds */}
 <div className="bg-stone-100 dark:bg-stone-900">
-```
+```bash
 
 ### Typography
 
@@ -324,7 +324,7 @@ These are applied via CSS custom properties:
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }
-```
+```bash
 
 Tailwind classes use these automatically:
 
@@ -332,7 +332,7 @@ Tailwind classes use these automatically:
 <h1 className="font-sans">  {/* Uses --font-heading */}
 <p className="font-sans">   {/* Uses --font-body */}
 <code className="font-mono"> {/* Uses --font-mono */}
-```
+```bash
 
 <Note>
 **Design OS UI vs. Product Design:**
@@ -364,7 +364,7 @@ export function ProjectList() {
     </div>
   )
 }
-```
+```bash
 
 **Good - Accepts data via props:**
 ```tsx
@@ -389,7 +389,7 @@ export function ProjectList({ projects, onSelectProject }: ProjectListProps) {
     </div>
   )
 }
-```
+```bash
 
 </Accordion>
 
@@ -424,7 +424,7 @@ export function ProjectCard({ project, onEdit, onDelete, onView }: ProjectCardPr
     </div>
   )
 }
-```
+```bash
 
 ### Preview Wrappers
 
@@ -447,7 +447,7 @@ export function ProjectsView() {
     />
   )
 }
-```
+```bash
 
 ## No Navigation in Section Screens
 
@@ -575,7 +575,7 @@ While not strictly enforced, consider basic accessibility:
 <button aria-label="Close modal" onClick={onClose}>
   <XIcon className="w-5 h-5" />
 </button>
-```
+```bash
 
 ## Summary Checklist
 

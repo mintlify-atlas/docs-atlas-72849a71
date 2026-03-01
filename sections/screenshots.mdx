@@ -13,14 +13,14 @@ Before capturing screenshots:
 
 The screenshot command requires the Playwright MCP server. If not installed, you'll see:
 
-```
+```plaintext
 To capture screenshots, I need the Playwright MCP server installed.
 Please run:
 
 claude mcp add playwright npx @playwright/mcp@latest
 
 Then restart this Claude Code session and run /screenshot-design again.
-```
+```plaintext
 
 <Warning>
 Use the exact command shown. Do not modify the package name or substitute alternatives.
@@ -49,13 +49,13 @@ Screenshots provide:
 
 If multiple screen designs exist, you'll be asked which to screenshot:
 
-```
+```plaintext
 Which screen design would you like to screenshot?
 
 - Invoice Management / InvoiceList
 - Invoice Management / InvoiceDetail
 - Client Management / ClientList
-```
+```plaintext
 
 Single screen designs are auto-selected.
 
@@ -65,7 +65,7 @@ The AI starts the dev server automatically:
 
 ```bash
 npm run dev
-```
+```plaintext
 
 <Note>
 You don't need to manually start the server. The AI handles this.
@@ -77,9 +77,9 @@ The server runs in the background while capturing the screenshot.
 
 The AI navigates to the screen design URL:
 
-```
+```plaintext
 http://localhost:3000/sections/[section-id]/screen-designs/[screen-design-name]
-```
+```plaintext
 
 Waits for the page to fully load.
 
@@ -105,7 +105,7 @@ browser_take_screenshot({
   fullPage: true,
   viewport: { width: 1280, height: 720 }
 })
-```
+```plaintext
 
 ### Save to Product Folder
 
@@ -116,7 +116,7 @@ Screenshots are saved in two steps:
 
 ```bash
 cp .playwright-mcp/invoice-list.png product/sections/invoice-management/invoice-list.png
-```
+```plaintext
 
 </Steps>
 
@@ -124,9 +124,9 @@ cp .playwright-mcp/invoice-list.png product/sections/invoice-management/invoice-
 
 Filenames follow the pattern:
 
-```
+```plaintext
 [screen-design-name]-[variant].png
-```
+```plaintext
 
 **Examples:**
 
@@ -141,7 +141,7 @@ Filenames follow the pattern:
 
 ## File Output Locations
 
-```
+```plaintext
 product/sections/[section-id]/
 ├── spec.md
 ├── data.json
@@ -149,7 +149,7 @@ product/sections/[section-id]/
 ├── invoice-list.png         # Screenshot
 ├── invoice-list-dark.png    # Dark mode screenshot
 └── invoice-detail.png       # Additional view screenshot
-```
+```plaintext
 
 Screenshots are stored alongside section definition files for easy reference.
 
@@ -157,12 +157,12 @@ Screenshots are stored alongside section definition files for easy reference.
 
 After capturing, the AI offers:
 
-```
+```plaintext
 Would you like me to capture any additional screenshots? For example:
 - Dark mode version
 - Mobile viewport
 - Different states (empty, loading, etc.)
-```
+```plaintext
 
 Run `/screenshot-design` again for each additional screenshot.
 
@@ -185,7 +185,7 @@ browser_take_screenshot({
   viewport: { width: 375, height: 667 },  // iPhone size
   fullPage: true
 })
-```
+```plaintext
 
 Name as `[screen-name]-mobile.png`
 
@@ -212,7 +212,7 @@ Capture various UI states:
 
 Capturing multiple variants:
 
-```
+```plaintext
 # Light mode, desktop
 /screenshot-design
 → invoice-list.png
@@ -230,16 +230,16 @@ Capturing multiple variants:
 (Modify data.json to have empty invoices array)
 /screenshot-design
 → invoice-list-empty.png
-```
+```plaintext
 
 Result:
-```
+```plaintext
 product/sections/invoice-management/
 ├── invoice-list.png
 ├── invoice-list-dark.png
 ├── invoice-list-mobile.png
 └── invoice-list-empty.png
-```
+```plaintext
 
 ## Screenshot Quality Tips
 
@@ -274,13 +274,13 @@ Use standard viewport widths:
 
 The AI confirms:
 
-```
+```plaintext
 I've saved the screenshot to product/sections/invoice-management/invoice-list.png.
 
 The screenshot captures the InvoiceList screen design for the Invoice Management section.
 
 Would you like me to capture any additional screenshots?
-```
+```plaintext
 
 ## Dev Server Management
 
@@ -305,7 +305,7 @@ If you see an error about Playwright:
 
 ```bash
 claude mcp add playwright npx @playwright/mcp@latest
-```
+```plaintext
 
 Restart your Claude session after installing.
 
@@ -315,7 +315,7 @@ The AI starts the server automatically. If it fails:
 
 ```bash
 npm run dev
-```
+```plaintext
 
 Manually start it, then run `/screenshot-design` again.
 

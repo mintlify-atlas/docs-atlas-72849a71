@@ -9,9 +9,9 @@ Defines the general shape of your product's data - the core entities ("nouns") a
 
 ## Syntax
 
-```
+```bash
 /data-shape
-```
+```bash
 
 ## What It Does
 
@@ -92,7 +92,7 @@ Creates or updates:
 - [Entity1] has many [Entity2]
 - [Entity2] belongs to [Entity1]
 - [Entity3] belongs to both [Entity1] and [Entity2]
-```
+```bash
 
 ## Guidelines
 
@@ -140,7 +140,7 @@ and payment method.
 - Client has many Invoice
 - Payment belongs to Invoice
 - Invoice has many Payment
-```
+```bash
 
 ## Why Define Data Shape?
 
@@ -157,7 +157,7 @@ The implementation agent will extend and refine these entities based on technica
 
 ## Example Session (Creating New)
 
-```
+```bash
 User: /data-shape
 
 Assistant: I've created your data shape at 
@@ -175,11 +175,11 @@ Assistant: I've created your data shape at
 - Payment belongs to Invoice
 
 This provides a shared vocabulary for your screen designs.
-```
+```bash
 
 ## Example Session (Updating Existing)
 
-```
+```bash
 User: /data-shape
 
 Assistant: Your data shape currently defines these entities:
@@ -193,7 +193,7 @@ What would you like to change about the entities or relationships?
 User: Add a Template entity for reusable invoice templates
 
 Assistant: I've updated the data shape to include Template.
-```
+```bash
 
 ## Important Notes
 

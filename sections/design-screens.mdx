@@ -71,7 +71,7 @@ export function InvoiceList({
     </div>
   )
 }
-```
+```plaintext
 
 **Key characteristics:**
 - Import types from `types.ts`
@@ -100,7 +100,7 @@ export default function InvoiceListPreview() {
     />
   )
 }
-```
+```plaintext
 
 **Key characteristics:**
 - Default export (required for Design OS routing)
@@ -127,26 +127,26 @@ If design tokens exist at `product/design-system/`, they're applied:
 - Neutral color for backgrounds, text, borders
 
 If not defined, you'll see:
-```
+```plaintext
 Note: Design tokens haven't been defined yet. I'll use default styling,
 but for consistent branding, consider running `/design-tokens` first.
-```
+```plaintext
 
 **Application Shell**
 
 If a shell exists at `src/shell/components/AppShell.tsx`, screen designs render inside it in Design OS.
 
 If not defined, you'll see:
-```
+```plaintext
 Note: An application shell hasn't been designed yet. The screen design
 will render standalone. Consider running `/design-shell` first.
-```
+```plaintext
 
 ### Clarify View Scope
 
 If the spec implies multiple views, you'll be asked which to build first:
 
-```
+```plaintext
 The specification suggests a few different views:
 
 1. List View - Show all invoices in a filterable list
@@ -154,7 +154,7 @@ The specification suggests a few different views:
 3. Form View - Create/edit invoice with line items
 
 Which view should I create first?
-```
+```plaintext
 
 Run `/design-screen` again for additional views.
 
@@ -202,7 +202,7 @@ export function InvoiceRow({ invoice, onView, onEdit, onDelete }: InvoiceRowProp
     </div>
   )
 }
-```
+```plaintext
 
 **Component Index**
 
@@ -213,7 +213,7 @@ Exports all components cleanly:
 ```typescript
 export { InvoiceList } from './InvoiceList'
 export { InvoiceRow } from './InvoiceRow'
-```
+```plaintext
 
 **Preview Wrapper**
 
@@ -239,7 +239,7 @@ Use Tailwind responsive prefixes for layouts that adapt across screen sizes:
 <div className="flex flex-col sm:flex-row gap-4">
   {/* Stack on mobile, horizontal on larger screens */}
 </div>
-```
+```plaintext
 
 ### Light & Dark Mode
 
@@ -250,7 +250,7 @@ Use `dark:` variants for all colors:
   <p className="text-stone-900 dark:text-stone-100">Content</p>
   <span className="text-stone-500 dark:text-stone-400">Secondary text</span>
 </div>
-```
+```plaintext
 
 ### Design Tokens Applied
 
@@ -263,14 +263,14 @@ When tokens are defined, they're used throughout:
 </button>
 
 <span className="text-lime-600 dark:text-lime-400">Accent text</span>
-```
+```plaintext
 
 **Typography Example** (if heading is `Inter`):
 ```tsx
 // Font is applied at app level, use appropriate weights
 <h1 className="font-bold">Heading</h1>
 <p className="font-normal">Body text</p>
-```
+```plaintext
 
 ### All Spec Requirements
 
@@ -281,14 +281,14 @@ Every user flow and UI requirement from the spec is implemented:
 
 ## File Output Locations
 
-```
+```plaintext
 src/sections/[section-id]/
 ├── components/
 │   ├── [ViewName].tsx      # Main component
 │   ├── [SubComponent].tsx  # Sub-components
 │   └── index.ts            # Component exports
 └── [ViewName].tsx          # Preview wrapper
-```
+```plaintext
 
 ## After Creation
 
@@ -297,9 +297,9 @@ Restart your dev server to see the changes.
 </Warning>
 
 View the screen design at:
-```
+```plaintext
 http://localhost:3000/sections/[section-id]/screen-designs/[view-name]
-```
+```plaintext
 
 ## Next Steps
 

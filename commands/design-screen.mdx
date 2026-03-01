@@ -9,9 +9,9 @@ Creates screen design components for a section. These are props-based React comp
 
 ## Syntax
 
-```
+```bash
 /design-screen
-```
+```bash
 
 ## What It Does
 
@@ -101,7 +101,7 @@ export function InvoiceList({
     </div>
   )
 }
-```
+```bash
 
 ### Preview Wrapper (Design OS Only)
 
@@ -120,7 +120,7 @@ export default function InvoiceListPreview() {
     />
   )
 }
-```
+```bash
 
 <Note>
 Only the main component is exported. The preview wrapper stays in Design OS.
@@ -177,7 +177,7 @@ If shell exists:
 
 ## Example Session
 
-```
+```bash
 User: /design-screen
 
 Assistant: Which section would you like to create a screen design for?
@@ -211,13 +211,13 @@ The screen design renders inside your application shell and uses your
 color palette (indigo, emerald, slate).
 
 Next: Run `/screenshot-design` to capture a screenshot.
-```
+```bash
 
 ## Sub-Components
 
 For complex views, the command creates sub-components:
 
-```tsx
+```typescript
 interface InvoiceRowProps {
   invoice: Invoice
   onView?: () => void
@@ -228,7 +228,7 @@ interface InvoiceRowProps {
 export function InvoiceRow({ invoice, onView, onEdit, onDelete }: InvoiceRowProps) {
   // Row implementation
 }
-```
+```bash
 
 Sub-components are also props-based and portable.
 

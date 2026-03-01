@@ -9,9 +9,9 @@ Creates or updates realistic sample data for a section. This data populates scre
 
 ## Syntax
 
-```
+```bash
 /sample-data
-```
+```bash
 
 ## What It Does
 
@@ -109,7 +109,7 @@ Every data.json MUST include:
     }
   ]
 }
-```
+```bash
 
 ### Sample Data Guidelines
 
@@ -149,7 +149,7 @@ export interface Invoice {
   dueDate: string
   lineItems: LineItem[]
 }
-```
+```bash
 
 ### Component Props Interface
 
@@ -170,7 +170,7 @@ export interface InvoiceListProps {
   /** Called when user wants to create a new invoice */
   onCreate?: () => void
 }
-```
+```bash
 
 ### Type Inference Rules
 
@@ -186,7 +186,7 @@ export interface InvoiceListProps {
 
 ## Example Session (Creating New)
 
-```
+```bash
 User: /sample-data
 
 Assistant: I've created two files for **Invoices**:
@@ -201,11 +201,11 @@ The types include:
   edit, delete, create)
 
 Review the files and let me know if you'd like adjustments.
-```
+```bash
 
 ## Example Session (Updating)
 
-```
+```bash
 User: /sample-data
 
 Assistant: Sample data already exists for **Invoices**. What would 
@@ -215,7 +215,7 @@ User: Add a notes field to each invoice for internal notes
 
 Assistant: I've updated the sample data and types for **Invoices** 
 to include the notes field.
-```
+```bash
 
 ## Global Data Shape Integration
 

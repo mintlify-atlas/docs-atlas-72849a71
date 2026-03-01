@@ -21,7 +21,7 @@ You can export at any point—it doesn't have to be "complete." Exporting genera
 
 ```bash
 /export-product
-```
+```bash
 
 The export command:
 
@@ -38,17 +38,17 @@ The export package contains everything needed for implementation:
 
 ### Ready-to-Use Prompts
 
-```
+```bash
 product-plan/prompts/
 ├── one-shot-prompt.md     # Prompt for full implementation
 └── section-prompt.md      # Prompt template for section-by-section
-```
+```bash
 
 Pre-written prompts you copy/paste into your coding agent. They reference the instruction files and guide your agent to review the designs and ask clarifying questions before implementing.
 
 ### Implementation Instructions
 
-```
+```bash
 product-plan/
 ├── product-overview.md              # Product summary (always provide)
 └── instructions/
@@ -57,7 +57,7 @@ product-plan/
         ├── 01-shell.md              # Design tokens + app shell
         ├── 02-[section-id].md       # One per section
         └── ...
-```
+```bash
 
 <Info>
 **product-overview.md** provides context about the full product—always include it with any implementation session.
@@ -68,20 +68,20 @@ product-plan/
 
 ### Design System
 
-```
+```bash
 product-plan/design-system/
 ├── tokens.css           # CSS custom properties
 ├── tailwind-colors.md   # Tailwind configuration guide
 └── fonts.md             # Google Fonts setup
-```
+```bash
 
 ### Data Shapes
 
-```
+```bash
 product-plan/data-shapes/
 ├── README.md            # UI data contracts overview
 └── overview.ts          # Combined type reference
-```
+```bash
 
 <Note>
 These types define what data the UI components expect. How you model, store, and fetch this data on the backend is an implementation decision.
@@ -89,7 +89,7 @@ These types define what data the UI components expect. How you model, store, and
 
 ### Shell Components
 
-```
+```bash
 product-plan/shell/
 ├── README.md            # Design intent
 ├── components/
@@ -98,13 +98,13 @@ product-plan/shell/
 │   ├── UserMenu.tsx     # User menu
 │   └── index.ts         # Exports
 └── screenshot.png       # Visual reference
-```
+```bash
 
 ### Section Components
 
 For each section:
 
-```
+```bash
 product-plan/sections/[section-id]/
 ├── README.md            # Feature overview, user flows
 ├── tests.md             # UI behavior test specs
@@ -114,7 +114,7 @@ product-plan/sections/[section-id]/
 ├── types.ts             # TypeScript interfaces
 ├── sample-data.json     # Test data
 └── screenshot.png       # Visual reference
-```
+```bash
 
 ### Test Instructions
 
@@ -146,7 +146,7 @@ Exported components are:
   onDelete={(id) => confirmDelete(id)}
   onCreate={() => navigate('/invoices/new')}
 />
-```
+```bash
 
 Your implementation agent's job is to:
 
