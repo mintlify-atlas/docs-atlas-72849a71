@@ -1,0 +1,129 @@
+{
+  "projectType": "saas",
+  "projectName": "Design OS",
+  "projectDescription": "A product planning and design tool that helps you define your product vision, sketch out your data shape, design your UI, and export production-ready components for implementation.",
+  "theme": "willow",
+  "primaryColor": "#84cc16",
+  "lightColor": "#ecfccb",
+  "darkColor": "#365314",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "introduction",
+              "getting-started",
+              "installation"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/overview",
+              "concepts/design-process",
+              "concepts/file-structure"
+            ]
+          },
+          {
+            "group": "Product Planning",
+            "pages": [
+              "planning/product-vision",
+              "planning/data-shape",
+              "planning/design-system",
+              "planning/application-shell"
+            ]
+          },
+          {
+            "group": "Section Design",
+            "pages": [
+              "sections/shape-section",
+              "sections/design-screens",
+              "sections/sample-data",
+              "sections/screenshots"
+            ]
+          },
+          {
+            "group": "Export & Implementation",
+            "pages": [
+              "export/overview",
+              "export/export-package",
+              "export/implementation-guide",
+              "export/one-shot-vs-incremental"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/best-practices",
+              "guides/working-with-ai",
+              "guides/troubleshooting",
+              "guides/design-requirements"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Command Reference",
+        "groups": [
+          {
+            "group": "Commands",
+            "pages": [
+              "commands/overview",
+              "commands/product-vision",
+              "commands/product-roadmap",
+              "commands/data-shape",
+              "commands/design-tokens",
+              "commands/design-shell",
+              "commands/shape-section",
+              "commands/sample-data",
+              "commands/design-screen",
+              "commands/screenshot-design",
+              "commands/export-product"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Resources",
+        "groups": [
+          {
+            "group": "Resources",
+            "pages": [
+              "resources/examples",
+              "resources/faq",
+              "resources/changelog",
+              "resources/community"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Guided product planning and vision definition",
+    "Data shape modeling and entity relationships",
+    "Design system creation with Tailwind colors and Google Fonts",
+    "Application shell and navigation design",
+    "Section-by-section screen design with React components",
+    "Sample data generation with TypeScript types",
+    "Complete export package for implementation handoff",
+    "Test-driven development specifications",
+    "Props-based component architecture",
+    "Light and dark mode support"
+  ],
+  "publicApiSurface": [
+    "/product-vision - Define product overview, roadmap, and data shape",
+    "/product-roadmap - Update product sections",
+    "/data-shape - Update data entities and relationships",
+    "/design-tokens - Choose colors and typography",
+    "/design-shell - Design navigation and layout",
+    "/shape-section - Define section spec and generate sample data",
+    "/sample-data - Update sample data and types",
+    "/design-screen - Create screen design components",
+    "/screenshot-design - Capture screenshots of designs",
+    "/export-product - Generate complete handoff package"
+  ]
+}
