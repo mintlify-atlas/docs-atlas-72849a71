@@ -1,0 +1,194 @@
+---
+title: /product-vision
+description: Define your complete product foundation
+---
+
+# /product-vision
+
+Defines your product foundation in one conversational flow. This command creates three essential files: product overview, roadmap, and data shape.
+
+## Syntax
+
+```
+/product-vision
+```
+
+## What It Does
+
+Guides you through a conversational process to establish:
+
+1. **Product Overview** - Core description, problems, solutions, and features
+2. **Product Roadmap** - Main sections/areas of your product
+3. **Data Shape** - Core entities and their relationships
+
+## Prerequisites
+
+None. This is typically the first command you run.
+
+## Outputs
+
+Creates three files:
+
+- `/product/product-overview.md` - Product definition
+- `/product/product-roadmap.md` - Section list
+- `/product/data-shape/data-shape.md` - Entity definitions
+
+## Workflow
+
+<Steps>
+  <Step title="Share Your Ideas">
+    The command asks you to share your raw notes and ideas about the product. Don't worry about structure - just explain what you're building.
+  </Step>
+  
+  <Step title="Answer Questions">
+    The command asks clarifying questions about:
+    - Product name and description
+    - Problems you're solving
+    - Key features
+    - Main sections/areas
+    - Core entities (the "nouns" users work with)
+  </Step>
+  
+  <Step title="Auto-Generation">
+    Once enough information is gathered, all three files are created automatically without requiring approval.
+  </Step>
+  
+  <Step title="Review & Refine">
+    Review the generated files and request changes if needed.
+  </Step>
+</Steps>
+
+## Product Overview Format
+
+The generated `product-overview.md` follows this structure:
+
+```markdown
+# [Product Name]
+
+## Description
+[1-3 sentence description]
+
+## Problems & Solutions
+
+### Problem 1: [Title]
+[How the product solves it]
+
+### Problem 2: [Title]
+[How the product solves it]
+
+## Key Features
+- [Feature 1]
+- [Feature 2]
+- [Feature 3]
+```
+
+<Note>
+The `# [Product Name]` heading is required - this displays as the card title in the app.
+</Note>
+
+## Roadmap Format
+
+The generated `product-roadmap.md` structure:
+
+```markdown
+# Product Roadmap
+
+## Sections
+
+### 1. [Section Title]
+[One sentence description]
+
+### 2. [Section Title]
+[One sentence description]
+
+### 3. [Section Title]
+[One sentence description]
+```
+
+<Accordion title="Roadmap Guidelines">
+- Sections should be ordered by development priority
+- Each section should be self-contained
+- 3-5 sections is ideal
+- The numbered format (`### 1. Title`) is required for parsing
+- Section titles become navigation items
+</Accordion>
+
+## Data Shape Format
+
+The generated `data-shape.md` structure:
+
+```markdown
+# Data Shape
+
+## Entities
+
+### [EntityName]
+[Plain-language description]
+
+### [AnotherEntity]
+[Plain-language description]
+
+## Relationships
+
+- [Entity1] has many [Entity2]
+- [Entity2] belongs to [Entity1]
+- [Entity3] belongs to both [Entity1] and [Entity2]
+```
+
+<Note>
+Entity names should be singular (User, Invoice, Project - not Users, Invoices).
+</Note>
+
+## Example Session
+
+```
+User: /product-vision
+
+Assistant: I'd love to help you define your product vision. Tell me about 
+the product you're building - share any notes, ideas, or rough thoughts you 
+have. What problem are you trying to solve? Who is it for?
+
+User: I want to build an invoicing app for freelancers. They can create 
+invoices, track payments, and manage clients.
+
+Assistant: Great! Let me ask a few questions...
+
+- What would you like to call this product?
+- What are the biggest pain points freelancers face with invoicing?
+- What are the main areas of this product? (e.g., Dashboard, Invoices, Clients)
+- What are the main "things" users will manage? (e.g., Invoices, Clients)
+
+[After gathering responses, creates all three files automatically]
+
+Assistant: I've set up the foundation for **InvoiceHub**:
+
+1. Product Overview - `product/product-overview.md`
+2. Product Roadmap - `product/product-roadmap.md` (4 sections)
+3. Data Shape - `product/data-shape/data-shape.md` (3 entities)
+
+Review these files and let me know if you'd like adjustments.
+```
+
+## Important Notes
+
+<Warning>
+- The command auto-proceeds after gathering information - no draft approval step
+- Always ensure the product has a name
+- If you need to update only the roadmap or data shape later, use `/product-roadmap` or `/data-shape`
+</Warning>
+
+## Next Steps
+
+After running `/product-vision`:
+
+1. Run `/design-tokens` to choose colors and typography
+2. Or run `/design-shell` to design the application structure
+3. Or run `/shape-section` to start defining individual sections
+
+## Updating Files
+
+To update specific files later:
+
+- Use `/product-roadmap` to update sections
+- Use `/data-shape` to update entities
+- Manually edit `product-overview.md` for description/feature changes

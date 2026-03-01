@@ -1,0 +1,93 @@
+---
+title: Command Reference
+description: Complete reference for all Design OS commands
+---
+
+# Command Reference
+
+Design OS provides a set of slash commands to guide you through the product planning and design workflow. Each command is conversational and helps you build your product definition step by step.
+
+## Quick Start
+
+The recommended workflow:
+
+<Steps>
+  <Step title="Define Product Vision">
+    Run `/product-vision` to create your product overview, roadmap, and data shape in one conversational flow.
+  </Step>
+  
+  <Step title="Choose Design System">
+    Run `/design-tokens` to select your color palette and typography.
+  </Step>
+  
+  <Step title="Design Application Shell">
+    Run `/design-shell` to create the navigation and layout structure.
+  </Step>
+  
+  <Step title="Design Each Section">
+    For each section:
+    - `/shape-section` - Define specification and generate sample data
+    - `/design-screen` - Create screen designs
+    - `/screenshot-design` - Capture screenshots
+  </Step>
+  
+  <Step title="Export">
+    Run `/export-product` to generate the complete handoff package.
+  </Step>
+</Steps>
+
+## Command Categories
+
+### Foundation Commands
+
+Establish your product's core definition:
+
+- [/product-vision](/commands/product-vision) - Define product overview, roadmap, and data shape
+- [/product-roadmap](/commands/product-roadmap) - Update product sections
+- [/data-shape](/commands/data-shape) - Define or update core entities
+
+### Design System Commands
+
+Define your visual identity:
+
+- [/design-tokens](/commands/design-tokens) - Choose colors and typography
+- [/design-shell](/commands/design-shell) - Design application navigation and layout
+
+### Section Commands
+
+Build out individual features:
+
+- [/shape-section](/commands/shape-section) - Define section specification
+- [/sample-data](/commands/sample-data) - Create or update sample data
+- [/design-screen](/commands/design-screen) - Create screen designs
+- [/screenshot-design](/commands/screenshot-design) - Capture design screenshots
+
+### Export Command
+
+Generate your handoff package:
+
+- [/export-product](/commands/export-product) - Create complete implementation package
+
+## Command Behavior
+
+<Note>
+All commands follow a conversational approach:
+- Commands ask clarifying questions
+- Commands auto-generate files without requiring approval drafts
+- You can review and request changes after files are created
+</Note>
+
+## Prerequisites
+
+Most commands have prerequisites:
+
+- `/design-tokens` requires `/product-vision`
+- `/design-shell` requires `/product-vision` and optionally `/design-tokens`
+- `/shape-section` requires `/product-roadmap`
+- `/design-screen` requires `/shape-section` and `/sample-data`
+- `/screenshot-design` requires `/design-screen`
+- `/export-product` requires at least one complete section
+
+<Warning>
+Commands will notify you if prerequisites are missing and guide you to run the required commands first.
+</Warning>

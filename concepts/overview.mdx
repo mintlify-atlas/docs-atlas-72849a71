@@ -1,0 +1,108 @@
+---
+title: "Core Concepts Overview"
+description: "Understand the fundamental principles and structure of Design OS"
+---
+
+Design OS is organized around four foundational pillars that guide your product from concept to implementation. Understanding these concepts helps you work efficiently through the design process.
+
+## The Four Pillars
+
+Every product you build in Design OS is structured around these four core areas:
+
+<Steps>
+  <Step title="Product Overview">
+    The **what** and **why** of your product. This includes your product name and description, the problems you're solving, key features, and your roadmap of sections.
+    
+    This pillar answers: What are you building and why does it matter?
+  </Step>
+  
+  <Step title="Data Shape">
+    The **nouns** of your system. Define core entity names, descriptions, and conceptual relationships between entities. This creates a shared vocabulary for consistent naming across all sections.
+    
+    This pillar answers: What are the key objects in your product domain?
+  </Step>
+  
+  <Step title="Design System">
+    The **look and feel** of your product. Choose your color palette from Tailwind colors and typography from Google Fonts. These tokens are applied consistently to all screen designs.
+    
+    This pillar answers: How should your product look and feel?
+  </Step>
+  
+  <Step title="Application Shell">
+    The **persistent chrome** that wraps your product. Design the global navigation structure, user menu, and layout pattern that appears across all sections.
+    
+    This pillar answers: How do users navigate through your product?
+  </Step>
+</Steps>
+
+## Sections: The Fifth Element
+
+Beyond the four pillars, your product is composed of **sections**—individual feature areas that each have:
+
+- **Specification** — Requirements, user flows, and scope
+- **Sample data** — TypeScript types and JSON data for screen designs
+- **Screen designs** — Production-ready React components
+- **Screenshots** — Visual documentation of completed designs
+
+Each section builds on the foundation established by the four pillars.
+
+## Two Distinct Contexts
+
+When working in Design OS, you're operating in two different contexts:
+
+<Accordion title="Design OS Application">
+  The React application that displays and manages your planning files. This is the tool itself.
+  
+  - Files live in `src/` (components, pages, utilities)
+  - Uses the Design OS design system (stone palette, DM Sans)
+  - Provides the interface for viewing specs, screen designs, and exports
+  
+  You rarely need to modify the Design OS application itself unless you're customizing the tool.
+</Accordion>
+
+<Accordion title="Product Design (Your Screens & Exports)">
+  The product you're planning and designing. This is what you're building.
+  
+  - Screen design components live in `src/sections/[section-name]/` and `src/shell/`
+  - Product definition files live in `product/`
+  - Exports are packaged to `product-plan/` for integration into your separate codebase
+  - Follow the design requirements specified in each section's spec
+  
+  This is where you spend most of your time in Design OS.
+</Accordion>
+
+<Note>
+  Design OS is a **planning tool**, not your end product codebase. The screen designs and components you generate are meant to be exported and integrated into your actual product's codebase.
+</Note>
+
+## Design Requirements
+
+All screen designs you create in Design OS follow these principles:
+
+- **Mobile Responsive** — Use Tailwind's responsive prefixes (`sm:`, `md:`, `lg:`, `xl:`) to ensure layouts adapt properly
+- **Light & Dark Mode** — Use `dark:` variants for all colors. Test that all UI elements are visible in both modes
+- **Use Design Tokens** — Apply your product's color palette and typography consistently
+- **Props-Based Components** — All components accept data and callbacks via props. Never import data directly
+- **No Navigation in Sections** — Section screen designs should not include navigation chrome. The shell handles all navigation
+
+## Design System Scope
+
+Design OS separates concerns between its own UI and the product you're designing:
+
+- **Design OS UI** — Always uses the stone/lime palette and DM Sans typography
+- **Product Screen Designs** — Use the design tokens you define for your product
+- **Shell** — Uses your product design tokens to preview the full app experience
+
+This separation ensures your product's design system remains independent and portable.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Design Process" icon="route" href="/concepts/design-process">
+    Learn the step-by-step workflow for building products in Design OS
+  </Card>
+  
+  <Card title="File Structure" icon="folder-tree" href="/concepts/file-structure">
+    Understand how Design OS organizes your product files
+  </Card>
+</CardGroup>

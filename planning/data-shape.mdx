@@ -1,0 +1,241 @@
+---
+title: Data Shape
+description: Define the core entities and relationships that form your product's data vocabulary
+---
+
+The data shape defines the core entities ("nouns") users will work with and how they relate to each other. This creates a shared vocabulary that ensures consistency across all sections.
+
+<Info>
+The data shape is typically created as part of `/product-vision`. Use `/data-shape` to update it later or create it separately if needed.
+</Info>
+
+## What Is Data Shape?
+
+The data shape is a conceptual model that identifies:
+
+- **Entity names** - The main "things" in your product (User, Project, Invoice, etc.)
+- **Plain-language descriptions** - What each entity represents from the user's perspective
+- **Relationships** - How entities connect to each other
+
+This is NOT a database schema. It's a high-level vocabulary that:
+
+- Helps maintain consistent naming across sections
+- Informs sample data generation
+- Provides context for screen designs
+- Documents the core concepts of your product
+
+## Creating Data Shape
+
+<Steps>
+  <Step title="Check Prerequisites">
+    You need product overview and roadmap defined first. If missing, run `/product-vision`.
+  </Step>
+
+  <Step title="Analyze Product">
+    The AI reviews your product overview and roadmap to identify the core entities users will interact with.
+  </Step>
+
+  <Step title="Generate Data Shape">
+    The AI creates `product/data-shape/data-shape.md` with entities and relationships. No approval needed - you'll review after.
+  </Step>
+
+  <Step title="Review and Refine">
+    Review the generated data shape and request changes if needed.
+  </Step>
+</Steps>
+
+## Example Data Shape
+
+Here's what a data shape file looks like for a CRM:
+
+```markdown product/data-shape/data-shape.md
+# Data Shape
+
+## Entities
+
+### User
+A team member who manages clients, creates deals, and tracks activities.
+
+### Client
+A person or company that the team is building a relationship with. Includes contact information and interaction history.
+
+### Deal
+A potential sale or contract with a specific value, stage, and expected close date.
+
+### Activity
+An interaction with a client, such as a call, email, meeting, or note.
+
+### Task
+A to-do item assigned to a user, often related to a client or deal.
+
+## Relationships
+
+- User can manage many Clients
+- Client has many Deals
+- Deal belongs to Client
+- Client has many Activities
+- Activity belongs to Client
+- Deal has many Tasks
+- Task belongs to Deal
+- Task is assigned to User
+```
+
+## Writing Guidelines
+
+### Entity Names
+
+- Use singular form (User, not Users)
+- Use capitalized nouns (Project, Invoice, Comment)
+- Keep names simple and recognizable
+- Avoid technical jargon
+
+### Descriptions
+
+- Explain what the entity represents from the user's perspective
+- Focus on purpose, not implementation details
+- Keep it to 1-2 sentences
+- Use plain language anyone could understand
+
+### Relationships
+
+- Use simple phrases: "has many", "belongs to", "has one"
+- Express from the user's mental model, not database structure
+- Include the most important relationships
+- Don't worry about being exhaustive
+
+<Warning>
+Do NOT define detailed schemas, field types, validation rules, or database structure. The implementation agent will handle those decisions.
+</Warning>
+
+## What About Fields?
+
+You might wonder: what fields does a Task have? What's on an Invoice?
+
+The data shape intentionally avoids this level of detail. Here's why:
+
+- **Field lists change frequently** as you design screens
+- **Different sections need different fields** from the same entity
+- **Implementation decisions** (what's required, what's calculated) come later
+
+Instead, when you run `/shape-section` for each section, you'll define the specific data that section needs. The data shape just establishes the entity names and basic relationships.
+
+## Updating Data Shape
+
+To update your data shape:
+
+```bash
+/data-shape
+```
+
+<Steps>
+  <Step title="Review Current State">
+    The AI shows your current entities and relationships.
+  </Step>
+
+  <Step title="Describe Changes">
+    Tell the AI what you want to add, remove, or modify.
+  </Step>
+
+  <Step title="File Updated">
+    The AI updates `product/data-shape/data-shape.md` immediately.
+  </Step>
+</Steps>
+
+## How It's Used
+
+The data shape influences several other parts of Design OS:
+
+### Sample Data Generation
+
+When you run `/shape-section` or `/sample-data`, the AI references the data shape to:
+
+- Use consistent entity names
+- Generate relationships that make sense
+- Create realistic example data
+
+### Screen Design
+
+When designing screens with `/design-screen`, the data shape helps the AI:
+
+- Understand what data the screen displays
+- Choose appropriate UI patterns
+- Maintain consistency across sections
+
+### Type Generation
+
+The data shape informs TypeScript interface generation in `types.ts` files, though specific fields come from section specs.
+
+### Export Package
+
+The data shape is included in the export package at `product-plan/data-shapes/` to give the implementation agent context.
+
+## Example: E-commerce Platform
+
+```markdown
+# Data Shape
+
+## Entities
+
+### Product
+An item available for purchase with details like name, description, price, and images.
+
+### Order
+A customer's purchase containing one or more products, shipping details, and payment information.
+
+### Customer
+A user account with order history, saved addresses, and payment methods.
+
+### Category
+A grouping used to organize products for browsing and navigation.
+
+### Review
+Customer feedback on a product including a rating and written comment.
+
+## Relationships
+
+- Product belongs to many Categories
+- Product has many Reviews
+- Review belongs to Product
+- Review is written by Customer
+- Order belongs to Customer
+- Order contains many Products
+- Customer has many Orders
+```
+
+## Common Patterns
+
+### Users and Content
+
+- User creates many [Content Items]
+- [Content Item] belongs to User
+
+Example: Blog posts, projects, documents
+
+### Containers and Items
+
+- [Container] has many [Items]
+- [Item] belongs to [Container]
+
+Example: Projects and tasks, albums and photos, courses and lessons
+
+### Many-to-Many
+
+- [Entity1] belongs to many [Entity2]
+- [Entity2] has many [Entity1]
+
+Example: Students and courses, tags and articles
+
+### Hierarchical
+
+- [Entity] has many child [Entity]
+- [Entity] belongs to parent [Entity]
+
+Example: Categories, folders, org structure
+
+## Next Steps
+
+With your data shape defined:
+
+1. Run `/design-tokens` to choose colors and typography
+2. Run `/design-shell` to design your application shell
+3. Run `/shape-section` to define specifications for individual sections

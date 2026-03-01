@@ -1,0 +1,261 @@
+---
+title: /design-screen
+description: Create screen designs for sections
+---
+
+# /design-screen
+
+Creates screen design components for a section. These are props-based React components that can be exported and integrated into any React codebase.
+
+## Syntax
+
+```
+/design-screen
+```
+
+## What It Does
+
+Generates production-ready screen designs:
+- Fully styled React components
+- Props-based and portable
+- Mobile responsive
+- Light and dark mode support
+- Design tokens applied
+- TypeScript types integrated
+
+## Prerequisites
+
+- Requires `product/sections/[section-id]/spec.md`
+- Requires `product/sections/[section-id]/data.json`
+- Requires `product/sections/[section-id]/types.ts`
+- Optional: `/product/design-system/colors.json` and `typography.json`
+- Optional: `src/shell/components/AppShell.tsx` (for shell integration)
+
+<Warning>
+If spec, data, or types are missing, the command prompts you to run `/shape-section` first.
+</Warning>
+
+## Outputs
+
+Creates:
+- `src/sections/[section-id]/components/[ViewName].tsx` - Main component
+- `src/sections/[section-id]/components/[SubComponent].tsx` - Sub-components (if needed)
+- `src/sections/[section-id]/components/index.ts` - Component exports
+- `src/sections/[section-id]/[ViewName].tsx` - Preview wrapper (Design OS only)
+
+## Workflow
+
+<Steps>
+  <Step title="Select Section">
+    If multiple sections exist, asks which one to create screen designs for.
+  </Step>
+  
+  <Step title="Verify Prerequisites">
+    Checks for spec, data, and types. Warns if design tokens or shell are missing.
+  </Step>
+  
+  <Step title="Analyze Requirements">
+    Reads spec.md, data.json, and types.ts to understand:
+    - User flows to implement
+    - Data structure to render
+    - Callbacks to handle
+  </Step>
+  
+  <Step title="Clarify Scope">
+    If multiple views are needed (list, detail, form), asks which to build first.
+  </Step>
+  
+  <Step title="Create Components">
+    Generates all components following design requirements.
+  </Step>
+</Steps>
+
+## Component Structure
+
+### Main Component (Exportable)
+
+```tsx
+import type { InvoiceListProps } from '@/../product/sections/invoices/types'
+
+export function InvoiceList({
+  invoices,
+  onView,
+  onEdit,
+  onDelete,
+  onCreate
+}: InvoiceListProps) {
+  return (
+    <div className="max-w-4xl mx-auto">
+      {/* Component implementation */}
+      
+      <button onClick={onCreate}>Create Invoice</button>
+      
+      {invoices.map(invoice => (
+        <div key={invoice.id}>
+          <span>{invoice.clientName}</span>
+          <button onClick={() => onView?.(invoice.id)}>View</button>
+          <button onClick={() => onEdit?.(invoice.id)}>Edit</button>
+          <button onClick={() => onDelete?.(invoice.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+### Preview Wrapper (Design OS Only)
+
+```tsx
+import data from '@/../product/sections/invoices/data.json'
+import { InvoiceList } from './components/InvoiceList'
+
+export default function InvoiceListPreview() {
+  return (
+    <InvoiceList
+      invoices={data.invoices}
+      onView={(id) => console.log('View invoice:', id)}
+      onEdit={(id) => console.log('Edit invoice:', id)}
+      onDelete={(id) => console.log('Delete invoice:', id)}
+      onCreate={() => console.log('Create new invoice')}
+    />
+  )
+}
+```
+
+<Note>
+Only the main component is exported. The preview wrapper stays in Design OS.
+</Note>
+
+## Design Requirements
+
+### Must Include
+
+<Accordion title="Required Features">
+- **Mobile responsive:** Use Tailwind responsive prefixes (`sm:`, `md:`, `lg:`)
+- **Light & dark mode:** Use `dark:` variants for all colors
+- **Design tokens:** Apply product's color palette and typography
+- **Props-based:** All data via props, no direct imports
+- **TypeScript:** Import and use types from types.ts
+- **Callbacks:** Handle all actions with optional chaining: `onDelete?.(id)`
+- **User flows:** Implement ALL flows from spec.md
+</Accordion>
+
+### Must NOT Include
+
+<Accordion title="What to Avoid">
+- No `import data from` statements in exportable components
+- No features not specified in spec
+- No routing logic (callbacks handle navigation intent)
+- No navigation elements (shell handles navigation)
+- No hardcoded values that should come from props
+</Accordion>
+
+## Design Token Application
+
+If design tokens exist:
+
+**Colors:**
+- Primary color → Buttons, links, key accents
+- Secondary color → Tags, highlights, secondary elements
+- Neutral color → Backgrounds, text, borders
+
+**Typography:**
+- Heading font → Titles, section headers
+- Body font → Paragraphs, UI text
+- Mono font → Code, technical content
+
+<Note>
+If design tokens don't exist, falls back to `stone` for neutrals and `lime` for accents.
+</Note>
+
+## Shell Integration
+
+If shell exists:
+- Screen designs render inside the shell content area
+- Preview shows full app experience
+- Navigation is handled by shell, not screen design
+
+## Example Session
+
+```
+User: /design-screen
+
+Assistant: Which section would you like to create a screen design for?
+1. Dashboard
+2. Invoices
+3. Clients
+
+User: Invoices
+
+Assistant: The specification suggests these views:
+1. **Invoice List** - Main view showing all invoices
+2. **Invoice Detail** - Single invoice view with line items
+
+Which view should I create first?
+
+User: Invoice List
+
+Assistant: I've created the screen design for **Invoices**:
+
+**Exportable components** (props-based, portable):
+- `src/sections/invoices/components/InvoiceList.tsx`
+- `src/sections/invoices/components/InvoiceRow.tsx`
+- `src/sections/invoices/components/index.ts`
+
+**Preview wrapper** (for Design OS only):
+- `src/sections/invoices/InvoiceList.tsx`
+
+**Important:** Restart your dev server to see the changes.
+
+The screen design renders inside your application shell and uses your 
+color palette (indigo, emerald, slate).
+
+Next: Run `/screenshot-design` to capture a screenshot.
+```
+
+## Sub-Components
+
+For complex views, the command creates sub-components:
+
+```tsx
+interface InvoiceRowProps {
+  invoice: Invoice
+  onView?: () => void
+  onEdit?: () => void
+  onDelete?: () => void
+}
+
+export function InvoiceRow({ invoice, onView, onEdit, onDelete }: InvoiceRowProps) {
+  // Row implementation
+}
+```
+
+Sub-components are also props-based and portable.
+
+## Important Notes
+
+<Warning>
+- **Restart dev server** after creating components
+- Components are props-based - never import data.json in exportable components
+- Preview wrapper is the ONLY file that imports data.json
+- Use TypeScript interfaces from types.ts for all props
+- Callbacks should be optional (`?`) and called with optional chaining (`?.`)
+- Apply design tokens when available
+</Warning>
+
+## Multiple Views
+
+If a section needs multiple views (list, detail, form):
+
+1. Run `/design-screen` for the first view
+2. Run `/design-screen` again for additional views
+3. Each view gets its own component and preview wrapper
+
+## Next Steps
+
+After creating screen designs:
+
+1. **Restart dev server** to see the design
+2. Run `/screenshot-design` to capture screenshots
+3. If spec calls for more views, run `/design-screen` again
+4. When all sections are complete, run `/export-product`

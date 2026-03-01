@@ -1,0 +1,255 @@
+---
+title: /shape-section
+description: Define section specification and generate sample data
+---
+
+# /shape-section
+
+Defines the specification for a section of your product through a conversational process, then automatically generates sample data and TypeScript types.
+
+## Syntax
+
+```
+/shape-section
+```
+
+## What It Does
+
+Guides you through defining:
+1. **Section Specification** - User flows, UI requirements, scope
+2. **Sample Data** - Realistic test data for screen designs
+3. **TypeScript Types** - Data interfaces and component props
+
+## Prerequisites
+
+- Requires `/product/product-roadmap.md`
+- Optional: `/product/data-shape/data-shape.md` (for consistent entity naming)
+- Optional: `src/shell/components/AppShell.tsx` (to configure shell usage)
+
+<Note>
+If roadmap doesn't exist, the command prompts you to run `/product-vision` first.
+</Note>
+
+## Outputs
+
+Creates three files:
+- `product/sections/[section-id]/spec.md` - Section specification
+- `product/sections/[section-id]/data.json` - Sample data
+- `product/sections/[section-id]/types.ts` - TypeScript interfaces
+
+## Workflow
+
+<Steps>
+  <Step title="Select Section">
+    If multiple sections exist, asks which one to define.
+  </Step>
+  
+  <Step title="Gather Initial Input">
+    Invites you to share any notes or ideas about the section.
+  </Step>
+  
+  <Step title="Ask Clarifying Questions">
+    Asks 4-6 targeted questions about:
+    - Main user actions/tasks
+    - Information to display
+    - Key user flows
+    - UI patterns needed
+    - Scope boundaries
+  </Step>
+  
+  <Step title="Configure Shell">
+    If shell exists, asks whether this section should:
+    - Display inside the app shell (default)
+    - Display as standalone page (no shell)
+  </Step>
+  
+  <Step title="Auto-Generate Files">
+    Creates all three files automatically without approval.
+  </Step>
+</Steps>
+
+## Specification Format
+
+The generated `spec.md`:
+
+```markdown
+# [Section Title] Specification
+
+## Overview
+[2-3 sentence summary]
+
+## User Flows
+- [Flow 1]
+- [Flow 2]
+- [Flow 3]
+
+## UI Requirements
+- [Requirement 1]
+- [Requirement 2]
+- [Requirement 3]
+
+## Configuration
+- shell: [true/false]
+```
+
+<Accordion title="Configuration Options">
+- `shell: true` - Section displays inside app shell (default)
+- `shell: false` - Section displays standalone without shell
+</Accordion>
+
+## Sample Data Generation
+
+Automatically generates `data.json` with:
+
+### Required Structure
+
+Every data.json includes a `_meta` section:
+
+```json
+{
+  "_meta": {
+    "models": {
+      "entityName": "Description of what this entity represents."
+    },
+    "relationships": [
+      "Description of how models connect"
+    ]
+  },
+  "entityName": [
+    // Sample records...
+  ]
+}
+```
+
+### Sample Data Characteristics
+
+<Accordion title="Data Quality">
+- **Realistic:** Believable names, dates, descriptions (not "Lorem ipsum" or "Test 123")
+- **Varied:** Mix of short/long text, different statuses
+- **Edge cases:** At least one empty array, one long description
+- **Sufficient volume:** 5-10 sample records for main entities
+- **TypeScript-friendly:** Consistent field names and types
+</Accordion>
+
+## TypeScript Types Generation
+
+Automatically generates `types.ts` with:
+
+### Data Interfaces
+
+Inferred from sample data:
+
+```typescript
+export interface Invoice {
+  id: string
+  invoiceNumber: string
+  clientName: string
+  total: number
+  status: 'draft' | 'sent' | 'paid' | 'overdue'
+  dueDate: string
+  lineItems: LineItem[]
+}
+
+export interface LineItem {
+  description: string
+  quantity: number
+  rate: number
+}
+```
+
+### Component Props Interface
+
+Includes data and callbacks:
+
+```typescript
+export interface InvoiceListProps {
+  /** The list of invoices to display */
+  invoices: Invoice[]
+  /** Called when user wants to view an invoice's details */
+  onView?: (id: string) => void
+  /** Called when user wants to edit an invoice */
+  onEdit?: (id: string) => void
+  /** Called when user wants to delete an invoice */
+  onDelete?: (id: string) => void
+  /** Called when user wants to create a new invoice */
+  onCreate?: () => void
+}
+```
+
+<Accordion title="Type Generation Rules">
+- PascalCase for interface names: `Invoice`, `LineItem`
+- camelCase for property names: `clientName`, `dueDate`
+- Union types for status/enum fields
+- JSDoc comments on callback props
+- Props interface named `[SectionName]Props`
+</Accordion>
+
+## Example Session
+
+```
+User: /shape-section
+
+Assistant: Which section would you like to define?
+1. Dashboard
+2. Invoices
+3. Clients
+4. Settings
+
+User: Invoices
+
+Assistant: Let's define the scope for **Invoices**. Do you have any 
+notes or ideas about what this section should include?
+
+User: Users should be able to create, edit, and send invoices. They 
+can track payment status and see invoice history.
+
+Assistant: Great! Let me ask a few questions:
+
+- What are the main actions a user can take in this section?
+- What information needs to be displayed in the invoice list?
+- Walk me through creating a new invoice - what's the flow?
+- Should invoices have multiple views (list and detail)?
+
+[After gathering responses...]
+
+Assistant: I've created the following for **Invoices**:
+
+1. **Spec** - `product/sections/invoices/spec.md`
+2. **Sample Data** - `product/sections/invoices/data.json` (8 records)
+3. **TypeScript Types** - `product/sections/invoices/types.ts`
+
+Sample data includes: invoices (8), lineItems
+
+Review these files and let me know if you'd like adjustments.
+```
+
+## Global Data Shape Integration
+
+If `/product/data-shape/data-shape.md` exists:
+
+- Sample data uses entity names from the global data shape
+- Ensures consistency across all sections
+- Types match global entity definitions
+
+<Note>
+Global data shape provides a shared vocabulary - sample data will reference the same entity names.
+</Note>
+
+## Important Notes
+
+<Warning>
+- Focus on UX and UI requirements, not backend/database details
+- Keep specs concise - only what was discussed
+- Entity names should be singular
+- Auto-proceeds without approval after gathering info
+- If updates needed, request changes and files are updated immediately
+</Warning>
+
+## Next Steps
+
+After shaping a section:
+
+1. Run `/design-screen` to create screen designs for this section
+2. If sample data needs updates, run `/sample-data`
+3. Repeat `/shape-section` for other sections
+4. Run `/screenshot-design` after creating screen designs

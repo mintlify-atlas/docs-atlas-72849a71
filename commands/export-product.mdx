@@ -1,0 +1,351 @@
+---
+title: /export-product
+description: Generate complete implementation handoff package
+---
+
+# /export-product
+
+Generates a complete handoff package with all components, documentation, and ready-to-use prompts for implementing your product.
+
+## Syntax
+
+```
+/export-product
+```
+
+## What It Does
+
+Creates a comprehensive `product-plan/` directory containing:
+- Ready-to-use prompts for coding agents
+- Implementation instructions (one-shot and incremental)
+- All screen design components (shell + sections)
+- TypeScript types and sample data
+- Design tokens and system documentation
+- UI behavior test specs for each section
+- Screenshots for visual reference
+
+## Prerequisites
+
+**Required:**
+- `/product/product-overview.md`
+- `/product/product-roadmap.md`
+- At least one section with screen designs in `src/sections/[section-id]/`
+
+**Recommended (warnings shown if missing):**
+- `/product/data-shape/data-shape.md`
+- `/product/design-system/colors.json`
+- `/product/design-system/typography.json`
+- `src/shell/components/AppShell.tsx`
+
+<Note>
+You can export without recommended files, but they enhance the handoff quality.
+</Note>
+
+## Outputs
+
+Creates complete directory structure:
+
+```
+product-plan/
+├── README.md                    # Quick start guide
+├── product-overview.md          # Product summary
+├── prompts/                     # Ready-to-use prompts
+│   ├── one-shot-prompt.md
+│   └── section-prompt.md
+├── instructions/                # Implementation guides
+│   ├── one-shot-instructions.md
+│   └── incremental/
+│       ├── 01-shell.md
+│       ├── 02-[section].md
+│       └── ...
+├── design-system/               # Design tokens
+├── data-shapes/                 # UI data contracts
+├── shell/                       # Shell components
+└── sections/                    # Section components
+    └── [section-id]/
+        ├── README.md
+        ├── tests.md             # UI behavior test specs
+        ├── components/
+        ├── types.ts
+        ├── sample-data.json
+        └── screenshot.png
+```
+
+Also creates:
+- `product-plan.zip` - Downloadable archive
+
+## Workflow
+
+<Steps>
+  <Step title="Verify Prerequisites">
+    Checks for required files. Shows warnings for missing recommended files.
+  </Step>
+  
+  <Step title="Gather Information">
+    Reads all product files:
+    - Product overview and roadmap
+    - Data shape and design tokens
+    - Shell and section specifications
+    - All screen design components
+  </Step>
+  
+  <Step title="Generate Export Structure">
+    Creates the complete `product-plan/` directory with all files.
+  </Step>
+  
+  <Step title="Transform Components">
+    Copies components with:
+    - Transformed import paths (relative instead of @/)
+    - Removed Design OS-specific imports
+    - Self-contained, portable structure
+  </Step>
+  
+  <Step title="Generate Documentation">
+    Creates:
+    - README with usage instructions
+    - Milestone instructions for each section
+    - Test specs for UI behavior
+    - Section READMEs
+  </Step>
+  
+  <Step title="Generate Prompts">
+    Creates ready-to-use prompt templates for:
+    - One-shot implementation (full app)
+    - Section-by-section implementation
+  </Step>
+  
+  <Step title="Create Zip Archive">
+    Packages everything into `product-plan.zip`.
+  </Step>
+</Steps>
+
+## Export Directory Details
+
+### prompts/
+
+Ready-to-use prompt templates:
+
+**one-shot-prompt.md**
+- For implementing entire app in one session
+- References `one-shot-instructions.md`
+- Prompts agent to ask about tech stack, auth, requirements
+- Includes space for additional notes
+
+**section-prompt.md**
+- Template for section-by-section implementation
+- Variables to fill in (SECTION_NAME, SECTION_ID, NN)
+- References incremental instructions
+- Focused on single section at a time
+
+### instructions/
+
+**one-shot-instructions.md**
+- All milestones combined into one document
+- Includes preamble about handoff expectations
+- Product overview context
+- Shell milestone (design tokens + navigation)
+- All section milestones
+- Testing guidance
+
+**incremental/01-shell.md**
+- First milestone: Setup design tokens and app shell
+- Design system configuration
+- Shell component integration
+- Navigation wiring
+
+**incremental/[NN]-[section-id].md**
+- One file per section (starting at 02)
+- Section overview and key functionality
+- Components provided
+- Props reference
+- Expected user flows (step-by-step)
+- Empty state handling
+- References to test specs
+- "Done When" checklist
+
+### design-system/
+
+- `tokens.css` - CSS custom properties
+- `tailwind-colors.md` - Tailwind configuration guide
+- `fonts.md` - Google Fonts setup
+
+### data-shapes/
+
+- `README.md` - Explanation of UI data contracts
+- `overview.ts` - All entity types aggregated
+
+### shell/
+
+- `README.md` - Shell design intent
+- `components/` - AppShell, MainNav, UserMenu
+- `screenshot.png` - Visual reference (if exists)
+
+### sections/[section-id]/
+
+- `README.md` - Feature overview, design decisions
+- `tests.md` - UI behavior test specs
+- `components/` - All exportable components
+- `types.ts` - TypeScript interfaces
+- `sample-data.json` - Test data
+- `screenshot.png` - Visual reference (if exists)
+
+## Test Specs (tests.md)
+
+Each section includes comprehensive UI behavior test specs:
+
+<Accordion title="Test Spec Contents">
+- **User Flow Tests:** Success and failure paths for main flows
+- **Empty State Tests:** Primary and related records empty states
+- **Component Interaction Tests:** Renders, clicks, hover, keyboard
+- **Edge Cases:** Long text, boundary values, state transitions
+- **Accessibility Checks:** Keyboard, labels, announcements, focus
+- **Sample Test Data:** Example data objects for tests
+</Accordion>
+
+Test specs are **framework-agnostic** - they describe WHAT to test (UI behavior), not HOW to write the test code.
+
+## Using the Export Package
+
+### Option A: Incremental (Recommended)
+
+<Steps>
+  <Step title="Copy product-plan/">
+    Copy the folder to your implementation codebase.
+  </Step>
+  
+  <Step title="Start with Shell">
+    Follow `instructions/incremental/01-shell.md` to set up design tokens and app shell.
+  </Step>
+  
+  <Step title="Implement Each Section">
+    For each section:
+    - Open `prompts/section-prompt.md`
+    - Fill in variables (SECTION_NAME, SECTION_ID, NN)
+    - Copy/paste into your coding agent
+    - Answer questions and implement
+    - Review and test
+  </Step>
+</Steps>
+
+### Option B: One-Shot
+
+<Steps>
+  <Step title="Copy product-plan/">
+    Copy the folder to your implementation codebase.
+  </Step>
+  
+  <Step title="Use One-Shot Prompt">
+    - Open `prompts/one-shot-prompt.md`
+    - Add any additional notes
+    - Copy/paste into your coding agent
+  </Step>
+  
+  <Step title="Answer Questions">
+    Agent will ask about:
+    - Tech stack and conventions
+    - Authentication and users
+    - Product requirements clarifications
+  </Step>
+  
+  <Step title="Review Plan & Implement">
+    Agent creates implementation plan, then builds everything.
+  </Step>
+</Steps>
+
+## Example Session
+
+```
+User: /export-product
+
+Assistant: [Checks prerequisites]
+
+I've created the complete export package at `product-plan/` and 
+`product-plan.zip`.
+
+**What's Included:**
+
+**Ready-to-Use Prompts:**
+- `prompts/one-shot-prompt.md` - Prompt for full implementation
+- `prompts/section-prompt.md` - Template for section-by-section
+
+**Instructions:**
+- `product-overview.md` - Product summary (always provide)
+- `instructions/one-shot-instructions.md` - All milestones combined
+- `instructions/incremental/` - 5 milestone instructions
+
+**Design Assets:**
+- `design-system/` - Colors, fonts, tokens
+- `data-shapes/` - UI data contracts
+- `shell/` - Application shell components
+- `sections/` - 4 section component packages with test specs
+
+**Download:**
+Restart your dev server and visit the Export page to download 
+`product-plan.zip`.
+
+**How to Use:**
+1. Copy `product-plan/` to your implementation codebase
+2. Open `prompts/one-shot-prompt.md` or `prompts/section-prompt.md`
+3. Add any additional notes
+4. Copy/paste into your coding agent
+5. Answer questions about tech stack, auth, etc.
+6. Let the agent implement based on the instructions
+```
+
+## Important Notes
+
+<Warning>
+- Import paths are transformed to be relative (not @/ aliases)
+- Components are self-contained and portable
+- Preview wrappers are NOT exported (Design OS only)
+- Test specs are framework-agnostic
+- Sample data is for testing before real APIs exist
+- Prompts guide agents to ask clarifying questions
+</Warning>
+
+## Component Portability
+
+Exported components are:
+- **Props-based:** Accept data and callbacks via props
+- **No imports:** Don't import data.json directly
+- **TypeScript:** Fully typed with interfaces
+- **Self-contained:** Include all sub-components
+- **Framework-agnostic:** Standard React patterns
+
+## Handoff Philosophy
+
+The export package focuses on:
+
+✅ **Included:**
+- Finished UI designs (components with full styling)
+- Product requirements and user flows
+- Design system tokens
+- Sample data showing expected data shapes
+- Test specs focused on user-facing behavior
+
+❌ **Not Included:**
+- Backend architecture decisions
+- Database schema details
+- API endpoint definitions
+- State management patterns
+- Data fetching strategies
+
+Implementation agents make these decisions based on the user's tech stack.
+
+## Next Steps
+
+After exporting:
+
+1. **Restart dev server** to see Export page
+2. **Download `product-plan.zip`** from Export page
+3. **Copy to implementation repo**
+4. **Use prompts** to guide coding agent
+5. **Implement incrementally** or all at once
+6. **Reference test specs** while building
+
+## Download Location
+
+Access the export at:
+- Directory: `product-plan/`
+- Archive: `product-plan.zip` (available on Export page)
+- Dev server: Visit `/export` route

@@ -1,0 +1,274 @@
+---
+title: Design System
+description: Choose your color palette and typography from Tailwind and Google Fonts
+---
+
+The design system defines your product's visual identity: colors and typography. These design tokens are applied consistently across all screen designs and the application shell.
+
+## What Gets Created
+
+Running `/design-tokens` creates two files:
+
+- `product/design-system/colors.json` - Primary, secondary, and neutral colors
+- `product/design-system/typography.json` - Heading, body, and mono fonts
+
+## The Process
+
+<Steps>
+  <Step title="Understand Your Product">
+    The AI reviews your product overview to understand what you're building and suggest appropriate design choices.
+  </Step>
+
+  <Step title="Choose Colors">
+    Select three colors from Tailwind's palette:
+    - **Primary** - Main accent for buttons, links, key actions
+    - **Secondary** - Complementary accent for tags, highlights
+    - **Neutral** - Backgrounds, text, borders
+  </Step>
+
+  <Step title="Choose Typography">
+    Select fonts from Google Fonts:
+    - **Heading** - For titles and section headers
+    - **Body** - For paragraphs and UI text
+    - **Mono** - For code and technical content
+  </Step>
+
+  <Step title="Confirm and Save">
+    Review your choices and the AI saves them to JSON files.
+  </Step>
+</Steps>
+
+## Color Palette
+
+Colors are chosen from Tailwind's built-in palette. Each color has shades from 50 (lightest) to 950 (darkest).
+
+### Available Colors
+
+**Warm tones:**
+- `red`, `orange`, `amber`, `yellow`, `lime`
+
+**Cool tones:**
+- `green`, `emerald`, `teal`, `cyan`, `sky`, `blue`
+
+**Purple tones:**
+- `indigo`, `violet`, `purple`, `fuchsia`, `pink`, `rose`
+
+**Neutral tones:**
+- `slate` (cool gray), `gray` (pure gray), `zinc` (slightly warm), `neutral`, `stone` (warm gray)
+
+### Choosing Colors
+
+**Primary color** is your brand's main accent:
+
+- Used for buttons, links, active states
+- Should stand out but not overwhelm
+- Popular choices: `blue`, `indigo`, `emerald`, `violet`
+
+**Secondary color** complements your primary:
+
+- Used for tags, badges, secondary actions
+- Often a different hue or a neutral variation
+- Should work well alongside primary
+
+**Neutral color** provides structure:
+
+- Used for backgrounds, text, borders
+- `slate` and `zinc` are most common
+- Affects the overall feel (cool vs. warm)
+
+### Example Color Schemes
+
+**Professional & Trustworthy:**
+```json
+{
+  "primary": "blue",
+  "secondary": "slate",
+  "neutral": "slate"
+}
+```
+
+**Modern & Energetic:**
+```json
+{
+  "primary": "violet",
+  "secondary": "fuchsia",
+  "neutral": "zinc"
+}
+```
+
+**Fresh & Natural:**
+```json
+{
+  "primary": "emerald",
+  "secondary": "teal",
+  "neutral": "stone"
+}
+```
+
+**Bold & Playful:**
+```json
+{
+  "primary": "lime",
+  "secondary": "amber",
+  "neutral": "stone"
+}
+```
+
+<Info>
+Design tokens use Tailwind color names, not hex codes. This allows your screen designs to automatically support light and dark modes using Tailwind's shade system.
+</Info>
+
+## Typography
+
+Fonts are chosen from Google Fonts for easy web integration and consistent rendering.
+
+### Popular Font Choices
+
+**Heading fonts** - For titles and emphasis:
+
+- `DM Sans` - Modern, clean, versatile
+- `Inter` - Professional, highly readable
+- `Poppins` - Friendly, geometric
+- `Manrope` - Rounded, approachable
+- `Space Grotesk` - Bold, distinctive
+- `Outfit` - Modern, tech-forward
+
+**Body fonts** - For paragraphs and UI:
+
+- `Inter` - Professional, great for interfaces
+- `Source Sans 3` - Clean, highly legible
+- `Nunito Sans` - Friendly, rounded
+- `Open Sans` - Classic, neutral
+- `DM Sans` - Modern, versatile
+
+**Mono fonts** - For code and technical content:
+
+- `IBM Plex Mono` - Professional, readable
+- `JetBrains Mono` - Designed for code
+- `Fira Code` - Popular with developers
+- `Source Code Pro` - Classic, reliable
+
+### Font Pairing Examples
+
+**Modern & Clean:**
+```json
+{
+  "heading": "DM Sans",
+  "body": "DM Sans",
+  "mono": "IBM Plex Mono"
+}
+```
+
+**Professional:**
+```json
+{
+  "heading": "Inter",
+  "body": "Inter",
+  "mono": "JetBrains Mono"
+}
+```
+
+**Friendly:**
+```json
+{
+  "heading": "Poppins",
+  "body": "Nunito Sans",
+  "mono": "Fira Code"
+}
+```
+
+**Bold & Modern:**
+```json
+{
+  "heading": "Space Grotesk",
+  "body": "Inter",
+  "mono": "Source Code Pro"
+}
+```
+
+<Note>
+Using the same font for heading and body (like Inter or DM Sans) creates a cohesive, modern look. Using different fonts adds more personality but requires careful pairing.
+</Note>
+
+## How Design Tokens Are Applied
+
+Design tokens are automatically applied when generating screen designs:
+
+### Color Usage
+
+- **Primary color** - Buttons, links, active nav items, key actions
+- **Secondary color** - Tags, badges, hover states, secondary actions
+- **Neutral color** - Backgrounds, text, borders, cards, inputs
+
+### Typography Usage
+
+- **Heading font** - Page titles, section headers, nav items, card titles
+- **Body font** - Paragraphs, descriptions, UI labels, form inputs
+- **Mono font** - Code blocks, technical IDs, monospaced data
+
+### Light and Dark Mode
+
+Tailwind's shade system automatically handles light and dark modes:
+
+- Light mode uses shades 500-700 for primary colors
+- Dark mode uses shades 400-500 for primary colors
+- Neutral colors adjust across the full 50-950 range
+
+## Example Files
+
+### colors.json
+
+```json product/design-system/colors.json
+{
+  "primary": "blue",
+  "secondary": "slate",
+  "neutral": "slate"
+}
+```
+
+### typography.json
+
+```json product/design-system/typography.json
+{
+  "heading": "DM Sans",
+  "body": "DM Sans",
+  "mono": "IBM Plex Mono"
+}
+```
+
+## Important Notes
+
+<Warning>
+**Design tokens apply only to your product designs**, not the Design OS application itself. The Design OS interface always uses its own design system (stone/lime palette, DM Sans typography).
+</Warning>
+
+### When to Define Design Tokens
+
+Define design tokens after product vision and before designing the shell or any sections. This ensures consistent styling across all screen designs.
+
+### Updating Design Tokens
+
+You can change colors and typography at any time by editing the JSON files directly or running `/design-tokens` again. Changes will apply to future screen designs, but won't automatically update existing designs.
+
+### No Custom Colors
+
+Design OS uses Tailwind's built-in colors only. This ensures:
+
+- Consistent shade scales (50-950)
+- Automatic dark mode support
+- No custom CSS or configuration needed
+- Easy integration with any React setup
+
+If you need custom brand colors in your final implementation, the implementation agent can add them while maintaining the design system structure.
+
+### No Custom Fonts
+
+Use Google Fonts names exactly as they appear on [fonts.google.com](https://fonts.google.com). The font names are used to generate CSS imports in screen design previews.
+
+## Next Steps
+
+With your design system defined:
+
+1. Run `/design-shell` to design your application's navigation and layout
+2. Run `/shape-section` to start designing sections with your visual identity
+3. All screen designs will automatically use your colors and typography

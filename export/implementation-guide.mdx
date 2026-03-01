@@ -1,0 +1,327 @@
+---
+title: Implementation Guide
+description: How to implement your designs in your codebase
+---
+
+After exporting your designs from Design OS, you have a complete handoff package ready for implementation. This guide covers how to work with your AI coding agent to build the product.
+
+## Getting Started
+
+1. Copy the `product-plan/` folder into your target codebase
+2. Start your AI coding agent (Claude Code, Cursor, etc.)
+3. Choose your implementation approach: one-shot or section-by-section
+
+<Info>
+See [Implementation Approaches](/export/one-shot-vs-incremental) to decide which strategy fits your project.
+</Info>
+
+## Using the Pre-Written Prompts
+
+The export includes ready-to-use prompts designed to guide your coding agent through the implementation process.
+
+### For One-Shot Implementation
+
+1. Open `product-plan/prompts/one-shot-prompt.md`
+2. Add any additional notes (tech stack preferences, constraints)
+3. Copy/paste the prompt into your coding agent
+4. Answer the agent's clarifying questions about:
+   - Your tech stack and existing codebase conventions
+   - Authentication and user management approach
+   - Product requirements that need clarification
+   - Anything else needed before implementing
+5. Let the agent plan and implement everything
+
+### For Incremental Implementation
+
+Work through the instructions in order:
+
+1. **Shell** (`instructions/incremental/01-shell.md`) — Design tokens and application shell
+2. **Sections** (`instructions/incremental/02-*.md`, `03-*.md`, etc.) — Each feature, one at a time
+
+For each milestone:
+
+1. Open `product-plan/prompts/section-prompt.md`
+2. Fill in the section variables at the top:
+   - `SECTION_NAME` — Human-readable name (e.g., "Invoices")
+   - `SECTION_ID` — Folder name (e.g., "invoices")
+   - `NN` — Milestone number (e.g., "02" for first section)
+3. Add any section-specific notes
+4. Copy/paste the prompt into your coding agent
+5. Answer clarifying questions and let the agent implement
+6. Review and test before moving to the next milestone
+
+<Note>
+The prompts guide your agent to review all provided files and ask the right questions before starting. Don't skip this step—it prevents wasted work from misunderstandings.
+</Note>
+
+## Test-Driven Development
+
+Each section includes a `tests.md` file with detailed test-writing instructions. We recommend a TDD approach:
+
+1. **Read the test instructions** — Review `sections/[section-id]/tests.md`
+2. **Write failing tests** — Based on the user flows and assertions described
+3. **Implement the feature** — Make the tests pass
+4. **Refactor** — Clean up while keeping tests green
+
+### What's in tests.md
+
+The test instructions include:
+
+<Accordion title="User Flow Tests">
+**Success and failure paths** for key interactions:
+
+- Setup and preconditions
+- Step-by-step actions the user takes
+- Expected results with specific assertions
+- Validation errors and edge cases
+
+**Example:**
+```
+Flow: Create a New Invoice
+
+1. User clicks 'New Invoice' button
+2. User fills in client name and items
+3. User clicks 'Create' to save
+4. Expected: Invoice appears in the list
+
+Failure Path: Missing required field
+- User leaves client name empty
+- User clicks 'Create'
+- Expected: Error message 'Client name is required'
+```
+</Accordion>
+
+<Accordion title="Empty State Tests">
+**Verifying behavior when no records exist:**
+
+- Primary empty state (first-time user, no records yet)
+- Related records empty state (parent exists, no children)
+- Transitions from empty to populated and back
+
+**Example:**
+```
+Scenario: User has no invoices yet
+
+Setup:
+- invoices array is empty ([])
+
+Expected Results:
+- Shows heading 'No invoices yet'
+- Shows text 'Create your first invoice to get started'
+- Shows button 'Create Invoice'
+- Clicking button opens the create form
+```
+</Accordion>
+
+<Accordion title="Component Interaction Tests">
+**Specific UI elements and behaviors:**
+
+- Rendering with correct data
+- User interactions (clicks, hovers, keyboard)
+- Edge cases (long text, many items, etc.)
+
+**Example:**
+```
+InvoiceRow Component
+
+Renders correctly:
+- Displays invoice number 'INV-001'
+- Shows formatted date 'Dec 12, 2025'
+- Shows status badge with correct color
+
+User interactions:
+- Clicking 'Edit' button calls onEdit with invoice id
+- Hovering row shows action buttons
+```
+</Accordion>
+
+<Accordion title="Sample Test Data">
+**Ready-to-use test fixtures:**
+
+```typescript
+// Populated state
+const mockInvoice = {
+  id: "test-1",
+  number: "INV-001",
+  client: "Acme Corp",
+  total: 1500,
+  status: "paid"
+};
+
+// Empty states
+const mockEmptyList = [];
+```
+</Accordion>
+
+<Warning>
+Test instructions are **framework-agnostic**—they describe WHAT to test, not HOW. Adapt them to your testing setup (Jest, Vitest, Playwright, Cypress, RSpec, Minitest, PHPUnit, etc.).
+</Warning>
+
+## Spec-Driven Development
+
+We also recommend a spec-driven approach:
+
+1. **Review the design** — Understand what's been designed and why
+2. **Ask clarifying questions** — Resolve any ambiguities before coding
+3. **Plan the implementation** — Decide on architecture, data layer, integration
+4. **Write tests first** — Based on the provided test instructions
+5. **Implement** — Build to make tests pass
+6. **Verify** — Ensure the implementation matches the design
+
+This approach prevents wasted work from misunderstandings and ensures the implementation properly supports the UI designs.
+
+## Clarifying Questions
+
+Before finalizing any implementation plan, encourage your agent to review all provided files and ask clarifying questions about:
+
+<CardGroup cols={2}>
+  <Card icon="stack">
+    **Tech Stack**
+    
+    Framework, language, existing conventions, and any constraints
+  </Card>
+  <Card icon="users">
+    **Authentication**
+    
+    User sign up, login, permissions, and session management
+  </Card>
+  <Card icon="database">
+    **Data Layer**
+    
+    How to extend the data shapes for your backend needs
+  </Card>
+  <Card icon="list-check">
+    **Requirements**
+    
+    Any product requirements that need clarification
+  </Card>
+</CardGroup>
+
+## What's Included vs. What You Build
+
+### The Design OS Export Provides
+
+- **Finished UI components** — Props-based, fully styled, responsive, dark mode support
+- **Product requirements** — Specs, user flows, and scope definitions
+- **Design system tokens** — Colors, typography, CSS custom properties
+- **Sample data** — Showing the shape of data components expect
+- **UI behavior test specs** — What to test from the user's perspective
+
+### Your Implementation Agent Builds
+
+- Backend APIs and data layer
+- Routing and navigation integration
+- State management
+- Error handling and loading states
+- Authentication and authorization
+- Database models and migrations
+- Tests based on the provided specs
+- Integration with external services
+
+<Info>
+**The UI components are complete and production-ready.** Wire them up, don't rebuild them.
+</Info>
+
+### How Components Work
+
+Components accept data and fire callbacks via props:
+
+```tsx
+<InvoiceList
+  invoices={data}
+  onView={(id) => navigate(`/invoices/${id}`)}
+  onEdit={(id) => navigate(`/invoices/${id}/edit`)}
+  onDelete={(id) => confirmDelete(id)}
+  onCreate={() => navigate('/invoices/new')}
+/>
+```
+
+How you fulfill those contracts is an implementation decision. The components don't care about:
+
+- Your routing library (React Router, Next.js, Remix, etc.)
+- Your data fetching approach (REST, GraphQL, tRPC, etc.)
+- Your state management (Context, Redux, Zustand, etc.)
+- Your backend framework (Node.js, Rails, Django, Laravel, etc.)
+
+## Implementation Tips
+
+<AccordionGroup>
+  <Accordion title="Use the pre-written prompts">
+    They guide your agent to review designs and ask the right questions. Don't skip the clarifying questions step—it prevents misunderstandings.
+  </Accordion>
+  
+  <Accordion title="Always include product-overview.md">
+    It gives essential context about the full product. Include it with every implementation session, whether one-shot or incremental.
+  </Accordion>
+  
+  <Accordion title="Write tests first">
+    Use the `tests.md` instructions for TDD. Writing tests before implementation ensures you're building what's actually needed.
+  </Accordion>
+  
+  <Accordion title="Review incrementally">
+    Section-by-section implementation lets you catch issues early. Don't wait until everything is built to start testing.
+  </Accordion>
+  
+  <Accordion title="Test with sample data first">
+    Use the provided `sample-data.json` before building real APIs. This lets you verify the UI works correctly before integrating with the backend.
+  </Accordion>
+  
+  <Accordion title="Handle empty states">
+    Ensure good UX when no records exist (first-time users, after deletions). Empty state designs are included in the components.
+  </Accordion>
+  
+  <Accordion title="Trust the components">
+    They're designed and styled already. Wire them up with your routing and data—don't rebuild them from scratch.
+  </Accordion>
+</AccordionGroup>
+
+## Example: Incremental Implementation
+
+Here's how a typical incremental implementation might flow:
+
+### Milestone 1: Shell
+
+1. Open `prompts/section-prompt.md` and set:
+   ```
+   SECTION_NAME = Shell
+   SECTION_ID = shell
+   NN = 01
+   ```
+2. Copy/paste into coding agent
+3. Agent asks clarifying questions about routing, auth, etc.
+4. Agent implements design tokens and shell components
+5. Review: Navigation works, user menu displays, responsive layout
+
+### Milestone 2: First Section (e.g., Invoices)
+
+1. Open `prompts/section-prompt.md` and set:
+   ```
+   SECTION_NAME = Invoices
+   SECTION_ID = invoices
+   NN = 02
+   ```
+2. Copy/paste into coding agent
+3. Agent asks about API endpoints, data persistence, etc.
+4. Agent writes tests based on `tests.md`
+5. Agent implements the section to make tests pass
+6. Review: User flows work, empty states display, tests pass
+
+### Milestone 3: Second Section (e.g., Projects)
+
+1. Repeat the process for the next section
+2. Continue until all sections are complete
+
+<Note>
+Each milestone builds on the previous one. Make sure each is complete and tested before moving to the next.
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Implementation Approaches" icon="route" href="/export/one-shot-vs-incremental">
+    Compare one-shot vs. incremental strategies
+  </Card>
+  <Card title="Export Package" icon="box" href="/export/export-package">
+    Detailed breakdown of what's included
+  </Card>
+</CardGroup>

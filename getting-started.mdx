@@ -1,0 +1,144 @@
+---
+title: Getting Started
+description: Learn the basics and start designing your first project with Design OS
+---
+
+Design OS follows a structured workflow that guides you from initial product vision to production-ready designs. This page walks you through the complete process and shows you what to expect at each step.
+
+## The Design Workflow
+
+Design OS uses a three-phase approach to transform your product idea into a complete design system:
+
+### Phase 1: Product Planning
+
+Before designing any screens, establish the foundation of your product:
+
+<Steps>
+  <Step title="Product Vision">
+    Run `/product-vision` to define your product overview, sections, and data shape in one conversational flow. The AI will ask clarifying questions about your product, and then automatically generate three key files:
+    - Product overview (name, description, problems/solutions, features)
+    - Product roadmap (sections you'll build)
+    - Data shape (core entities and their relationships)
+  </Step>
+  <Step title="Design Tokens">
+    Run `/design-tokens` to choose your color palette from Tailwind's built-in colors and typography from Google Fonts. These tokens will be applied consistently across all your screen designs.
+  </Step>
+  <Step title="Application Shell">
+    Run `/design-shell` to design the persistent navigation and layout that wraps all sections of your product.
+  </Step>
+</Steps>
+
+<Info>
+You can update individual planning files later using `/product-roadmap`, `/data-shape`, and `/sample-data` commands.
+</Info>
+
+### Phase 2: Section Design
+
+Once the foundation is set, work through each section in your roadmap:
+
+<Steps>
+  <Step title="Shape the Section">
+    Run `/shape-section` to define the section's scope and requirements. The AI will help you:
+    - Clarify what the section does
+    - Define specific requirements
+    - Generate sample data and TypeScript types
+  </Step>
+  <Step title="Design the Screen">
+    Run `/design-screen` to create the actual React components. The AI will build production-ready components that use your design tokens and sample data.
+  </Step>
+  <Step title="Capture Screenshots (Optional)">
+    Run `/screenshot-design` to snap a screenshot of your finished design for quick reference.
+  </Step>
+</Steps>
+
+Repeat this process for each section in your roadmap.
+
+<Tip>
+Restart the dev server (`npm run dev`) after creating new components to see your changes.
+</Tip>
+
+### Phase 3: Export
+
+When all sections are designed, generate your handoff package:
+
+<Steps>
+  <Step title="Export Product">
+    Run `/export-product` to generate a complete handoff package in the `product-plan/` directory. This includes:
+    - Ready-to-use prompts for coding agents
+    - Implementation instructions (one-shot or incremental)
+    - All React components with TypeScript types
+    - Design tokens and sample data
+    - Test specifications for each section
+  </Step>
+</Steps>
+
+## Quick Reference: Slash Commands
+
+Here are all the commands you'll use throughout the design process:
+
+| Command | Purpose |
+|---------|---------||
+| `/product-vision` | Define product overview, roadmap sections, and data shape |
+| `/design-tokens` | Choose colors and typography |
+| `/design-shell` | Design navigation and layout |
+| `/shape-section` | Define a section's scope, requirements, and generate sample data + types |
+| `/design-screen` | Create screen design components |
+| `/screenshot-design` | Capture screenshots |
+| `/export-product` | Generate the complete handoff package |
+| `/product-roadmap` | Update product sections (after initial creation) |
+| `/data-shape` | Update data entities (after initial creation) |
+| `/sample-data` | Update sample data and types (after initial creation) |
+
+## Using the Dev Server
+
+Design OS runs as a local Vite application. While you work with the AI through slash commands, you can view your designs in real-time:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser to see:
+- Your product overview and roadmap
+- Design system tokens
+- Application shell preview
+- Section specifications and screen designs
+- Export packages
+
+<Note>
+Design OS is a design environment—a separate codebase from your actual product. When you're done designing, you'll export components and assets to import into your product's codebase.
+</Note>
+
+## Tips for Success
+
+<CardGroup cols={2}>
+  <Card title="Follow the Sequence" icon="list-ol">
+    Each step builds on the previous one. Don't skip ahead or you'll miss important context.
+  </Card>
+  <Card title="Be Specific" icon="bullseye">
+    The more detail you provide during conversations, the better the output will match your vision.
+  </Card>
+  <Card title="Iterate" icon="rotate">
+    Each command is a conversation. Refine your designs until you're happy with the results.
+  </Card>
+  <Card title="Restart as Needed" icon="power-off">
+    After creating new components, restart the dev server to see your changes reflected in the UI.
+  </Card>
+</CardGroup>
+
+## What Happens During Export?
+
+When you run `/export-product`, Design OS generates a comprehensive handoff package:
+
+- **Ready-to-use prompts**: Pre-written prompts you can copy/paste into Claude Code, Cursor, or any coding agent
+- **Implementation instructions**: Step-by-step guides for building your product
+- **Portable components**: Props-based React components that work with any setup
+- **Data shapes**: TypeScript interfaces defining what data components expect
+- **Test specs**: UI behavior specifications for each section
+
+<Info>
+The handoff focuses on UI designs, product requirements, and user flows. Backend architecture, data modeling, and business logic decisions are left to your implementation agent.
+</Info>
+
+## Next Steps
+
+Ready to install Design OS? Head over to the [Installation](/installation) guide to set up your local environment.

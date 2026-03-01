@@ -1,0 +1,169 @@
+---
+title: "The Design Process"
+description: "The structured workflow for building products in Design OS"
+---
+
+Design OS guides you through a structured sequence where each step builds on the previous one. This process ensures you define your product vision before diving into screen designs.
+
+## The Planning Flow
+
+Design OS follows a three-phase approach: Product Planning, Section Design, and Export.
+
+### Phase 1: Product Planning
+
+Before designing any screens, establish your product foundation. These steps define what you're building and create the design system all sections will use.
+
+<Steps>
+  <Step title="Product Vision">
+    Define your product overview, roadmap sections, and data shape—all in one conversational flow. After answering clarifying questions, three files are generated automatically:
+    
+    - `product/product-overview.md` — Product description, problems/solutions, features
+    - `product/product-roadmap.md` — List of sections with titles and descriptions
+    - `product/data-shape/data-shape.md` — Entity names, descriptions, and relationships
+    
+    **Command:** `/product-vision`
+    
+    <Note>
+      After initial creation, use `/product-roadmap` to update sections or `/data-shape` to update entities individually.
+    </Note>
+  </Step>
+  
+  <Step title="Design System">
+    Choose your color palette from Tailwind colors and typography from Google Fonts. These tokens are applied to all screen designs and ensure visual consistency.
+    
+    **Output:**
+    - `product/design-system/colors.json` — Primary, secondary, and neutral colors
+    - `product/design-system/typography.json` — Heading, body, and mono fonts
+    
+    **Command:** `/design-tokens`
+  </Step>
+  
+  <Step title="Application Shell">
+    Design the persistent navigation and layout that wraps all sections. This includes your main navigation structure, user menu, and overall layout pattern.
+    
+    **Output:**
+    - `product/shell/spec.md` — Shell specification
+    - `src/shell/components/` — React components (AppShell, MainNav, UserMenu)
+    
+    **Command:** `/design-shell`
+  </Step>
+</Steps>
+
+<Info>
+  Complete all Product Planning steps before moving to Section Design. The foundation you establish here is used throughout the rest of the process.
+</Info>
+
+### Phase 2: Section Design
+
+Once your foundation is set, work through each section in your roadmap. Repeat these steps for every feature area in your product.
+
+<Steps>
+  <Step title="Shape the Section">
+    Define the section's specification—its scope, user flows, and requirements. This command also generates sample data and TypeScript types you'll use in your screen designs.
+    
+    **Output:**
+    - `product/sections/[section-name]/spec.md` — Section specification
+    - `product/sections/[section-name]/data.json` — Sample data for screen designs
+    - `product/sections/[section-name]/types.ts` — TypeScript interfaces
+    
+    **Command:** `/shape-section`
+    
+    <Note>
+      After initial creation, use `/sample-data` to update the data and types if needed.
+    </Note>
+  </Step>
+  
+  <Step title="Design the Screen">
+    Create the actual React components for this section. The AI builds production-ready components that use your design tokens and sample data.
+    
+    **Output:**
+    - `src/sections/[section-name]/components/` — Exportable components
+    - `src/sections/[section-name]/[ViewName].tsx` — Preview wrapper
+    
+    **Command:** `/design-screen`
+    
+    <Info>
+      Restart the dev server after creating new components to see your changes.
+    </Info>
+  </Step>
+  
+  <Step title="Capture Screenshots (Optional)">
+    Document the finished design by capturing screenshots in both light and dark modes. These are included in your export package for visual reference.
+    
+    **Output:**
+    - `product/sections/[section-name]/*.png` — Screenshots
+    
+    **Command:** `/screenshot-design`
+  </Step>
+</Steps>
+
+### Phase 3: Export
+
+When all sections are designed, generate your complete handoff package for implementation.
+
+<Steps>
+  <Step title="Export Product">
+    Generate the complete export package with all components, types, and handoff documentation. This package is ready to hand off to your coding agent or development team.
+    
+    **Output:** `product-plan/` directory containing:
+    
+    - **Ready-to-use prompts** — Pre-written prompts to copy/paste into coding agents
+      - `one-shot-prompt.md` — For full implementation in one session
+      - `section-prompt.md` — Template for section-by-section implementation
+    - **Implementation instructions** — UI-focused guides for each milestone
+      - `one-shot-instructions.md` — All milestones combined
+      - `incremental/` — Milestone-by-milestone instructions
+    - **Test specs** — Each section includes `tests.md` with UI behavior specs
+    - **Portable components** — Props-based React components ready for any setup
+    - **Data shapes** — TypeScript interfaces defining what data components expect
+    
+    **Command:** `/export-product`
+  </Step>
+</Steps>
+
+<Note>
+  The export focuses on UI designs, product requirements, and user flows. Backend architecture, data modeling, and business logic decisions are left to the implementation agent.
+</Note>
+
+## The Conversational Workflow
+
+Each slash command starts a conversation. The AI asks clarifying questions, you provide direction, and together you shape the output. This collaborative approach ensures the result matches your vision.
+
+### Tips for Success
+
+- **Follow the sequence** — Don't skip steps. Each builds on the previous one
+- **Be specific** — The more detail you provide, the better the output
+- **Iterate** — Refine your designs until you're satisfied. It's easier to adjust here than in code
+- **Restart when needed** — After creating new components, restart the dev server to see changes
+
+## What Design OS Does (and Doesn't Do)
+
+<Accordion title="Design OS DOES">
+  - Help you define your product vision and requirements
+  - Generate production-ready UI components and screen designs
+  - Create a complete handoff package for implementation
+  - Provide sample data and types for realistic previews
+  - Establish a consistent design system across all sections
+</Accordion>
+
+<Accordion title="Design OS DOES NOT">
+  - Build your backend or database schema
+  - Make business logic or architecture decisions
+  - Host or deploy your application
+  - Replace your actual product codebase
+  - Handle authentication, authorization, or data persistence
+</Accordion>
+
+Design OS is the **planning step** between your idea and your codebase. It helps you define what to build and how it should work, then hands off everything needed for implementation.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="File Structure" icon="folder-tree" href="/concepts/file-structure">
+    Understand how Design OS organizes your product files
+  </Card>
+  
+  <Card title="Product Planning" icon="compass" href="/planning/product-vision">
+    Start your first product with the Product Planning workflow
+  </Card>
+</CardGroup>

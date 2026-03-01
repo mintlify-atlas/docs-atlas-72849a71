@@ -1,0 +1,375 @@
+---
+title: Export Package
+description: Detailed breakdown of what's included in the export package
+---
+
+The export package (`product-plan/`) contains everything your implementation agent needs to build the product.
+
+## Package Structure
+
+<Accordion title="Complete Directory Structure">
+```
+product-plan/
+├── README.md                    # Quick start guide
+├── product-overview.md          # Product summary (always provide)
+│
+├── prompts/                     # Ready-to-use prompts
+│   ├── one-shot-prompt.md       # Full implementation prompt
+│   └── section-prompt.md        # Section-by-section template
+│
+├── instructions/                # Implementation instructions
+│   ├── one-shot-instructions.md # All milestones combined
+│   └── incremental/             # Milestone-by-milestone
+│       ├── 01-shell.md
+│       ├── 02-[section-id].md
+│       └── ...
+│
+├── design-system/               # Design tokens
+│   ├── tokens.css
+│   ├── tailwind-colors.md
+│   └── fonts.md
+│
+├── data-shapes/                 # UI data contracts
+│   ├── README.md
+│   └── overview.ts
+│
+├── shell/                       # Shell components
+│   ├── README.md
+│   ├── components/
+│   │   ├── AppShell.tsx
+│   │   ├── MainNav.tsx
+│   │   ├── UserMenu.tsx
+│   │   └── index.ts
+│   └── screenshot.png
+│
+└── sections/                    # Section components
+    └── [section-id]/
+        ├── README.md
+        ├── tests.md
+        ├── components/
+        │   ├── [Component].tsx
+        │   └── index.ts
+        ├── types.ts
+        ├── sample-data.json
+        └── screenshot.png
+```
+</Accordion>
+
+## Ready-to-Use Prompts
+
+### one-shot-prompt.md
+
+A complete prompt for full product implementation in one session.
+
+**What it does:**
+- References `product-overview.md` and `one-shot-instructions.md`
+- Guides agent to review all files before starting
+- Prompts agent to ask clarifying questions about:
+  - Tech stack and existing codebase conventions
+  - Authentication and user management
+  - Product requirements
+  - Anything else needed before implementing
+
+**When to use:** For simpler products or when you want to build everything in one session.
+
+### section-prompt.md
+
+A template prompt for implementing one section at a time.
+
+**What it does:**
+- References specific section's instruction file and assets
+- Points to `tests.md` for UI behavior test specs
+- Guides agent to ask clarifying questions about integration and requirements
+
+**When to use:** For larger products or when you want to review progress incrementally.
+
+<Info>
+Both prompts are designed to be copied directly into your coding agent. Fill in any template variables and add project-specific notes before using.
+</Info>
+
+## Implementation Instructions
+
+### product-overview.md
+
+Provides essential context about the full product:
+
+- Product summary and description
+- Planned sections in order
+- Product entities (from data shape)
+- Design system overview
+- Implementation sequence
+
+<Warning>
+Always include `product-overview.md` with any implementation session—it gives critical context about the full product.
+</Warning>
+
+### one-shot-instructions.md
+
+Combines all milestones into a single comprehensive document:
+
+- Includes product overview
+- Shell milestone (design tokens + application shell)
+- All section milestones
+- Testing guidance
+- About the handoff (what's provided vs. what you build)
+
+### Incremental Instructions
+
+Breaks implementation into discrete milestones:
+
+<Accordion title="01-shell.md">
+**Milestone 1: Shell**
+
+Sets up the foundation:
+
+- Design tokens configuration (CSS custom properties, Tailwind colors, fonts)
+- Application shell components (AppShell, MainNav, UserMenu)
+- Navigation wiring
+- Responsive layout
+
+**Files to reference:**
+- `product-plan/design-system/` — Design tokens
+- `product-plan/shell/README.md` — Shell design intent
+- `product-plan/shell/components/` — Shell React components
+- `product-plan/shell/screenshot.png` — Visual reference
+</Accordion>
+
+<Accordion title="[NN]-[section-id].md">
+**Milestone N: [Section Title]**
+
+Each section milestone includes:
+
+- **Goal** — Brief description of the feature
+- **Overview** — What this enables users to do
+- **Key Functionality** — 3-6 main capabilities
+- **Components Provided** — List of components to integrate
+- **Props Reference** — Data shapes and callback props
+- **Expected User Flows** — Step-by-step scenarios (2-4 flows)
+- **Empty States** — Handling no data scenarios
+- **Testing** — Reference to `tests.md` for specs
+- **Files to Reference** — All relevant files for this section
+- **Done When** — Completion checklist
+
+**Files to reference:**
+- `product-plan/sections/[section-id]/README.md` — Feature overview
+- `product-plan/sections/[section-id]/tests.md` — Test specs
+- `product-plan/sections/[section-id]/components/` — React components
+- `product-plan/sections/[section-id]/types.ts` — TypeScript interfaces
+- `product-plan/sections/[section-id]/sample-data.json` — Test data
+- `product-plan/sections/[section-id]/screenshot.png` — Visual reference
+</Accordion>
+
+## Design System Files
+
+### tokens.css
+
+CSS custom properties for your design tokens:
+
+```css
+:root {
+  /* Colors */
+  --color-primary: [Tailwind color];
+  --color-secondary: [Tailwind color];
+  --color-neutral: [Tailwind color];
+
+  /* Typography */
+  --font-heading: '[Heading Font]', sans-serif;
+  --font-body: '[Body Font]', sans-serif;
+  --font-mono: '[Mono Font]', monospace;
+}
+```
+
+### tailwind-colors.md
+
+Guidance for configuring Tailwind colors:
+
+- Color choices (primary, secondary, neutral)
+- Usage examples for buttons, badges, text
+- Dark mode variants
+
+### fonts.md
+
+Google Fonts setup instructions:
+
+- Font import link for HTML
+- Font family declarations
+- Usage guidance (headings, body, code)
+
+## Data Shapes
+
+### README.md
+
+Explains the UI data contracts:
+
+- What these types represent (frontend contract)
+- List of all entities across sections
+- Per-section type files
+- Combined reference file
+
+<Note>
+These types define what data the UI components expect to receive as props. How you model, store, and fetch this data on the backend is an implementation decision.
+</Note>
+
+### overview.ts
+
+Aggregated TypeScript interfaces from all sections:
+
+```typescript
+// UI Data Shapes — Combined Reference
+//
+// These types define the data that UI components expect.
+// They are a frontend contract, not a database schema.
+
+// From: sections/invoices
+export interface Invoice {
+  id: string;
+  number: string;
+  // ...
+}
+
+// From: sections/projects
+export interface Project {
+  id: string;
+  name: string;
+  // ...
+}
+```
+
+Only includes data shape interfaces, not component Props interfaces (those stay in each section's `types.ts`).
+
+## Shell Components
+
+### README.md
+
+Describes the shell design:
+
+- Design intent and layout pattern
+- Navigation structure
+- User menu functionality
+- Responsive behavior
+
+### components/
+
+Portable React components:
+
+- **AppShell.tsx** — Main layout wrapper
+- **MainNav.tsx** — Navigation component
+- **UserMenu.tsx** — User menu with avatar
+- **index.ts** — Exports
+
+<Info>
+All import paths are transformed to relative paths—no Design OS dependencies.
+</Info>
+
+### screenshot.png
+
+Visual reference showing the target design of the application shell.
+
+## Section Components
+
+### README.md
+
+Feature documentation:
+
+- Overview of what the section enables
+- User flows and interactions
+- Design decisions
+- Data shapes used
+- Visual reference
+- Components provided
+- Callback props table
+
+### tests.md
+
+Framework-agnostic test specifications:
+
+<Tabs>
+  <Tab title="User Flow Tests">
+    **Success paths and failure paths** for key user interactions:
+    
+    - Setup and preconditions
+    - Step-by-step actions
+    - Expected results with specific assertions
+    - Validation error scenarios
+  </Tab>
+  <Tab title="Empty State Tests">
+    **Handling no data scenarios:**
+    
+    - Primary empty state (no records yet)
+    - Related records empty state (parent exists, no children)
+    - First-time user experience
+    - Transitions from empty to populated and back
+  </Tab>
+  <Tab title="Component Interaction Tests">
+    **Specific UI elements and behaviors:**
+    
+    - Rendering with correct data
+    - User interactions (clicks, hovers, keyboard)
+    - Edge cases (long text, many items, etc.)
+  </Tab>
+  <Tab title="Sample Test Data">
+    **Ready-to-use test fixtures:**
+    
+    - Populated state examples
+    - Empty state examples
+    - Edge case variations
+  </Tab>
+</Tabs>
+
+<Warning>
+Test specs describe WHAT to test from the user's perspective, not HOW to write the test code. Adapt them to your testing framework.
+</Warning>
+
+### components/
+
+Exportable React components:
+
+- Props-based (accept data and callbacks)
+- Fully styled with Tailwind
+- Responsive and dark mode support
+- Production-ready
+- No Design OS dependencies
+
+### types.ts
+
+TypeScript interfaces:
+
+- Data shape interfaces (entities)
+- Component Props interfaces
+- Callback function signatures
+
+### sample-data.json
+
+Test data showing the shape of data components expect. Use this before building real APIs.
+
+### screenshot.png
+
+Visual reference showing the target design of the section.
+
+## What You Build
+
+The export provides **finished UI designs**. Your implementation agent builds:
+
+- Backend APIs and data layer
+- Routing and navigation
+- State management
+- Error handling and loading states
+- Authentication and authorization
+- Database models and migrations
+- Tests based on the provided specs
+- Integration with external services
+
+<Info>
+The components are props-based—they accept data and fire callbacks. How you fulfill those contracts is up to you.
+</Info>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Implementation Guide" icon="code" href="/export/implementation-guide">
+    Learn how to use the export package
+  </Card>
+  <Card title="Implementation Approaches" icon="route" href="/export/one-shot-vs-incremental">
+    Choose your implementation strategy
+  </Card>
+</CardGroup>

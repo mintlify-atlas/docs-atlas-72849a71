@@ -1,0 +1,161 @@
+---
+title: Product Vision
+description: Define your product's core identity, roadmap, and data shape in one conversational flow
+---
+
+The product vision phase establishes the foundation for your entire product. In one conversational flow, you'll define your product overview, roadmap sections, and data shape.
+
+## What Gets Created
+
+Running `/product-vision` creates three essential files:
+
+- `product/product-overview.md` - Product description, problems/solutions, features
+- `product/product-roadmap.md` - 3-5 sections ordered by development priority
+- `product/data-shape/data-shape.md` - Core entities and relationships
+
+## The Process
+
+<Steps>
+  <Step title="Share Your Ideas">
+    Start by sharing your raw notes, ideas, or thoughts about what you're building. Don't worry about structure - just explain the problem you're solving and who it's for.
+  </Step>
+
+  <Step title="Answer Questions">
+    The AI will ask clarifying questions to understand:
+    
+    - **Product identity** - Name, description, target users
+    - **Problems & solutions** - What pain points you're addressing and how
+    - **Key features** - The main capabilities that deliver value
+    - **Roadmap sections** - The main areas or screens of your product
+    - **Core entities** - The main "things" users will create, view, or manage
+  </Step>
+
+  <Step title="Review Generated Files">
+    Once the AI has enough information, it automatically creates all three files. Review them and request any adjustments needed.
+  </Step>
+</Steps>
+
+<Note>
+The AI will ask questions one or two at a time, conversationally. It's helping you think through your product, not just transcribing.
+</Note>
+
+## Product Overview
+
+The product overview captures the core identity:
+
+```markdown product/product-overview.md
+# TaskFlow
+
+## Description
+TaskFlow is a lightweight project management tool that helps small teams coordinate work without the overhead of complex enterprise software.
+
+## Problems & Solutions
+
+### Problem 1: Too much complexity
+Most project management tools are overwhelming for small teams. TaskFlow provides just the essentials - tasks, projects, and team coordination.
+
+### Problem 2: Context switching
+Teams waste time jumping between chat, docs, and task tools. TaskFlow keeps conversations tied directly to tasks.
+
+## Key Features
+- Simple task creation and assignment
+- Project-based organization
+- In-line task comments and discussions
+- Real-time team activity feed
+- Flexible task views (list, board, calendar)
+```
+
+<Warning>
+The `# Product Name` heading at the top is required - this is what displays as the card title in the Design OS interface.
+</Warning>
+
+## Product Roadmap
+
+The roadmap defines 3-5 self-contained sections, ordered by development priority:
+
+```markdown product/product-roadmap.md
+# Product Roadmap
+
+## Sections
+
+### 1. Dashboard
+Overview of active tasks, recent activity, and team status at a glance.
+
+### 2. Projects
+Create, organize, and manage projects with task lists and progress tracking.
+
+### 3. Tasks
+Detailed task management with assignments, due dates, comments, and status updates.
+
+### 4. Team
+Team member directory with workload visibility and activity history.
+
+### 5. Settings
+Account preferences, notification settings, and workspace configuration.
+```
+
+<Info>
+The numbered format (`### 1. Title`) is required for parsing. Each section should be self-contained enough to design and build independently.
+</Info>
+
+## Data Shape
+
+The data shape defines the core entities ("nouns") and how they relate:
+
+```markdown product/data-shape/data-shape.md
+# Data Shape
+
+## Entities
+
+### User
+A team member who can create projects, create tasks, and be assigned work.
+
+### Project
+A container for organizing related tasks with a name, description, and optional deadline.
+
+### Task
+A discrete piece of work with a title, description, assignee, due date, and status.
+
+### Comment
+A message attached to a task for discussion and coordination.
+
+## Relationships
+
+- Project has many Tasks
+- Task belongs to Project
+- Task has many Comments
+- Comment belongs to Task
+- User can create many Projects
+- User can be assigned to many Tasks
+- User can write many Comments
+```
+
+<Note>
+  Keep entity names singular (User, Task, Project - not Users, Tasks, Projects). This is a conceptual vocabulary, not a database schema.
+</Note>
+
+## What This Provides
+
+The product vision phase gives you:
+
+- **Shared vocabulary** - Consistent entity names across all sections
+- **Clear scope** - Defined boundaries for what you're building
+- **Development roadmap** - Prioritized sections ready to design and build
+- **Problem framing** - Documented pain points and solutions
+
+## Updating Later
+
+You can update individual files after initial creation:
+
+- `/product-roadmap` - Add, remove, or reorder sections
+- `/data-shape` - Add, remove, or update entities and relationships
+
+To completely redefine your product vision, run `/product-vision` again.
+
+## Next Steps
+
+With your product vision established:
+
+1. Run `/design-tokens` to choose your color palette and typography
+2. Run `/design-shell` to design your application's navigation and layout
+3. Run `/shape-section` to start designing individual sections

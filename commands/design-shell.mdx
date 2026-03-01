@@ -1,0 +1,271 @@
+---
+title: /design-shell
+description: Design your application's navigation and layout
+---
+
+# /design-shell
+
+Designs the application shell - the persistent navigation and layout that wraps all sections of your product.
+
+## Syntax
+
+```
+/design-shell
+```
+
+## What It Does
+
+Creates a complete application shell design including:
+- Navigation structure
+- Layout pattern (sidebar, top nav, or minimal)
+- User menu
+- Responsive behavior
+- Fully styled React components
+
+## Prerequisites
+
+- Requires `/product/product-overview.md`
+- Requires `/product/product-roadmap.md`
+- Optional: `/product/design-system/colors.json` and `typography.json`
+
+<Warning>
+If design tokens aren't defined, the shell will use default styling. Run `/design-tokens` first for consistent branding.
+</Warning>
+
+## Outputs
+
+Creates:
+- `/product/shell/spec.md` - Shell specification
+- `src/shell/components/AppShell.tsx` - Main shell wrapper
+- `src/shell/components/MainNav.tsx` - Navigation component
+- `src/shell/components/UserMenu.tsx` - User menu component
+- `src/shell/components/index.ts` - Component exports
+- `src/shell/ShellPreview.tsx` - Preview wrapper
+
+## Workflow
+
+<Steps>
+  <Step title="Analyze Sections">
+    Reads your roadmap to understand the navigation structure.
+  </Step>
+  
+  <Step title="Choose Layout Pattern">
+    Asks which pattern fits your product:
+    - Sidebar Navigation
+    - Top Navigation
+    - Minimal Header
+  </Step>
+  
+  <Step title="Gather Details">
+    Asks about:
+    - User menu placement
+    - Mobile behavior
+    - Additional navigation items (Settings, Help, etc.)
+    - Default/home view
+  </Step>
+  
+  <Step title="Present Specification">
+    Shows the complete shell design for confirmation.
+  </Step>
+  
+  <Step title="Create Components">
+    Generates all shell components and the specification file.
+  </Step>
+</Steps>
+
+## Layout Patterns
+
+### Sidebar Navigation
+
+**Best for:**
+- Apps with many sections
+- Dashboard-style tools
+- Admin panels
+
+**Features:**
+- Vertical nav on the left
+- Content area on the right
+- Collapsible on mobile
+
+### Top Navigation
+
+**Best for:**
+- Simpler apps
+- Marketing-style products
+- Fewer sections (3-5)
+
+**Features:**
+- Horizontal nav at top
+- Content below
+- Hamburger menu on mobile
+
+### Minimal Header
+
+**Best for:**
+- Single-purpose tools
+- Wizard-style flows
+- Focused experiences
+
+**Features:**
+- Just logo + user menu
+- Sections accessed differently
+- Maximum content space
+
+## Shell Component Structure
+
+### AppShell.tsx
+
+Main wrapper component:
+
+```tsx
+interface AppShellProps {
+  children: React.ReactNode
+  navigationItems: Array<{
+    label: string
+    href: string
+    isActive?: boolean
+  }>
+  user?: {
+    name: string
+    avatarUrl?: string
+  }
+  onNavigate?: (href: string) => void
+  onLogout?: () => void
+}
+```
+
+### MainNav.tsx
+
+Navigation component based on chosen pattern.
+
+### UserMenu.tsx
+
+User menu with avatar and dropdown.
+
+## Shell Features
+
+<Accordion title="Built-in Features">
+- Props-based and portable
+- Design tokens applied (if defined)
+- Light and dark mode support
+- Mobile responsive
+- Uses Tailwind CSS for styling
+- Uses lucide-react for icons
+- Navigation for all roadmap sections
+</Accordion>
+
+## Example Session
+
+```
+User: /design-shell
+
+Assistant: I'm designing the shell for **InvoiceHub**. Based on your 
+roadmap, you have 4 sections:
+
+1. **Dashboard**
+2. **Invoices**
+3. **Clients**
+4. **Settings**
+
+Let's decide on the shell layout. Common patterns:
+
+**A. Sidebar Navigation** - Best for dashboard-style apps
+**B. Top Navigation** - Best for simpler apps with fewer sections
+**C. Minimal Header** - Best for single-purpose tools
+
+Which pattern fits **InvoiceHub** best?
+
+User: Sidebar navigation
+
+Assistant: Where should the user menu appear?
+
+User: Bottom of sidebar
+
+Assistant: Here's the shell design:
+
+**Layout:** Sidebar Navigation
+**Navigation Structure:**
+- Dashboard → Home view
+- Invoices → Invoice management
+- Clients → Client management
+- Settings → Configuration
+
+**User Menu:** Bottom of sidebar with avatar and logout
+
+**Responsive:** Sidebar collapses to hamburger on mobile
+
+Does this match what you had in mind?
+
+User: Yes
+
+Assistant: I've designed the application shell for **InvoiceHub**.
+
+**Created files:**
+- `/product/shell/spec.md`
+- `src/shell/components/AppShell.tsx`
+- `src/shell/components/MainNav.tsx`
+- `src/shell/components/UserMenu.tsx`
+- `src/shell/components/index.ts`
+- `src/shell/ShellPreview.tsx`
+
+**Important:** Restart your dev server to see the changes.
+```
+
+## Shell Specification Format
+
+The generated `spec.md`:
+
+```markdown
+# Application Shell Specification
+
+## Overview
+[Description of shell design and purpose]
+
+## Navigation Structure
+- [Nav Item 1] → [Section 1]
+- [Nav Item 2] → [Section 2]
+
+## User Menu
+[Location and contents description]
+
+## Layout Pattern
+[Description of sidebar/top nav/etc.]
+
+## Responsive Behavior
+- **Desktop:** [Behavior]
+- **Tablet:** [Behavior]
+- **Mobile:** [Behavior]
+
+## Design Notes
+[Additional design decisions]
+```
+
+## How Shell Integrates
+
+When you create section screen designs:
+
+1. Screen designs render inside the shell content area
+2. The shell provides navigation context
+3. Preview shows full app experience
+4. Exported components include both shell and sections
+
+<Note>
+The shell is a screen design - it demonstrates navigation and layout. It's not authentication or routing logic.
+</Note>
+
+## Important Notes
+
+<Warning>
+- Restart dev server after creating shell components
+- Shell applies design tokens when available
+- Section screen designs should NOT include navigation (shell handles it)
+- Shell is exported as portable, props-based components
+</Warning>
+
+## Next Steps
+
+After designing the shell:
+
+1. Run `/shape-section` to define section specifications
+2. Run `/design-screen` - sections will render inside the shell
+3. All screen designs will show in full app context

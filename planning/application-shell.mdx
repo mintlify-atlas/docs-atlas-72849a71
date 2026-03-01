@@ -1,0 +1,348 @@
+---
+title: Application Shell
+description: Design the persistent navigation and layout that wraps all your sections
+---
+
+The application shell is the persistent navigation and layout structure that wraps all your sections. It provides global navigation, user menu, and consistent chrome across your product.
+
+## What Gets Created
+
+Running `/design-shell` creates:
+
+- `product/shell/spec.md` - Shell specification document
+- `src/shell/components/AppShell.tsx` - Main shell wrapper component
+- `src/shell/components/MainNav.tsx` - Navigation component
+- `src/shell/components/UserMenu.tsx` - User menu component
+- `src/shell/components/index.ts` - Component exports
+- `src/shell/ShellPreview.tsx` - Preview wrapper for Design OS
+
+## The Process
+
+<Steps>
+  <Step title="Review Product Structure">
+    The AI reviews your product roadmap to understand your sections and suggest appropriate navigation patterns.
+  </Step>
+
+  <Step title="Choose Layout Pattern">
+    Select from common navigation patterns:
+    - **Sidebar Navigation** - Vertical nav on left
+    - **Top Navigation** - Horizontal nav at top
+    - **Minimal Header** - Just logo + user menu
+  </Step>
+
+  <Step title="Define Navigation Items">
+    Specify what appears in the navigation and where. Include Settings, Help, or other global items.
+  </Step>
+
+  <Step title="Configure User Menu">
+    Decide where the user menu appears and what it contains (avatar, name, logout, profile, etc.).
+  </Step>
+
+  <Step title="Design Responsive Behavior">
+    Define how the shell adapts on mobile devices (collapsible sidebar, hamburger menu, etc.).
+  </Step>
+
+  <Step title="Generate Components">
+    The AI creates all shell components with your design tokens applied.
+  </Step>
+</Steps>
+
+## Layout Patterns
+
+### Sidebar Navigation
+
+Vertical navigation panel on the left side of the screen.
+
+**Best for:**
+- Dashboard-style tools
+- Admin panels
+- Apps with many sections (5+)
+- Applications where users spend long sessions
+
+**Characteristics:**
+- Navigation always visible on desktop
+- Can be collapsible or fixed-width
+- User menu typically at bottom of sidebar
+- Content area takes remaining horizontal space
+
+### Top Navigation
+
+Horizontal navigation bar across the top of the screen.
+
+**Best for:**
+- Simpler apps (3-5 sections)
+- Marketing-style products
+- Consumer-facing applications
+- Mobile-first experiences
+
+**Characteristics:**
+- Navigation in header bar
+- User menu typically at top right
+- Content area takes full width below
+- Cleaner, more spacious feel
+
+### Minimal Header
+
+Just logo and user menu, with sections accessed differently.
+
+**Best for:**
+- Single-purpose tools
+- Wizard-style flows
+- Mobile apps
+- Focus-mode experiences
+
+**Characteristics:**
+- Minimal chrome, maximum content area
+- Sections might use tabs or internal navigation
+- User menu only persistent element
+- Very clean, distraction-free
+
+## Shell Components
+
+The shell consists of several props-based React components:
+
+### AppShell.tsx
+
+The main wrapper component that provides layout structure:
+
+```tsx
+interface AppShellProps {
+  children: React.ReactNode
+  navigationItems: Array<{
+    label: string
+    href: string
+    icon?: React.ReactNode
+    isActive?: boolean
+  }>
+  user?: {
+    name: string
+    email?: string
+    avatarUrl?: string
+  }
+  onNavigate?: (href: string) => void
+  onLogout?: () => void
+}
+```
+
+### MainNav.tsx
+
+The navigation component (sidebar or top nav based on pattern):
+
+- Renders navigation items
+- Handles active states
+- Responsive behavior (mobile menu)
+- Icon support from lucide-react
+
+### UserMenu.tsx
+
+The user menu with avatar and dropdown:
+
+- User avatar (initials fallback if no image)
+- User name and email
+- Logout option
+- Optional profile/settings links
+
+## Example Shell Specification
+
+```markdown product/shell/spec.md
+# Application Shell Specification
+
+## Overview
+Sidebar navigation layout with persistent left-side nav and user menu at the bottom.
+
+## Navigation Structure
+- Dashboard → Dashboard section
+- Projects → Projects section
+- Tasks → Tasks section
+- Team → Team section
+- Settings → Settings section
+
+## User Menu
+Located at the bottom of the sidebar. Displays user avatar, name, and opens a dropdown with:
+- Profile
+- Account Settings
+- Logout
+
+## Layout Pattern
+Sidebar navigation with fixed 256px width on desktop. Collapsible to icon-only mode. Content area takes remaining space.
+
+## Responsive Behavior
+- **Desktop (1024px+):** Full sidebar visible, can toggle to collapsed icon-only mode
+- **Tablet (768px-1023px):** Collapsed by default, expands on hover or click
+- **Mobile (<768px):** Hidden by default, accessible via hamburger menu button
+
+## Design Notes
+- Use primary color for active nav items
+- Icons from lucide-react for all nav items
+- Smooth transitions for sidebar collapse/expand
+- Light and dark mode support
+```
+
+## Design Token Application
+
+The shell automatically applies your design tokens:
+
+### Colors
+
+- **Primary color** - Active nav items, key accents
+- **Secondary color** - Hover states, subtle highlights
+- **Neutral color** - Backgrounds, borders, text
+
+### Typography
+
+- **Heading font** - Nav item labels, section titles
+- **Body font** - User name, other text
+
+### Example Usage
+
+```tsx
+// Active nav item uses primary color
+<button className="bg-blue-600 text-white dark:bg-blue-500">
+  Dashboard
+</button>
+
+// Hover state uses secondary color
+<button className="hover:bg-slate-100 dark:hover:bg-slate-800">
+  Projects
+</button>
+
+// Background uses neutral color
+<nav className="bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
+  {/* navigation items */}
+</nav>
+```
+
+## Mobile Responsiveness
+
+The shell is fully responsive:
+
+### Sidebar Pattern on Mobile
+
+- Sidebar hidden by default
+- Hamburger menu button in top left
+- Sidebar slides in as overlay when opened
+- Backdrop dismisses menu
+
+### Top Nav Pattern on Mobile
+
+- Logo remains visible
+- Nav items collapse into hamburger menu
+- User menu remains in top right
+
+## Example ShellPreview.tsx
+
+The preview wrapper shows the shell in Design OS:
+
+```tsx src/shell/ShellPreview.tsx
+import { AppShell } from './components/AppShell'
+import { Home, FolderKanban, CheckSquare, Users, Settings } from 'lucide-react'
+
+export default function ShellPreview() {
+  const navigationItems = [
+    { label: 'Dashboard', href: '/dashboard', icon: <Home className="w-5 h-5" />, isActive: true },
+    { label: 'Projects', href: '/projects', icon: <FolderKanban className="w-5 h-5" /> },
+    { label: 'Tasks', href: '/tasks', icon: <CheckSquare className="w-5 h-5" /> },
+    { label: 'Team', href: '/team', icon: <Users className="w-5 h-5" /> },
+    { label: 'Settings', href: '/settings', icon: <Settings className="w-5 h-5" /> },
+  ]
+
+  const user = {
+    name: 'Alex Morgan',
+    email: 'alex@example.com',
+    avatarUrl: undefined,
+  }
+
+  return (
+    <AppShell
+      navigationItems={navigationItems}
+      user={user}
+      onNavigate={(href) => console.log('Navigate to:', href)}
+      onLogout={() => console.log('Logout')}
+    >
+      <div className="p-8">
+        <h1 className="text-2xl font-bold mb-4">Content Area</h1>
+        <p className="text-slate-600 dark:text-slate-400">
+          Section content will render here.
+        </p>
+      </div>
+    </AppShell>
+  )
+}
+```
+
+<Info>
+The preview wrapper is for Design OS only. The exportable components (`AppShell`, `MainNav`, `UserMenu`) are props-based and can be integrated into any React application.
+</Info>
+
+## Dark Mode Support
+
+All shell components support light and dark modes:
+
+```tsx
+// Backgrounds adapt to theme
+<div className="bg-white dark:bg-slate-900">
+
+// Text adjusts for contrast
+<span className="text-slate-900 dark:text-slate-100">
+
+// Borders remain subtle
+<div className="border border-slate-200 dark:border-slate-800">
+```
+
+Use Tailwind's `dark:` variants throughout to ensure the shell looks great in both modes.
+
+## What About Authentication?
+
+The shell does NOT include authentication UI (login forms, signup flows, password reset, etc.). It assumes the user is already authenticated.
+
+Authentication screens are separate from the shell and are typically designed as standalone sections or handled by your implementation's auth provider.
+
+## Icons
+
+Use [lucide-react](https://lucide.dev) for all icons:
+
+```tsx
+import { Home, Settings, User, LogOut } from 'lucide-react'
+
+<Home className="w-5 h-5" />
+<Settings className="w-5 h-5" />
+```
+
+Lucide provides a comprehensive icon set that matches modern design aesthetics and works well at different sizes.
+
+## Important Notes
+
+<Warning>
+**Restart your dev server** after the shell is created. New components need to be picked up by the build system.
+</Warning>
+
+### Shell vs. Section Screens
+
+- **Shell** - Global navigation and layout
+- **Section screens** - Content that renders inside the shell
+
+When you design section screens with `/design-screen`, they render as children of the shell, showing the complete application experience.
+
+### Props-Based Architecture
+
+All shell components accept data and callbacks via props:
+
+- No direct data imports in exportable components
+- Navigation handled via `onNavigate` callback
+- User actions handled via callback props
+- Easy to integrate with any routing solution
+
+### Styling Requirements
+
+- Use Tailwind CSS utility classes only
+- Support light and dark mode with `dark:` variants
+- Mobile responsive with `sm:`, `md:`, `lg:` breakpoints
+- No custom CSS or styled-components
+
+## Next Steps
+
+With your application shell designed:
+
+1. Run `/shape-section` to define specifications for your first section
+2. Run `/design-screen` to create screen designs that render inside the shell
+3. Section designs will automatically wrap in the shell to show the full app experience

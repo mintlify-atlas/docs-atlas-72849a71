@@ -1,0 +1,183 @@
+---
+title: FAQ
+description: Frequently asked questions about Design OS
+---
+
+## Getting Started
+
+<Accordion title="What AI coding assistant do I need?">
+Design OS uses slash commands to guide the design process. **Claude Code** is recommended, but you can invoke the Design OS commands from any AI coding tool that supports custom commands or prompts—Cursor, Windsurf, Codex, or others.
+
+The key requirement is the ability to run custom slash commands that execute prompts from the `.rp/design-os/` directory.
+</Accordion>
+
+<Accordion title="Do I need to know React to use Design OS?">
+No. Design OS handles the React component generation for you through conversational design sessions. You describe what you want, answer questions about user flows and UI requirements, and the AI builds the components.
+
+However, familiarity with React concepts helps when you review the generated components or want to make manual adjustments.
+</Accordion>
+
+<Accordion title="Can I use Design OS for an existing project?">
+Yes. Design OS can generate components for new features in existing projects. Simply work through the design process, export the components, and integrate them into your codebase.
+
+The exported components are portable—they accept data via props and have no Design OS dependencies.
+</Accordion>
+
+## Technology & Compatibility
+
+<Accordion title="What tech stack does Design OS use?">
+**Design OS itself** runs on:
+- Node.js (v18+)
+- React (v18+)
+- Vite
+- Tailwind CSS (v4)
+
+**Exported components** require:
+- React (v18+)
+- Tailwind CSS (v4)
+
+Your backend can be anything—Rails, Laravel, Next.js, Python, Go, whatever. Design OS only handles the frontend design layer.
+</Accordion>
+
+<Accordion title="Can I use a different CSS framework?">
+Components are built with Tailwind CSS utility classes. If you use a different CSS framework, you'll need to manually convert the styling when integrating components into your codebase.
+
+Tailwind is recommended because it's already configured in the export package.
+</Accordion>
+
+<Accordion title="Does Design OS work with Next.js? Remix? Vue?">
+Exported components are React components. They work with:
+- Next.js (App Router or Pages Router)
+- Remix
+- Create React App
+- Vite
+- Any React setup
+
+For Vue, Svelte, or other frameworks, you'll need to adapt the component logic manually. Design OS doesn't generate components for non-React frameworks.
+</Accordion>
+
+## Workflow & Process
+
+<Accordion title="Do I have to follow the steps in order?">
+Yes, the sequence matters. Each step builds on the previous one:
+
+1. **Product Vision** establishes what you're building
+2. **Design Tokens** set your visual identity
+3. **Application Shell** creates the navigation wrapper
+4. **Section Design** builds each feature area
+5. **Export** packages everything for implementation
+
+Skipping steps or working out of order will cause errors because later commands depend on files created by earlier ones.
+</Accordion>
+
+<Accordion title="Can I design sections in any order?">
+Once the foundation is complete (vision, tokens, shell), you can design sections in any order. However, designing in roadmap order is recommended because:
+
+- Earlier sections often have simpler patterns that inform later ones
+- You can export and implement incrementally
+- It matches the natural product development flow
+</Accordion>
+
+<Accordion title="How do I update designs after exporting?">
+Design OS is not version-controlled with your implementation. To update:
+
+1. Make changes in Design OS
+2. Run `/export-product` again to generate a new export package
+3. Copy updated components to your codebase
+4. Test and integrate the changes
+
+Treat each export as a snapshot. Design OS doesn't track what's been implemented or sync with your production code.
+</Accordion>
+
+<Accordion title="Can multiple people work on the same Design OS instance?">
+Design OS runs locally and uses file-based storage. For team collaboration:
+
+- Commit the Design OS workspace to version control
+- Use branches for different design explorations
+- Merge design changes like you would code
+
+Only one person can actively design at a time per workspace instance.
+</Accordion>
+
+## Export & Implementation
+
+<Accordion title="What exactly gets exported?">
+The export package includes:
+
+- **Ready-to-use prompts** for your implementation agent
+- **Product overview** and context documentation
+- **Implementation instructions** (one-shot or milestone-by-milestone)
+- **Design system** (tokens, Tailwind config, fonts)
+- **Data shapes** (TypeScript interfaces)
+- **Shell components** (AppShell, MainNav, UserMenu)
+- **Section components** (all exportable components)
+- **Sample data** for testing
+- **Test instructions** (framework-agnostic specs)
+- **Screenshots** (if captured)
+
+See the [Export](/export/overview) guide for complete details.
+</Accordion>
+
+<Accordion title="Are the components production-ready?">
+Yes—they're complete, styled, responsive, and include dark mode support. However, they still need implementation work:
+
+- Wire up callbacks to routing and API calls
+- Replace sample data with real backend data
+- Add error handling and loading states
+- Implement empty states
+- Build backend APIs
+- Write tests
+
+The components are the UI layer. Your implementation agent handles the integration.
+</Accordion>
+
+<Accordion title="Can I edit components after exporting?">
+Yes. Once exported, the components are yours to modify. They have no Design OS dependencies and can be edited like any React component.
+
+If you make significant changes, those changes won't sync back to Design OS. Treat the export as a starting point, not a live connection.
+</Accordion>
+
+<Accordion title="How do I implement the exported designs?">
+Use the included prompts:
+
+1. Copy `prompts/one-shot-prompt.md` or `prompts/section-prompt.md`
+2. Paste into your coding agent in your implementation codebase
+3. The agent will review the product overview and instructions
+4. Answer clarifying questions about your backend setup
+5. The agent implements components, APIs, and tests
+
+See [Implementation Guide](/export/implementation-guide) for detailed guidance.
+</Accordion>
+
+## Support & Learning
+
+<Accordion title="Where can I get help?">
+For support, training, and community:
+
+- **Builder Methods Pro** — Access to Brian Casel (the creator), community of Design OS users, workshops, and AI-first development training. [Join Builder Methods Pro](https://buildermethods.com/pro)
+
+- **GitHub Issues** — Report bugs or request features at [github.com/buildermethods/design-os](https://github.com/buildermethods/design-os)
+
+- **Documentation** — All guides and references at [buildermethods.com/design-os](https://buildermethods.com/design-os)
+</Accordion>
+
+<Accordion title="Is there a community or forum?">
+Yes! Join **Builder Methods Pro** for:
+
+- Direct access to Brian Casel (creator of Design OS)
+- Community of builders using Design OS
+- Office hours and Q&A sessions
+- Workshops on AI-first development
+- Early access to new features
+
+[Learn more about Builder Methods Pro](https://buildermethods.com/pro)
+</Accordion>
+
+<Accordion title="Can I request new features?">
+Yes. Feature requests are welcome:
+
+- **GitHub Issues** — Open an issue with your suggestion
+- **Builder Methods Pro** — Share ideas directly with Brian and the community
+
+Check the [changelog](/resources/changelog) regularly for new releases and features.
+</Accordion>

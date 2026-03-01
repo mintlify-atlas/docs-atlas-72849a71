@@ -1,0 +1,325 @@
+---
+title: Designing Screen Components
+description: Build props-based React components with preview wrappers for Design OS
+---
+
+The `/design-screen` command creates React components for a section. Components are props-based and portable, designed to be exported to any React codebase.
+
+## Prerequisites
+
+Before designing screens, verify these files exist:
+
+- `product/sections/[section-id]/spec.md` - Section specification
+- `product/sections/[section-id]/data.json` - Sample data
+- `product/sections/[section-id]/types.ts` - TypeScript interfaces
+
+<Note>
+Run `/shape-section` first if these files don't exist.
+</Note>
+
+## Component Architecture
+
+Screen designs consist of two parts:
+
+### Exportable Components
+
+Props-based components that accept data and callbacks. These are what get exported to your codebase.
+
+```tsx
+// src/sections/invoice-management/components/InvoiceList.tsx
+import type { InvoiceListProps } from '@/../product/sections/invoice-management/types'
+
+export function InvoiceList({
+  invoices,
+  onView,
+  onEdit,
+  onDelete,
+  onCreate
+}: InvoiceListProps) {
+  return (
+    <div className="max-w-4xl mx-auto p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Invoices</h1>
+        <button 
+          onClick={onCreate}
+          className="px-4 py-2 bg-lime-500 text-white rounded-lg"
+        >
+          Create Invoice
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {invoices.map(invoice => (
+          <div 
+            key={invoice.id}
+            className="p-4 border rounded-lg dark:border-stone-700"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">{invoice.clientName}</p>
+                <p className="text-sm text-stone-500">{invoice.invoiceNumber}</p>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => onView?.(invoice.id)}>View</button>
+                <button onClick={() => onEdit?.(invoice.id)}>Edit</button>
+                <button onClick={() => onDelete?.(invoice.id)}>Delete</button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+**Key characteristics:**
+- Import types from `types.ts`
+- Accept all data via props
+- Never import `data.json` directly
+- Use optional chaining for callbacks: `onDelete?.(id)`
+- Fully self-contained and portable
+
+### Preview Wrapper
+
+A wrapper that imports sample data and feeds it to the component. This is only for Design OS.
+
+```tsx
+// src/sections/invoice-management/InvoiceList.tsx
+import data from '@/../product/sections/invoice-management/data.json'
+import { InvoiceList } from './components/InvoiceList'
+
+export default function InvoiceListPreview() {
+  return (
+    <InvoiceList
+      invoices={data.invoices}
+      onView={(id) => console.log('View invoice:', id)}
+      onEdit={(id) => console.log('Edit invoice:', id)}
+      onDelete={(id) => console.log('Delete invoice:', id)}
+      onCreate={() => console.log('Create new invoice')}
+    />
+  )
+}
+```
+
+**Key characteristics:**
+- Default export (required for Design OS routing)
+- Imports sample data from `data.json`
+- Provides `console.log` handlers for testing
+- NOT exported to user's codebase
+- Renders inside app shell if one exists
+
+## The Design Process
+
+<Steps>
+
+### Select a Section
+
+Choose which section to create a screen design for. Single sections are auto-selected.
+
+### Check for Enhancements
+
+**Design Tokens**
+
+If design tokens exist at `product/design-system/`, they're applied:
+- Primary color for buttons, links, key accents
+- Secondary color for tags, highlights
+- Neutral color for backgrounds, text, borders
+
+If not defined, you'll see:
+```
+Note: Design tokens haven't been defined yet. I'll use default styling,
+but for consistent branding, consider running `/design-tokens` first.
+```
+
+**Application Shell**
+
+If a shell exists at `src/shell/components/AppShell.tsx`, screen designs render inside it in Design OS.
+
+If not defined, you'll see:
+```
+Note: An application shell hasn't been designed yet. The screen design
+will render standalone. Consider running `/design-shell` first.
+```
+
+### Clarify View Scope
+
+If the spec implies multiple views, you'll be asked which to build first:
+
+```
+The specification suggests a few different views:
+
+1. List View - Show all invoices in a filterable list
+2. Detail View - Display full invoice details
+3. Form View - Create/edit invoice with line items
+
+Which view should I create first?
+```
+
+Run `/design-screen` again for additional views.
+
+### Component Generation
+
+The AI creates:
+
+**Main Component**
+
+`src/sections/[section-id]/components/[ViewName].tsx`
+
+Implements all user flows and UI requirements from the spec.
+
+**Sub-Components** (if needed)
+
+`src/sections/[section-id]/components/[SubComponent].tsx`
+
+For complex views, functionality is broken into smaller components:
+
+```tsx
+// InvoiceRow.tsx
+import type { Invoice } from '@/../product/sections/invoice-management/types'
+
+interface InvoiceRowProps {
+  invoice: Invoice
+  onView?: () => void
+  onEdit?: () => void
+  onDelete?: () => void
+}
+
+export function InvoiceRow({ invoice, onView, onEdit, onDelete }: InvoiceRowProps) {
+  return (
+    <div className="flex items-center justify-between p-4 border-b">
+      <div>
+        <p className="font-medium">{invoice.clientName}</p>
+        <p className="text-sm text-stone-500 dark:text-stone-400">
+          {invoice.invoiceNumber}
+        </p>
+      </div>
+      <div className="flex gap-2">
+        <button onClick={onView}>View</button>
+        <button onClick={onEdit}>Edit</button>
+        <button onClick={onDelete}>Delete</button>
+      </div>
+    </div>
+  )
+}
+```
+
+**Component Index**
+
+`src/sections/[section-id]/components/index.ts`
+
+Exports all components cleanly:
+
+```typescript
+export { InvoiceList } from './InvoiceList'
+export { InvoiceRow } from './InvoiceRow'
+```
+
+**Preview Wrapper**
+
+`src/sections/[section-id]/[ViewName].tsx`
+
+Feeds sample data to the component for Design OS preview.
+
+</Steps>
+
+## Design Requirements
+
+All screen designs include:
+
+### Mobile Responsive
+
+Use Tailwind responsive prefixes for layouts that adapt across screen sizes:
+
+```tsx
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  {/* Cards adapt: 1 column mobile, 2 tablet, 3 desktop */}
+</div>
+
+<div className="flex flex-col sm:flex-row gap-4">
+  {/* Stack on mobile, horizontal on larger screens */}
+</div>
+```
+
+### Light & Dark Mode
+
+Use `dark:` variants for all colors:
+
+```tsx
+<div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700">
+  <p className="text-stone-900 dark:text-stone-100">Content</p>
+  <span className="text-stone-500 dark:text-stone-400">Secondary text</span>
+</div>
+```
+
+### Design Tokens Applied
+
+When tokens are defined, they're used throughout:
+
+**Colors Example** (if primary is `lime`):
+```tsx
+<button className="bg-lime-500 hover:bg-lime-600 dark:bg-lime-600 dark:hover:bg-lime-700">
+  Primary Action
+</button>
+
+<span className="text-lime-600 dark:text-lime-400">Accent text</span>
+```
+
+**Typography Example** (if heading is `Inter`):
+```tsx
+// Font is applied at app level, use appropriate weights
+<h1 className="font-bold">Heading</h1>
+<p className="font-normal">Body text</p>
+```
+
+### All Spec Requirements
+
+Every user flow and UI requirement from the spec is implemented:
+- All actions have callback props
+- All data fields are displayed
+- Edge cases are handled (empty states, long text)
+
+## File Output Locations
+
+```
+src/sections/[section-id]/
+├── components/
+│   ├── [ViewName].tsx      # Main component
+│   ├── [SubComponent].tsx  # Sub-components
+│   └── index.ts            # Component exports
+└── [ViewName].tsx          # Preview wrapper
+```
+
+## After Creation
+
+<Warning>
+Restart your dev server to see the changes.
+</Warning>
+
+View the screen design at:
+```
+http://localhost:3000/sections/[section-id]/screen-designs/[view-name]
+```
+
+## Next Steps
+
+1. **Capture screenshots** - Run `/screenshot-design` for documentation
+2. **Create additional views** - Run `/design-screen` again for other views
+3. **Export when complete** - Run `/export-product` to generate handoff package
+
+## Component Guidelines
+
+### What TO Include
+
+- All user flows from spec
+- Prop data (not hardcoded values)
+- Realistic UI states (hover, active, disabled)
+- Callback props for all interactions
+- Optional chaining for callbacks: `onDelete?.(id)`
+
+### What NOT to Include
+
+- No `import data from` in exportable components
+- No features not in the spec
+- No routing logic (callbacks handle navigation intent)
+- No navigation elements (shell handles navigation)

@@ -1,0 +1,509 @@
+---
+title: 'Troubleshooting'
+description: 'Common issues and solutions when using Design OS'
+---
+
+## Installation Issues
+
+<Accordion title="npm install fails with dependency errors">
+
+**Problem:** Dependency conflicts or version mismatches during installation.
+
+**Solutions:**
+
+1. Ensure you're using Node.js 18 or higher:
+   ```bash
+   node --version
+   ```
+
+2. Clear npm cache and reinstall:
+   ```bash
+   rm -rf node_modules package-lock.json
+   npm cache clean --force
+   npm install
+   ```
+
+3. If using a different package manager, try npm specifically:
+   ```bash
+   npm install
+   ```
+
+</Accordion>
+
+<Accordion title="Port 5173 already in use">
+
+**Problem:** Vite dev server can't start because port is in use.
+
+**Solutions:**
+
+1. Kill the process using port 5173:
+   ```bash
+   lsof -ti:5173 | xargs kill -9
+   ```
+
+2. Or use a different port:
+   ```bash
+   npm run dev -- --port 3000
+   ```
+
+</Accordion>
+
+## Dev Server Issues
+
+<Accordion title="Changes not appearing in browser">
+
+**Problem:** You made changes but they don't show up in the preview.
+
+**Solutions:**
+
+1. Restart the dev server:
+   ```bash
+   # Stop the server (Ctrl+C)
+   npm run dev
+   ```
+
+2. Hard refresh the browser:
+   - **Mac:** Cmd + Shift + R
+   - **Windows/Linux:** Ctrl + Shift + R
+
+3. Clear browser cache and reload
+
+4. Check the terminal for errors that might be blocking hot module reload
+
+</Accordion>
+
+<Accordion title="New components not showing up">
+
+**Problem:** You created new components with a slash command but they don't appear.
+
+**Solutions:**
+
+1. **Restart the dev server** — This is the most common solution:
+   ```bash
+   # Stop with Ctrl+C, then:
+   npm run dev
+   ```
+
+2. Check that files were created in the correct location:
+   ```bash
+   ls src/sections/[section-name]/components/
+   ```
+
+3. Verify the component is exported in the index file:
+   ```bash
+   cat src/sections/[section-name]/components/index.ts
+   ```
+
+</Accordion>
+
+<Accordion title="Module not found errors">
+
+**Problem:** Import errors in the console or terminal.
+
+**Solutions:**
+
+1. Check the import path is correct
+
+2. Ensure the file exists at the specified path
+
+3. Restart the dev server after creating new files
+
+4. Check for typos in file names or import statements
+
+5. Verify the file extension matches (.tsx vs .ts)
+
+</Accordion>
+
+## Design Issues
+
+<Accordion title="Dark mode not working properly">
+
+**Problem:** Components don't look right in dark mode.
+
+**Solutions:**
+
+1. **Check for missing `dark:` variants:**
+   - All background colors need `dark:` variants
+   - All text colors need `dark:` variants
+   - Border colors need `dark:` variants
+
+2. **Common pattern:**
+   ```tsx
+   // Wrong - no dark variant
+   <div className="bg-white text-gray-900">
+
+   // Right - includes dark variant
+   <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+   ```
+
+3. **Test in both modes:**
+   - Toggle dark mode in your system settings
+   - Or use browser DevTools to toggle `dark` class on `<html>`
+
+</Accordion>
+
+<Accordion title="Layout not responsive">
+
+**Problem:** Design breaks or looks wrong on mobile/tablet.
+
+**Solutions:**
+
+1. **Add responsive breakpoints:**
+   ```tsx
+   // Wrong - fixed layout
+   <div className="grid grid-cols-3 gap-4">
+
+   // Right - responsive
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+   ```
+
+2. **Use responsive utilities:**
+   - `sm:` — 640px and up
+   - `md:` — 768px and up
+   - `lg:` — 1024px and up
+   - `xl:` — 1280px and up
+
+3. **Test at different viewport sizes:**
+   - Resize browser window
+   - Use browser DevTools device toolbar
+   - Test on actual mobile devices
+
+</Accordion>
+
+<Accordion title="Colors not matching design tokens">
+
+**Problem:** Screen designs not using the colors from `/design-tokens`.
+
+**Solutions:**
+
+1. **Check design tokens are defined:**
+   ```bash
+   cat product/design-system/colors.json
+   ```
+
+2. **Regenerate the screen design:**
+   - Use `/design-screen` again
+   - Mention that colors should use the design tokens
+
+3. **Verify the correct palette:**
+   - Primary, secondary, and neutral should match your chosen Tailwind colors
+   - Check that intensity values (400, 500, 600, etc.) are appropriate
+
+</Accordion>
+
+<Accordion title="Fonts not loading">
+
+**Problem:** Typography doesn't match the fonts chosen in `/design-tokens`.
+
+**Solutions:**
+
+1. **Check typography.json:**
+   ```bash
+   cat product/design-system/typography.json
+   ```
+
+2. **Verify Google Fonts are loading:**
+   - Check network tab in browser DevTools
+   - Look for Google Fonts requests
+   - Ensure font names match exactly
+
+3. **Check CSS custom properties:**
+   - Open browser DevTools
+   - Inspect an element
+   - Verify `--font-heading` and `--font-body` are set
+
+</Accordion>
+
+## Data & Type Issues
+
+<Accordion title="TypeScript errors in components">
+
+**Problem:** Type errors when using components.
+
+**Solutions:**
+
+1. **Check types file exists:**
+   ```bash
+   cat product/sections/[section-name]/types.ts
+   ```
+
+2. **Verify types match data shape:**
+   - Compare types.ts interfaces to data.json structure
+   - Ensure all required fields are present
+   - Check for typos in property names
+
+3. **Regenerate types:**
+   ```bash
+   /sample-data
+   ```
+   This regenerates both data.json and types.ts
+
+</Accordion>
+
+<Accordion title="Sample data not matching UI needs">
+
+**Problem:** The generated sample data doesn't fit your screen design.
+
+**Solutions:**
+
+1. **Update sample data:**
+   ```bash
+   /sample-data
+   ```
+   Describe the specific data structure you need
+
+2. **Be specific about fields:**
+   - List all fields required by your UI
+   - Specify data types and formats
+   - Mention any relationships or nested structures
+
+3. **Manually edit if needed:**
+   ```bash
+   # Edit directly
+   product/sections/[section-name]/data.json
+   ```
+   Then restart dev server
+
+</Accordion>
+
+## Export Issues
+
+<Accordion title="Export fails or incomplete">
+
+**Problem:** `/export-product` command fails or generates incomplete package.
+
+**Solutions:**
+
+1. **Check all required files exist:**
+   - `product/product-overview.md`
+   - `product/product-roadmap.md`
+   - `product/design-system/colors.json`
+   - `product/design-system/typography.json`
+   - `product/shell/spec.md`
+   - Each section's spec.md, data.json, and types.ts
+
+2. **Verify component files:**
+   - Check `src/shell/components/` exists
+   - Check each `src/sections/[section-name]/components/` exists
+
+3. **Run export again:**
+   ```bash
+   /export-product
+   ```
+
+4. **Check for error messages in the output**
+
+</Accordion>
+
+<Accordion title="Missing sections in export">
+
+**Problem:** Some sections don't appear in the export package.
+
+**Solutions:**
+
+1. **Verify section is in roadmap:**
+   ```bash
+   cat product/product-roadmap.md
+   ```
+
+2. **Check section has all required files:**
+   - `product/sections/[section-name]/spec.md`
+   - `product/sections/[section-name]/data.json`
+   - `product/sections/[section-name]/types.ts`
+   - `src/sections/[section-name]/components/`
+
+3. **Complete missing steps:**
+   - Run `/shape-section` if spec is missing
+   - Run `/design-screen` if components are missing
+
+</Accordion>
+
+## Implementation Issues
+
+<Accordion title="AI agent not understanding the design">
+
+**Problem:** Your coding agent implements something different from the design.
+
+**Solutions:**
+
+1. **Use the pre-written prompts:**
+   - Don't write prompts from scratch
+   - Use `prompts/section-prompt.md` or `prompts/one-shot-prompt.md`
+
+2. **Always include context:**
+   - Reference `product-overview.md`
+   - Point to the specific instruction file
+   - Mention the section's `tests.md`
+
+3. **Ask the agent to review first:**
+   - "Before implementing, review all provided files"
+   - "Describe what you understand about the design"
+   - "Ask clarifying questions before starting"
+
+4. **Be specific with corrections:**
+   - Point to the exact specification that was missed
+   - Reference the component design
+   - Show the difference between expected and actual
+
+</Accordion>
+
+<Accordion title="Components not working in target codebase">
+
+**Problem:** Exported components have errors when integrated.
+
+**Solutions:**
+
+1. **Check Tailwind CSS v4 is installed:**
+   ```bash
+   npm install tailwindcss@next @tailwindcss/vite@next
+   ```
+
+2. **Verify Tailwind v4 configuration:**
+   - Add to vite.config.ts plugins:
+     ```ts
+     import tailwindcss from '@tailwindcss/vite'
+     
+     export default defineConfig({
+       plugins: [tailwindcss()]
+     })
+     ```
+   - Import in CSS:
+     ```css
+     @import "tailwindcss";
+     ```
+
+3. **Check for missing dependencies:**
+   - React 18+
+   - TypeScript (if using .tsx files)
+
+4. **Verify props are passed correctly:**
+   - Components expect data via props
+   - Check props match the TypeScript interfaces
+
+</Accordion>
+
+<Accordion title="Styling not applied in production">
+
+**Problem:** Components look correct in dev but broken in production build.
+
+**Solutions:**
+
+1. **Verify Tailwind v4 build configuration:**
+   - Ensure `@tailwindcss/vite` plugin is in vite.config
+   - Check that CSS is being processed correctly
+
+2. **Check content paths (not needed in v4 but verify just in case):**
+   - Components should be in scanned directories
+
+3. **Test production build locally:**
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+4. **Check for purged classes:**
+   - Dynamic class names might be removed
+   - Use complete class names, not string concatenation
+
+</Accordion>
+
+## File Structure Issues
+
+<Accordion title="Can't find product files">
+
+**Problem:** Looking for product definition files and can't locate them.
+
+**Solutions:**
+
+**Product definition files** are in `product/`:
+- `product/product-overview.md`
+- `product/product-roadmap.md`
+- `product/data-shape/data-shape.md`
+- `product/design-system/colors.json`
+- `product/design-system/typography.json`
+- `product/shell/spec.md`
+- `product/sections/[section-name]/spec.md`
+- `product/sections/[section-name]/data.json`
+- `product/sections/[section-name]/types.ts`
+
+**Component files** are in `src/`:
+- `src/shell/components/`
+- `src/sections/[section-name]/components/`
+
+**Export package** is in `product-plan/` (generated by `/export-product`)
+
+</Accordion>
+
+<Accordion title="Confused about Design OS vs. product design files">
+
+**Problem:** Not sure which files are for Design OS app vs. your product design.
+
+**Solutions:**
+
+**Design OS application** (the planning tool itself):
+- Files in `src/` (except `src/shell/` and `src/sections/`)
+- Uses stone/lime palette and DM Sans
+- You rarely need to modify these
+
+**Your product design** (what you're planning):
+- Product definition files in `product/`
+- Screen design components in `src/sections/` and `src/shell/`
+- Export package in `product-plan/`
+- Uses your chosen design tokens
+
+</Accordion>
+
+## Performance Issues
+
+<Accordion title="Slow dev server or hot reload">
+
+**Problem:** Dev server is slow or hot module reload takes a long time.
+
+**Solutions:**
+
+1. **Restart the dev server:**
+   ```bash
+   npm run dev
+   ```
+
+2. **Clear Vite cache:**
+   ```bash
+   rm -rf node_modules/.vite
+   npm run dev
+   ```
+
+3. **Check for large files:**
+   - Large images can slow things down
+   - Optimize images before adding
+
+4. **Check system resources:**
+   - Close unnecessary applications
+   - Ensure sufficient RAM available
+
+</Accordion>
+
+## Getting Help
+
+If you're still experiencing issues:
+
+<Note>
+**Community & Support:**
+
+- Visit the [Design OS documentation](https://buildermethods.com/design-os)
+- Join [Builder Methods Pro](https://buildermethods.com/pro) for direct support
+- Check the [GitHub repository](https://github.com/BuilderMethods/design-os) for issues
+
+</Note>
+
+When reporting issues, include:
+
+- Design OS version
+- Node.js version (`node --version`)
+- Operating system
+- Steps to reproduce the issue
+- Error messages (full text)
+- Screenshots if relevant
+
+<Tip>
+**Before reporting:** Try restarting the dev server first. Many issues are resolved by a simple restart.
+</Tip>

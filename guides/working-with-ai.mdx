@@ -1,0 +1,449 @@
+---
+title: 'Working with AI Coding Agents'
+description: 'How to work with Claude Code, Cursor, and other AI agents to implement your designs'
+---
+
+## Overview
+
+Design OS generates a complete handoff package that AI coding agents can use to implement your product. The export includes production-ready UI components, specifications, sample data, and pre-written prompts that guide the agent through implementation.
+
+<Note>
+This guide covers implementation with AI coding agents like Claude Code, Cursor, Windsurf, and similar tools. The Design OS export is optimized for these workflows.
+</Note>
+
+## Getting Started
+
+### 1. Export Your Design
+
+Once all sections are designed, run the export command in Design OS:
+
+```bash
+/export-product
+```
+
+This generates the `product-plan/` folder with everything your coding agent needs.
+
+### 2. Copy to Your Codebase
+
+Move the `product-plan/` folder into your target codebase:
+
+```bash
+cp -r product-plan /path/to/your-codebase/
+```
+
+### 3. Start Your AI Coding Agent
+
+Open your codebase in your preferred AI coding tool:
+
+- **Claude Code** — Anthropic's AI coding agent
+- **Cursor** — AI-first code editor
+- **Windsurf** — Codeium's AI agent
+- **Any other AI agent** that can read files and write code
+
+## Implementation Approaches
+
+<Accordion title="Incremental Implementation (Recommended)">
+
+**Best for:** Larger products, or when you want to review progress section-by-section.
+
+### How It Works
+
+Implement one milestone at a time:
+
+1. **Shell** — Design tokens and application shell
+2. **Section 1** — First feature section
+3. **Section 2** — Second feature section
+4. Continue for each section...
+
+### The Process
+
+For each milestone:
+
+1. Open `product-plan/prompts/section-prompt.md`
+2. Fill in the section-specific variables:
+   - `SECTION_NAME` — The section's display name
+   - `SECTION_ID` — The section's folder name
+   - `NN` — The milestone number (01, 02, etc.)
+3. Add any additional context (tech stack, constraints, notes)
+4. Copy the entire prompt
+5. Paste into your AI coding agent
+6. Answer the agent's clarifying questions
+7. Let the agent implement
+8. Review, test, and verify before moving to next milestone
+
+### Benefits
+
+- Catch issues early before they cascade
+- Review each feature individually
+- Less overwhelming for the agent
+- Easier to course-correct if needed
+- More control over the implementation process
+
+</Accordion>
+
+<Accordion title="One-Shot Implementation">
+
+**Best for:** Simpler products (2-3 sections), or when you want everything built in one session.
+
+### How It Works
+
+1. Open `product-plan/prompts/one-shot-prompt.md`
+2. Add any additional context:
+   - Tech stack preferences
+   - Existing codebase conventions
+   - Constraints or requirements
+3. Copy the entire prompt
+4. Paste into your AI coding agent
+5. Answer the agent's clarifying questions about:
+   - Authentication approach
+   - Data layer and backend
+   - Routing and state management
+   - Any other architectural decisions
+6. Let the agent plan and implement everything
+
+### What the Agent Does
+
+- Reviews `product-overview.md` for context
+- Reads `instructions/one-shot-instructions.md` with all milestones combined
+- Reviews all section components, data shapes, and test specs
+- Asks clarifying questions
+- Creates an implementation plan
+- Builds everything: routing, data layer, state management, tests
+- Wires up the provided UI components
+
+### When to Use
+
+- Small projects with 2-3 sections
+- When you have high confidence in the design
+- When you want rapid initial implementation
+- When you're comfortable reviewing more code at once
+
+</Accordion>
+
+## Using the Pre-Written Prompts
+
+The export includes prompts specifically designed to guide AI coding agents:
+
+### Section Prompt Template
+
+**Location:** `product-plan/prompts/section-prompt.md`
+
+This template is used for incremental implementation. It includes:
+
+- Variables to fill in (section name, ID, milestone number)
+- References to the section's instruction file
+- Links to components, data shapes, and test specs
+- Instructions to ask clarifying questions first
+- Guidance to review designs before implementing
+
+<Tip>
+**Key feature:** The section prompt guides the agent to understand the design first, ask questions, and then implement—rather than jumping straight to code.
+</Tip>
+
+### One-Shot Prompt
+
+**Location:** `product-plan/prompts/one-shot-prompt.md`
+
+This prompt is for complete implementation in one session. It includes:
+
+- Reference to product overview for context
+- Link to combined instructions (all milestones)
+- Instructions to review all files first
+- Guidance to ask architectural questions before starting
+- Emphasis on spec-driven development
+
+<Warning>
+**Don't skip the prompts.** They include critical instructions that ensure the agent:
+- Reviews designs before implementing
+- Asks clarifying questions
+- Follows the specifications accurately
+- Writes tests based on provided test specs
+</Warning>
+
+## Clarifying Questions
+
+Before the agent starts implementing, encourage it to ask questions about:
+
+### Tech Stack
+
+- **Framework** — Next.js, Remix, Vite + React Router?
+- **Language** — TypeScript or JavaScript?
+- **Styling** — Tailwind v4 (already in components), any additions?
+- **State management** — Context, Zustand, Redux, Jotai?
+- **Testing** — Jest, Vitest, Playwright, Cypress?
+
+### Backend & Data
+
+- **Backend framework** — Express, Fastify, Rails, Django?
+- **Database** — PostgreSQL, MySQL, MongoDB?
+- **ORM/Query builder** — Prisma, Drizzle, Sequelize?
+- **API approach** — REST, GraphQL, tRPC?
+
+### Authentication
+
+- **Auth provider** — Clerk, Auth0, NextAuth, custom?
+- **User model** — What fields beyond the basics?
+- **Session management** — JWT, sessions, cookies?
+
+### Architecture
+
+- **Routing structure** — How should routes be organized?
+- **Data fetching** — Server components, client hooks, SSR?
+- **Error handling** — Global error boundary, toast notifications?
+- **Form handling** — React Hook Form, Formik, uncontrolled?
+
+<Tip>
+The more questions the agent asks upfront, the better the implementation will match your needs. Encourage this step.
+</Tip>
+
+## What's Included vs. What Gets Built
+
+### Provided by Design OS
+
+<Accordion title="UI Components">
+Production-ready React components, fully styled with Tailwind v4:
+
+- Props-based and portable
+- Responsive across all screen sizes
+- Light and dark mode support
+- Accessible and semantic markup
+- Located in `sections/[section-id]/components/`
+
+**The agent should wire these up, not rebuild them.**
+</Accordion>
+
+<Accordion title="Product Specifications">
+Detailed requirements for each section:
+
+- Section scope and user flows
+- UI behavior descriptions
+- Data requirements
+- Success criteria
+- Located in section instruction files
+</Accordion>
+
+<Accordion title="Design System">
+Design tokens and CSS custom properties:
+
+- Color palette (primary, secondary, neutral)
+- Typography (heading, body, mono)
+- CSS custom properties for easy theming
+- Located in `design-system/`
+</Accordion>
+
+<Accordion title="Data Shapes">
+TypeScript interfaces defining component props:
+
+- What data each component expects
+- Interface definitions for entities
+- Sample data showing structure
+- Located in `data-shapes/[section-id]/`
+</Accordion>
+
+<Accordion title="Test Specifications">
+Detailed test-writing instructions:
+
+- User flow tests (success and failure paths)
+- Component interaction tests
+- Empty state tests
+- Edge case scenarios
+- Located in each section's `tests.md`
+</Accordion>
+
+### Built by the Agent
+
+- **Backend/API layer** — Endpoints, database schema, business logic
+- **Data layer** — Queries, mutations, data fetching
+- **Routing** — URL structure, navigation setup
+- **State management** — Global state, form state, cache
+- **Authentication** — User model, sessions, permissions
+- **Tests** — Based on provided test specs
+- **Integration** — Wiring components to data sources
+
+<Note>
+The UI components are complete. The agent's job is to build everything around them and connect them to your data layer.
+</Note>
+
+## Test-Driven Development
+
+Each section includes a `tests.md` file with detailed test-writing instructions.
+
+### The TDD Workflow
+
+1. **Read test instructions** — Review `sections/[section-id]/tests.md`
+2. **Write failing tests** — Based on the user flows and assertions
+3. **Implement the feature** — Make the tests pass
+4. **Refactor** — Clean up while keeping tests green
+
+### What's Included in Test Specs
+
+- **User flow tests** — Key interactions from the user's perspective
+- **Success and failure paths** — Both happy path and error cases
+- **Empty state tests** — Behavior when no records exist
+- **Component interactions** — Specific UI elements and behaviors
+- **Edge cases** — Boundary conditions and transitions
+
+<Tip>
+**Framework-agnostic** — Test instructions describe WHAT to test, not HOW. Adapt them to your testing framework (Jest, Vitest, Playwright, Cypress, etc.).
+</Tip>
+
+### Example Test Instruction
+
+From a section's `tests.md`:
+
+> **User creates a new project:**
+> 1. User clicks "New Project" button
+> 2. Modal opens with form fields
+> 3. User enters project name and description
+> 4. User clicks "Create"
+> 5. Assert: New project appears in the list
+> 6. Assert: Success message is displayed
+
+The agent transforms this into actual test code for your framework.
+
+## Spec-Driven Development
+
+### The Process
+
+1. **Review the design** — Look at components and understand the UI
+2. **Read the specification** — Understand requirements and scope
+3. **Ask clarifying questions** — Resolve ambiguities before coding
+4. **Plan the implementation** — Decide on architecture and approach
+5. **Write tests first** — Based on test specs
+6. **Implement** — Build to make tests pass
+7. **Verify** — Ensure implementation matches design
+
+<Note>
+This approach prevents wasted work from misunderstandings and ensures the implementation properly supports the UI designs.
+</Note>
+
+## Tips for Working with AI Agents
+
+### Always Provide Context
+
+When giving prompts to your agent:
+
+- Include `product-overview.md` for full product context
+- Reference the specific instruction file for the milestone
+- Mention the section's `tests.md` for test specs
+- Add notes about tech stack, existing conventions, or constraints
+
+### Review Before Approving Plans
+
+Before letting the agent implement:
+
+- Review the agent's proposed architecture
+- Verify it understands the requirements correctly
+- Ask questions if anything seems off
+- Approve the plan before implementation begins
+
+### Use Sample Data First
+
+Before building real APIs:
+
+- Use the provided `sample-data.json` files
+- Wire components to sample data initially
+- Verify the UI works as expected
+- Then replace with real API calls
+
+This lets you test the integration without backend dependencies.
+
+### Iterate in Small Steps
+
+For incremental implementation:
+
+- Complete one milestone fully before moving to the next
+- Test each section before continuing
+- Fix issues immediately rather than accumulating technical debt
+- Don't skip ahead even if tempted
+
+### Trust the Components
+
+The UI components are production-ready:
+
+- Don't ask the agent to rebuild or restyle them
+- Wire them up to your data layer
+- If you need changes, update the Design OS design and re-export
+
+<Warning>
+**Common mistake:** Asking the agent to modify the component styles or structure. Instead, make changes in Design OS and export again.
+</Warning>
+
+### Handle Empty States
+
+Make sure the agent implements proper empty states:
+
+- First-time user experience when no data exists
+- Clear calls-to-action to create first record
+- Helpful messaging explaining what goes here
+
+The designs include empty states—ensure they're implemented.
+
+## Supported AI Coding Agents
+
+Design OS export packages work with any AI coding agent that can:
+
+- Read files in your codebase
+- Write and modify code
+- Execute commands
+- Review specifications
+
+### Tested With
+
+- **Claude Code** — Anthropic's AI coding agent
+- **Cursor** — AI-first code editor
+- **Windsurf** — Codeium's AI flow-state IDE
+- **GitHub Copilot** — With proper prompting
+- **Any LLM with file access** — Via custom integrations
+
+<Tip>
+The pre-written prompts are optimized for long-context models like Claude 3.5 Sonnet. They work best with agents that can hold the entire product context.
+</Tip>
+
+## Common Questions
+
+<Accordion title="Can I modify the components after export?">
+Yes, but we recommend making changes in Design OS and re-exporting. This keeps your design source of truth in one place.
+
+If you must modify exported components directly, maintain the props-based architecture and ensure changes are documented.
+</Accordion>
+
+<Accordion title="What if my agent suggests a different approach?">
+Review the agent's suggestion carefully. If it proposes architectural changes, evaluate whether they're improvements or deviations from the spec.
+
+Often agents will suggest patterns that make sense for your specific tech stack. That's fine as long as the UI designs are implemented accurately.
+</Accordion>
+
+<Accordion title="How do I handle agent errors during implementation?">
+If the agent makes mistakes:
+
+1. Point out the specific issue
+2. Reference the relevant part of the specification
+3. Ask the agent to review the design again
+4. Request a fix that aligns with the spec
+
+Provide clear, specific feedback rather than vague corrections.
+</Accordion>
+
+<Accordion title="Can I use multiple agents for different sections?">
+Yes, especially with incremental implementation. You can use different agents for different milestones, or even switch agents mid-project if needed.
+
+Just ensure each agent has access to:
+- `product-overview.md` for context
+- The specific instruction file for their milestone
+- All design system and component files
+</Accordion>
+
+## Next Steps
+
+After implementation:
+
+1. **Test thoroughly** — Run all tests, manually test user flows
+2. **Review UI accuracy** — Compare implementation to Design OS previews
+3. **Handle edge cases** — Ensure error states and empty states work
+4. **Performance check** — Verify loading times and responsiveness
+5. **Deploy** — Ship your product to production
+
+<Tip>
+Keep your Design OS project. You can always refine designs, add new sections, and re-export as your product evolves.
+</Tip>

@@ -1,0 +1,216 @@
+---
+title: /screenshot-design
+description: Capture screenshots of screen designs
+---
+
+# /screenshot-design
+
+Captures screenshots of screen designs for documentation purposes. Screenshots are saved to the product folder alongside specs and data.
+
+## Syntax
+
+```
+/screenshot-design
+```
+
+## What It Does
+
+1. Starts the dev server automatically
+2. Navigates to the screen design
+3. Hides the Design OS navigation header
+4. Captures a full-page screenshot
+5. Saves the screenshot to the section folder
+
+## Prerequisites
+
+- Requires at least one screen design in `src/sections/[section-id]/`
+- Requires Playwright MCP server installed
+
+<Warning>
+If Playwright MCP is not installed, the command provides installation instructions.
+</Warning>
+
+## Installing Playwright MCP
+
+If prompted, run:
+
+```bash
+claude mcp add playwright npx @playwright/mcp@latest
+```
+
+Then restart your Claude Code session and run `/screenshot-design` again.
+
+## Outputs
+
+Saves screenshots to:
+- `product/sections/[section-id]/[screen-design-name].png`
+
+## Workflow
+
+<Steps>
+  <Step title="Select Screen Design">
+    If multiple screen designs exist, asks which one to screenshot.
+  </Step>
+  
+  <Step title="Start Dev Server">
+    Automatically starts `npm run dev` in the background.
+  </Step>
+  
+  <Step title="Navigate & Capture">
+    - Navigates to the screen design URL
+    - Waits for page to load
+    - Clicks "Hide" to remove navigation header
+    - Captures full-page screenshot
+  </Step>
+  
+  <Step title="Save Screenshot">
+    Copies the screenshot to the product folder with a descriptive filename.
+  </Step>
+</Steps>
+
+## Screenshot Specifications
+
+<Accordion title="Technical Details">
+- **Viewport width:** 1280px (desktop)
+- **Capture mode:** Full page (including scrollable content)
+- **Format:** PNG
+- **Navigation:** Hidden before capture
+- **Mode:** Light mode (default)
+</Accordion>
+
+## Naming Convention
+
+Screenshots are named:
+- `[screen-design-name].png` - Main view
+- `[screen-design-name]-dark.png` - Dark mode variant
+- `[screen-design-name]-mobile.png` - Mobile viewport
+- `[screen-design-name]-empty.png` - Empty state
+
+## Screen Design URL Pattern
+
+Design OS serves screen designs at:
+
+```
+http://localhost:3000/sections/[section-id]/screen-designs/[screen-design-name]
+```
+
+The command constructs this URL automatically.
+
+## Example Session
+
+```
+User: /screenshot-design
+
+Assistant: Which screen design would you like to screenshot?
+
+**Invoices:**
+1. Invoices / InvoiceList
+
+**Dashboard:**
+2. Dashboard / DashboardView
+
+User: 1
+
+Assistant: [Starts dev server automatically]
+[Navigates to design, hides header, captures screenshot]
+
+I've saved the screenshot to 
+`product/sections/invoices/invoice-list.png`.
+
+The screenshot captures the **InvoiceList** screen design for the 
+**Invoices** section.
+
+Would you like me to capture any additional screenshots?
+For example:
+- Dark mode version
+- Mobile viewport
+- Different states (empty, loading, etc.)
+
+User: No, that's all
+```
+
+## Multiple Screenshots
+
+To capture multiple variants:
+
+1. Run `/screenshot-design` for the main view
+2. Run again for dark mode variant
+3. Run again for mobile viewport
+4. Run again for different states (empty, error, etc.)
+
+Each run saves a separate file.
+
+## Dark Mode Screenshots
+
+To capture dark mode:
+
+1. Manually switch to dark mode in the browser
+2. Run `/screenshot-design`
+3. Save with `-dark.png` suffix
+
+<Note>
+The command can be enhanced to automatically toggle dark mode if needed.
+</Note>
+
+## Mobile Screenshots
+
+To capture mobile viewport:
+
+1. The command can capture at different viewport widths
+2. Save with `-mobile.png` suffix
+
+## Where Screenshots Are Used
+
+1. **Export package:** Included in `product-plan/sections/[section-id]/`
+2. **Visual reference:** For implementation fidelity checking
+3. **Documentation:** In README files and handoff docs
+4. **Design review:** To share with stakeholders
+
+## Important Notes
+
+<Warning>
+- The command starts the dev server itself - don't start it manually
+- Full-page screenshots capture all scrollable content
+- Navigation header is hidden before capture
+- Screenshots are PNG format for best quality
+- Save with descriptive filenames for clarity
+</Warning>
+
+## Troubleshooting
+
+### Playwright MCP Not Available
+
+If you see:
+
+```
+To capture screenshots, I need the Playwright MCP server installed.
+```
+
+Run:
+
+```bash
+claude mcp add playwright npx @playwright/mcp@latest
+```
+
+Then restart Claude Code.
+
+### Dev Server Port Conflict
+
+If port 3000 is in use:
+1. Stop other processes using port 3000
+2. Or modify the dev server port in package.json
+
+### Screenshot Location
+
+Screenshots are saved to:
+- `product/sections/[section-id]/` (alongside spec.md and data.json)
+- Also copied to `.playwright-mcp/` temporarily
+
+## Next Steps
+
+After capturing screenshots:
+
+1. Review screenshots for visual accuracy
+2. Capture additional variants if needed (dark mode, mobile, states)
+3. Run `/screenshot-design` for other screen designs
+4. When all sections are complete, run `/export-product`

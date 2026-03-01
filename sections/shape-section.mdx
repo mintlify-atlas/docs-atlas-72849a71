@@ -1,0 +1,234 @@
+---
+title: Shaping a Section
+description: Define section specifications and generate sample data with TypeScript types
+---
+
+The `/shape-section` command defines what a section does and generates its sample data in one conversational flow. This creates the specification, sample data, and TypeScript types needed for screen design.
+
+## Prerequisites
+
+Before shaping a section, you must have:
+
+- **Product roadmap** defined at `product/product-roadmap.md`
+- Run `/product-vision` or `/product-roadmap` first if not created
+
+## What Gets Created
+
+Shaping a section generates three files:
+
+| File | Purpose |
+|------|----------|
+| `product/sections/[section-id]/spec.md` | Section specification with user flows and UI requirements |
+| `product/sections/[section-id]/data.json` | Sample data (5-10 realistic records with `_meta` descriptions) |
+| `product/sections/[section-id]/types.ts` | TypeScript interfaces for data and component props |
+
+## The Shaping Process
+
+<Steps>
+
+### Select a Section
+
+If you have multiple sections in your roadmap, you'll be asked which one to work on. Single sections are auto-selected.
+
+### Share Your Ideas
+
+The AI asks you to share any initial thoughts about the section:
+
+```
+Let's define the scope and requirements for Invoice Management.
+
+Do you have any notes or ideas about what this section should include?
+Share any thoughts about the features, user flows, or UI patterns you're
+envisioning. If you're not sure yet, we can start with questions.
+```
+
+You can provide raw notes or proceed directly to questions.
+
+### Answer Clarifying Questions
+
+The AI asks 4-6 targeted questions to understand:
+
+- **Main user actions** - What can users do in this section?
+- **Information to display** - What data needs to be shown?
+- **Key user flows** - What are the step-by-step interactions?
+- **UI patterns** - Specific layouts or components needed?
+- **Scope boundaries** - What's intentionally excluded?
+
+<Note>
+Focus on user experience and interface requirements. No backend or database details are needed.
+</Note>
+
+### Configure Shell Display
+
+If an app shell has been designed, you'll be asked:
+
+```
+Should this section's screen designs be displayed inside the app shell
+(with navigation header), or should they be standalone pages (without the shell)?
+```
+
+**Options:**
+- **Inside app shell** - Default for most in-app sections
+- **Standalone (no shell)** - For public pages, landing pages, or embeds
+
+### Automatic Generation
+
+Once enough information is gathered, all three files are created automatically:
+
+**1. Specification (`spec.md`)**
+
+The spec includes:
+
+```markdown
+# Invoice Management Specification
+
+## Overview
+Manage invoices for client billing, track payment status, and generate
+professional invoice documents for services rendered.
+
+## User Flows
+- View all invoices in a filterable list
+- Create new invoices with line items
+- Edit draft invoices before sending
+- Mark invoices as sent/paid
+- Delete draft invoices
+
+## UI Requirements
+- Table or card layout showing invoice number, client, amount, status, due date
+- Status badges (draft, sent, paid, overdue)
+- Actions: view, edit, delete, mark as sent
+- Create button prominently displayed
+
+## Configuration
+- shell: true
+```
+
+**2. Sample Data (`data.json`)**
+
+Realistic sample data with metadata:
+
+```json
+{
+  "_meta": {
+    "models": {
+      "invoices": "Each invoice represents a bill sent to a client for work completed.",
+      "lineItems": "Line items are individual services or products on each invoice."
+    },
+    "relationships": [
+      "Each Invoice contains one or more Line Items",
+      "Invoices track which Client they belong to via clientName"
+    ]
+  },
+  "invoices": [
+    {
+      "id": "inv-001",
+      "invoiceNumber": "INV-2024-001",
+      "clientName": "Acme Corp",
+      "clientEmail": "billing@acme.com",
+      "total": 1500.00,
+      "status": "sent",
+      "dueDate": "2024-02-15",
+      "lineItems": [
+        {
+          "description": "Web Design",
+          "quantity": 1,
+          "rate": 1500.00
+        }
+      ]
+    }
+  ]
+}
+```
+
+Sample data includes:
+- 5-10 realistic records with varied content
+- Edge cases (empty arrays, long descriptions)
+- Consistent field names for TypeScript
+
+**3. TypeScript Types (`types.ts`)**
+
+Data interfaces and component props:
+
+```typescript
+// Data shapes
+export interface LineItem {
+  description: string
+  quantity: number
+  rate: number
+}
+
+export interface Invoice {
+  id: string
+  invoiceNumber: string
+  clientName: string
+  clientEmail: string
+  total: number
+  status: 'draft' | 'sent' | 'paid' | 'overdue'
+  dueDate: string
+  lineItems: LineItem[]
+}
+
+// Component props
+export interface InvoiceListProps {
+  /** The list of invoices to display */
+  invoices: Invoice[]
+  /** Called when user wants to view an invoice's details */
+  onView?: (id: string) => void
+  /** Called when user wants to edit an invoice */
+  onEdit?: (id: string) => void
+  /** Called when user wants to delete an invoice */
+  onDelete?: (id: string) => void
+  /** Called when user wants to create a new invoice */
+  onCreate?: () => void
+}
+```
+
+Types include:
+- Inferred types from sample data
+- Union types for status/enum fields
+- Props interface with data and callback props
+
+</Steps>
+
+## Global Data Shape Integration
+
+If you've defined a global data shape (`/data-shape`), the AI uses it to:
+
+- Match entity names across sections
+- Ensure consistent relationships
+- Maintain shared vocabulary
+
+<Note>
+If no global data shape exists, a warning appears but generation continues.
+</Note>
+
+## Next Steps
+
+After shaping your section:
+
+1. **Review the files** - Check spec, data, and types
+2. **Update if needed** - Run `/sample-data` to modify data structure
+3. **Design screens** - Run `/design-screen` to create React components
+
+## Updating Sample Data
+
+To modify the data structure or sample records after creation:
+
+```
+/sample-data
+```
+
+This allows you to adjust entity structures, add fields, or update sample values without reshaping the entire section.
+
+## File Output Locations
+
+```
+product/sections/[section-id]/
+├── spec.md          # Section specification
+├── data.json        # Sample data with _meta
+└── types.ts         # TypeScript interfaces
+```
+
+<Warning>
+The section-id is the slug version of the section title (lowercase, hyphens instead of spaces).
+</Warning>

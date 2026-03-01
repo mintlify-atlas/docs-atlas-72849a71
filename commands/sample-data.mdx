@@ -1,0 +1,258 @@
+---
+title: /sample-data
+description: Create or update realistic sample data for sections
+---
+
+# /sample-data
+
+Creates or updates realistic sample data for a section. This data populates screen designs and defines the TypeScript interfaces for components.
+
+## Syntax
+
+```
+/sample-data
+```
+
+## What It Does
+
+**If sample data doesn't exist:** Generates data and types based on the section specification.
+
+**If sample data exists:** Updates the data shape or sample values based on your feedback.
+
+## Prerequisites
+
+- Requires `product/sections/[section-id]/spec.md` (created by `/shape-section`)
+- Optional: `/product/data-shape/data-shape.md` (for consistent entity naming)
+
+<Note>
+This command is typically run by `/shape-section` automatically. Use it when you need to update existing sample data.
+</Note>
+
+## Outputs
+
+Creates or updates:
+- `product/sections/[section-id]/data.json` - Sample data
+- `product/sections/[section-id]/types.ts` - TypeScript interfaces
+
+## Workflow (New Data)
+
+<Steps>
+  <Step title="Select Section">
+    If multiple sections exist, asks which one to generate data for.
+  </Step>
+  
+  <Step title="Check Global Data Shape">
+    If exists, uses entity names for consistency.
+  </Step>
+  
+  <Step title="Analyze Specification">
+    Reads spec.md to determine:
+    - What entities are needed
+    - What fields each entity requires
+    - What actions can be taken (become callbacks)
+  </Step>
+  
+  <Step title="Generate Files">
+    Creates both data.json and types.ts automatically.
+  </Step>
+</Steps>
+
+## Workflow (Updating Existing)
+
+<Steps>
+  <Step title="Show Current Data">
+    Displays existing data structure.
+  </Step>
+  
+  <Step title="Gather Feedback">
+    Asks what to change about the data shape or values.
+  </Step>
+  
+  <Step title="Update Files">
+    Immediately updates both data.json and types.ts.
+  </Step>
+</Steps>
+
+## Data.json Structure
+
+### Required _meta Section
+
+Every data.json MUST include:
+
+```json
+{
+  "_meta": {
+    "models": {
+      "invoices": "Each invoice represents a bill sent to a client.",
+      "lineItems": "Line items are individual services on an invoice."
+    },
+    "relationships": [
+      "Each Invoice contains one or more Line Items",
+      "Invoices track which Client they belong to via clientName"
+    ]
+  },
+  "invoices": [
+    {
+      "id": "inv-001",
+      "invoiceNumber": "INV-2024-001",
+      "clientName": "Acme Corp",
+      "total": 1500.00,
+      "status": "sent",
+      "dueDate": "2024-02-15",
+      "lineItems": [
+        {
+          "description": "Web Design",
+          "quantity": 1,
+          "rate": 1500.00
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Sample Data Guidelines
+
+<Accordion title="Quality Standards">
+- **Realistic values:** Use believable names, dates, descriptions
+- **Varied content:** Mix short and long text, different statuses
+- **Edge cases:** Include empty arrays, long descriptions, boundary values
+- **Sufficient quantity:** 5-10 records for main entities
+- **TypeScript-friendly:** Consistent field names (camelCase)
+- **Entity alignment:** Match global data shape names if defined
+</Accordion>
+
+## Types.ts Structure
+
+### Data Interfaces
+
+Inferred from the JSON structure:
+
+```typescript
+// =============================================================================
+// UI Data Shapes — These define the data the components expect to receive
+// =============================================================================
+
+export interface LineItem {
+  description: string
+  quantity: number
+  rate: number
+}
+
+export interface Invoice {
+  id: string
+  invoiceNumber: string
+  clientName: string
+  clientEmail: string
+  total: number
+  status: 'draft' | 'sent' | 'paid' | 'overdue'
+  dueDate: string
+  lineItems: LineItem[]
+}
+```
+
+### Component Props Interface
+
+```typescript
+// =============================================================================
+// Component Props
+// =============================================================================
+
+export interface InvoiceListProps {
+  /** The list of invoices to display */
+  invoices: Invoice[]
+  /** Called when user wants to view an invoice's details */
+  onView?: (id: string) => void
+  /** Called when user wants to edit an invoice */
+  onEdit?: (id: string) => void
+  /** Called when user wants to delete an invoice */
+  onDelete?: (id: string) => void
+  /** Called when user wants to create a new invoice */
+  onCreate?: () => void
+}
+```
+
+### Type Inference Rules
+
+<Accordion title="How Types Are Generated">
+- **Strings** → `string`
+- **Numbers** → `number`
+- **Booleans** → `boolean`
+- **Arrays** → `TypeName[]`
+- **Nested objects** → Create named interface
+- **Status fields** → Use union types: `'draft' | 'sent' | 'paid'`
+- **Callbacks** → Based on actions in spec: `onEdit?: (id: string) => void`
+</Accordion>
+
+## Example Session (Creating New)
+
+```
+User: /sample-data
+
+Assistant: I've created two files for **Invoices**:
+
+1. `product/sections/invoices/data.json` - Sample data with 8 records
+2. `product/sections/invoices/types.ts` - TypeScript interfaces
+
+The types include:
+- `Invoice` - The main data type
+- `LineItem` - Nested invoice items
+- `InvoiceListProps` - Props interface (includes callbacks for view, 
+  edit, delete, create)
+
+Review the files and let me know if you'd like adjustments.
+```
+
+## Example Session (Updating)
+
+```
+User: /sample-data
+
+Assistant: Sample data already exists for **Invoices**. What would 
+you like to change about the existing data shape or sample data?
+
+User: Add a notes field to each invoice for internal notes
+
+Assistant: I've updated the sample data and types for **Invoices** 
+to include the notes field.
+```
+
+## Global Data Shape Integration
+
+When `/product/data-shape/data-shape.md` exists:
+
+1. Entity names in sample data match global definitions
+2. Types use the same entity names
+3. Ensures consistency across all sections
+4. Implementation agents can reference shared entities
+
+<Note>
+If global data shape defines "Invoice", all sections will use "Invoice" (not "CustomerInvoice" or "Bill").
+</Note>
+
+## Important Notes
+
+<Warning>
+- Generate realistic data, not "Lorem ipsum" or "Test 123"
+- Include edge cases: empty arrays, long text, varied statuses
+- Keep field names clear and TypeScript-friendly (camelCase)
+- Always generate types.ts alongside data.json
+- Callback props should cover all actions mentioned in spec
+- Auto-proceeds without approval when creating new data
+</Warning>
+
+## Why Sample Data Matters
+
+1. **Design Testing:** Populate screen designs with realistic content
+2. **Type Safety:** TypeScript interfaces ensure props are correct
+3. **Component Contracts:** Clear definition of what data components expect
+4. **Implementation Guide:** Shows developers the expected data shape
+5. **Consistency:** Shared entity names across all sections
+
+## Next Steps
+
+After generating sample data:
+
+1. Run `/design-screen` to create screen designs using this data
+2. Screen designs will import and render the sample data
+3. Types ensure component props are type-safe

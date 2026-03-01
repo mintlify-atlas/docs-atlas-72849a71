@@ -1,0 +1,261 @@
+---
+title: 'Best Practices'
+description: 'Guidelines and best practices for using Design OS effectively'
+---
+
+## Follow the Workflow Sequence
+
+Design OS is built around a structured process. Each step builds on the previous one, so following the sequence ensures you have all the context and assets needed at each stage.
+
+<Tip>
+Don't skip ahead. Complete Product Planning before designing sections, and design the Shell before individual sections.
+</Tip>
+
+### The Recommended Flow
+
+1. **Product Vision** — Define your product overview, roadmap sections, and data shape
+2. **Design Tokens** — Choose colors and typography
+3. **Application Shell** — Design navigation and layout
+4. **For each section:**
+   - Shape the section specification
+   - Generate sample data and types
+   - Design the screen components
+   - Capture screenshots
+5. **Export** — Generate the complete handoff package
+
+## Be Specific in Your Direction
+
+Design OS uses conversational commands. The AI asks clarifying questions, and you provide direction. The more specific you are, the better the output.
+
+<Note>
+**Good example:** "I want a dashboard with a summary card showing total revenue this month, a line chart of daily sales, and a table of recent orders with customer name, order total, and status."
+
+**Vague example:** "Make a dashboard with some charts."
+</Note>
+
+### What to Specify
+
+- **Layout structure** — How elements are arranged, what goes where
+- **Data to display** — Specific fields, metrics, and information
+- **Interactive elements** — Buttons, filters, forms, and what they do
+- **User flows** — What happens when users take actions
+- **Empty states** — What users see when there's no data yet
+
+## Iterate and Refine
+
+Each command is a conversation, not a one-shot operation. After reviewing the output:
+
+- Provide feedback on what to adjust
+- Ask for refinements to layout, spacing, or functionality
+- Request additional components or variations
+- Iterate until you're satisfied with the design
+
+<Tip>
+You can always rerun commands like `/design-screen` or `/design-shell` to refine designs. The components will be updated.
+</Tip>
+
+## Restart the Dev Server
+
+After creating new components or making significant changes, restart the Vite dev server to ensure all updates are reflected.
+
+```bash
+npm run dev
+```
+
+## Design System Guidelines
+
+### Use Design Tokens Consistently
+
+Once you've defined your color palette and typography in `/design-tokens`, those tokens apply to all screen designs:
+
+- **Colors** — Primary, secondary, and neutral palettes from Tailwind
+- **Typography** — Heading, body, and monospace fonts from Google Fonts
+
+<Warning>
+The Design OS application itself always uses stone/lime and DM Sans. Your product design tokens only apply to the screen designs and shell you're creating.
+</Warning>
+
+### Design for Both Modes
+
+All screen designs must work in both light and dark modes:
+
+- Use `dark:` variants for all colors
+- Test each design in both modes
+- Ensure text is readable and UI elements are visible in both contexts
+
+### Design for All Screen Sizes
+
+Use Tailwind's responsive prefixes to create layouts that adapt:
+
+- `sm:` — 640px and up
+- `md:` — 768px and up
+- `lg:` — 1024px and up
+- `xl:` — 1280px and up
+
+<Tip>
+Start with mobile layout (base classes), then add responsive variants for larger screens.
+</Tip>
+
+## Component Architecture
+
+### Props-Based Components
+
+All screen design components must be props-based:
+
+- Accept data via props, never import data directly
+- Accept callback functions for user actions
+- Remain independent and reusable
+
+**Why?** This makes components portable. They can be dropped into any React application and wired up to any data source.
+
+### Separation of Concerns
+
+- **Section components** (`src/sections/[section-name]/components/`) — Exportable, props-based UI components
+- **Preview wrappers** (`src/sections/[section-name]/[ViewName].tsx`) — Load sample data and pass to components
+- **Sample data** (`product/sections/[section-name]/data.json`) — Used only in previews, not imported in exportable components
+
+## Data Shape First
+
+Before designing screens for a section, use `/shape-section` to:
+
+1. Define the section's scope and requirements
+2. Generate sample data that matches the UI needs
+3. Generate TypeScript interfaces
+
+Having realistic sample data before designing screens helps you:
+
+- See how the UI handles real content
+- Identify missing data fields early
+- Design better empty states and loading states
+
+## Planning Your Sections
+
+When defining sections in `/product-vision`:
+
+- **Think in user journeys** — Each section is a feature area or workflow
+- **Keep sections focused** — One primary purpose per section
+- **Order by priority** — List sections in the order you want to build them
+- **Be descriptive** — Section descriptions guide the AI when generating specs
+
+<Accordion title="Example Section Breakdown">
+For a project management tool:
+
+1. **Dashboard** — Overview of projects, tasks, and team activity
+2. **Projects** — Browse, create, and manage projects
+3. **Tasks** — View and update tasks across projects
+4. **Team** — Manage team members and permissions
+5. **Settings** — Account and notification preferences
+
+Each section is self-contained but shares the same shell and design system.
+</Accordion>
+
+## Test Your Designs
+
+Before exporting:
+
+- View each section in the Design OS preview
+- Test responsive behavior by resizing your browser
+- Toggle dark mode and verify readability
+- Check that all interactive elements work as expected
+- Verify empty states show appropriate messaging
+
+## Export Strategy
+
+### Incremental vs. One-Shot
+
+Choose your implementation approach based on project size:
+
+**Incremental (Recommended):**
+- Better for larger products
+- Allows you to review and test each section before moving forward
+- Easier to catch issues early
+- Less overwhelming for the coding agent
+
+**One-Shot:**
+- Better for simpler products with 2-3 sections
+- Faster if you want everything built at once
+- Requires more upfront confidence in the design
+
+## Working with AI Coding Agents
+
+### Use the Pre-Written Prompts
+
+The export package includes ready-to-use prompts:
+
+- `prompts/section-prompt.md` — Template for incremental implementation
+- `prompts/one-shot-prompt.md` — For full implementation in one session
+
+These prompts guide your coding agent to:
+
+- Review all provided files first
+- Ask clarifying questions before implementing
+- Follow the design specifications accurately
+- Write tests based on the provided test instructions
+
+<Tip>
+Don't write your own prompts from scratch. The pre-written prompts include important context and instructions that ensure better results.
+</Tip>
+
+### Always Include Context
+
+When giving a prompt to your coding agent:
+
+- Always reference `product-overview.md` for context
+- Point to the specific instruction files
+- Mention the section's `tests.md` for test specs
+- Include any additional notes about tech stack or constraints
+
+### Encourage Questions
+
+Before finalizing the implementation plan, ask your coding agent to:
+
+- Review all provided files
+- Ask clarifying questions about tech stack, auth approach, data layer
+- Confirm understanding of requirements
+- Propose an implementation plan for your review
+
+## Maintaining Design OS Projects
+
+### Updating After Initial Creation
+
+You can update product files after initial creation:
+
+- `/product-roadmap` — Add or modify sections
+- `/data-shape` — Add or update entities
+- `/sample-data` — Update sample data and types for a section
+- `/design-screen` — Redesign or refine screen components
+
+### Version Control
+
+Commit your Design OS project to version control:
+
+- The entire Design OS project is portable
+- `product/` folder contains all your specifications
+- `src/sections/` and `src/shell/` contain screen designs
+- `product-plan/` can be regenerated with `/export-product`
+
+<Note>
+You can share the entire Design OS project with team members or between machines. Just clone the repo and run `npm install`.
+</Note>
+
+## Common Pitfalls to Avoid
+
+<Warning>
+**Don't skip Product Planning** — Jumping straight to section design without defining vision, design tokens, and shell leads to inconsistent designs.
+</Warning>
+
+<Warning>
+**Don't import data in exportable components** — Section components must be props-based. Only preview wrappers should import sample data.
+</Warning>
+
+<Warning>
+**Don't forget responsive design** — Always use Tailwind responsive prefixes. Test layouts at different screen sizes.
+</Warning>
+
+<Warning>
+**Don't ignore dark mode** — Use `dark:` variants for all colors. Both modes should be fully functional.
+</Warning>
+
+<Warning>
+**Don't rebuild the components during implementation** — The UI components are production-ready. Wire them up to your data layer, don't recreate them.
+</Warning>

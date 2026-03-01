@@ -1,0 +1,333 @@
+---
+title: Capturing Screenshots
+description: Take screenshots of screen designs for documentation and handoff materials
+---
+
+The `/screenshot-design` command captures screenshots of your screen designs. Screenshots are saved alongside spec and data files for visual reference during implementation.
+
+## Prerequisites
+
+Before capturing screenshots:
+
+### 1. Playwright MCP Server
+
+The screenshot command requires the Playwright MCP server. If not installed, you'll see:
+
+```
+To capture screenshots, I need the Playwright MCP server installed.
+Please run:
+
+claude mcp add playwright npx @playwright/mcp@latest
+
+Then restart this Claude Code session and run /screenshot-design again.
+```
+
+<Warning>
+Use the exact command shown. Do not modify the package name or substitute alternatives.
+</Warning>
+
+### 2. Screen Design Created
+
+You must have at least one screen design at `src/sections/[section-id]/[ViewName].tsx`.
+
+Run `/design-screen` first if no screens exist.
+
+## What Screenshots Are For
+
+Screenshots provide:
+
+- **Visual reference** during implementation
+- **Documentation materials** for handoff packages
+- **Design comparisons** across sections
+- **Stakeholder reviews** before implementation
+
+## The Screenshot Process
+
+<Steps>
+
+### Select a Screen Design
+
+If multiple screen designs exist, you'll be asked which to screenshot:
+
+```
+Which screen design would you like to screenshot?
+
+- Invoice Management / InvoiceList
+- Invoice Management / InvoiceDetail
+- Client Management / ClientList
+```
+
+Single screen designs are auto-selected.
+
+### Dev Server Starts Automatically
+
+The AI starts the dev server automatically:
+
+```bash
+npm run dev
+```
+
+<Note>
+You don't need to manually start the server. The AI handles this.
+</Note>
+
+The server runs in the background while capturing the screenshot.
+
+### Navigate to Screen Design
+
+The AI navigates to the screen design URL:
+
+```
+http://localhost:3000/sections/[section-id]/screen-designs/[screen-design-name]
+```
+
+Waits for the page to fully load.
+
+### Hide Navigation Bar
+
+Before capturing, the AI clicks the "Hide" link in the Design OS navigation bar to capture only your screen design (not the Design OS chrome).
+
+The Hide button is located using the `data-hide-header` attribute.
+
+### Capture Full Page Screenshot
+
+The AI captures a full-page screenshot:
+
+**Specifications:**
+- **Viewport**: Desktop width (1280px)
+- **Mode**: Full page (includes scrollable content)
+- **Format**: PNG for best quality
+
+```typescript
+// Screenshot includes entire page, not just viewport
+browser_take_screenshot({
+  url: 'http://localhost:3000/sections/invoice-management/screen-designs/invoice-list',
+  fullPage: true,
+  viewport: { width: 1280, height: 720 }
+})
+```
+
+### Save to Product Folder
+
+Screenshots are saved in two steps:
+
+1. **Initial save** to `.playwright-mcp/[filename].png`
+2. **Copy** to `product/sections/[section-id]/[filename].png`
+
+```bash
+cp .playwright-mcp/invoice-list.png product/sections/invoice-management/invoice-list.png
+```
+
+</Steps>
+
+## Screenshot Naming Convention
+
+Filenames follow the pattern:
+
+```
+[screen-design-name]-[variant].png
+```
+
+**Examples:**
+
+| Filename | Description |
+|----------|-------------|
+| `invoice-list.png` | Main list view |
+| `invoice-list-dark.png` | Dark mode variant |
+| `invoice-detail.png` | Detail view |
+| `invoice-form-empty.png` | Empty state |
+| `client-dashboard.png` | Dashboard view |
+| `client-dashboard-mobile.png` | Mobile viewport |
+
+## File Output Locations
+
+```
+product/sections/[section-id]/
+├── spec.md
+├── data.json
+├── types.ts
+├── invoice-list.png         # Screenshot
+├── invoice-list-dark.png    # Dark mode screenshot
+└── invoice-detail.png       # Additional view screenshot
+```
+
+Screenshots are stored alongside section definition files for easy reference.
+
+## Capturing Multiple Screenshots
+
+After capturing, the AI offers:
+
+```
+Would you like me to capture any additional screenshots? For example:
+- Dark mode version
+- Mobile viewport
+- Different states (empty, loading, etc.)
+```
+
+Run `/screenshot-design` again for each additional screenshot.
+
+## Screenshot Variants
+
+### Dark Mode
+
+Capture both light and dark mode versions:
+
+1. Run `/screenshot-design` normally for light mode
+2. Toggle to dark mode in the browser
+3. Run `/screenshot-design` again, name as `[screen-name]-dark.png`
+
+### Mobile Viewport
+
+Capture mobile layouts:
+
+```typescript
+browser_take_screenshot({
+  viewport: { width: 375, height: 667 },  // iPhone size
+  fullPage: true
+})
+```
+
+Name as `[screen-name]-mobile.png`
+
+### Different States
+
+Capture various UI states:
+
+**Empty state:**
+- Temporarily modify `data.json` to have empty arrays
+- Capture screenshot
+- Name as `[screen-name]-empty.png`
+
+**Loading state:**
+- Modify preview wrapper to show loading spinner
+- Capture screenshot
+- Name as `[screen-name]-loading.png`
+
+**Error state:**
+- Modify preview wrapper to show error message
+- Capture screenshot
+- Name as `[screen-name]-error.png`
+
+## Example Screenshot Session
+
+Capturing multiple variants:
+
+```
+# Light mode, desktop
+/screenshot-design
+→ invoice-list.png
+
+# Dark mode, desktop
+(Toggle dark mode in browser)
+/screenshot-design
+→ invoice-list-dark.png
+
+# Light mode, mobile
+/screenshot-design
+→ invoice-list-mobile.png
+
+# Empty state
+(Modify data.json to have empty invoices array)
+/screenshot-design
+→ invoice-list-empty.png
+```
+
+Result:
+```
+product/sections/invoice-management/
+├── invoice-list.png
+├── invoice-list-dark.png
+├── invoice-list-mobile.png
+└── invoice-list-empty.png
+```
+
+## Screenshot Quality Tips
+
+### Use Realistic Data
+
+Ensure `data.json` has varied, realistic content:
+- Different statuses
+- Varied text lengths
+- Edge cases visible
+
+### Capture Full Context
+
+Use full-page screenshots to show:
+- Complete layouts
+- Scrollable content
+- Footer elements
+
+### Consistent Viewport
+
+Use standard viewport widths:
+- **Desktop**: 1280px or 1440px
+- **Tablet**: 768px
+- **Mobile**: 375px or 414px
+
+### Clean Browser State
+
+- No browser extensions visible
+- No dev tools open
+- Consistent zoom level (100%)
+
+## After Capturing
+
+The AI confirms:
+
+```
+I've saved the screenshot to product/sections/invoice-management/invoice-list.png.
+
+The screenshot captures the InvoiceList screen design for the Invoice Management section.
+
+Would you like me to capture any additional screenshots?
+```
+
+## Dev Server Management
+
+The AI may stop the dev server after capturing if it started it.
+
+If you're doing multiple screenshots, you can keep it running between captures.
+
+## Next Steps
+
+After capturing screenshots:
+
+1. **Review screenshots** - Check that they show expected content
+2. **Capture variants** - Dark mode, mobile, different states
+3. **Continue sections** - Run `/design-screen` for additional views
+4. **Export when complete** - Run `/export-product` to include screenshots in handoff
+
+## Troubleshooting
+
+### Playwright Not Found
+
+If you see an error about Playwright:
+
+```bash
+claude mcp add playwright npx @playwright/mcp@latest
+```
+
+Restart your Claude session after installing.
+
+### Dev Server Not Running
+
+The AI starts the server automatically. If it fails:
+
+```bash
+npm run dev
+```
+
+Manually start it, then run `/screenshot-design` again.
+
+### Screenshot Shows Navigation Bar
+
+The AI should automatically hide the Design OS navigation. If visible:
+- Manually click "Hide" in the nav bar
+- Then run screenshot command
+
+### Incomplete Screenshot
+
+If screenshot is cut off:
+- Ensure `fullPage: true` is used
+- Check that page fully loaded before capture
+- Increase wait time before screenshot

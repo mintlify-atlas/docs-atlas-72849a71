@@ -1,0 +1,172 @@
+---
+title: /product-roadmap
+description: Create or update your product's section roadmap
+---
+
+# /product-roadmap
+
+Creates or updates your product roadmap - the main sections/areas of your product.
+
+## Syntax
+
+```
+/product-roadmap
+```
+
+## What It Does
+
+**If roadmap doesn't exist:** Generates a roadmap based on your product overview.
+
+**If roadmap exists:** Lets you update the sections based on your feedback.
+
+## Prerequisites
+
+- Requires `/product/product-overview.md` (created by `/product-vision`)
+
+<Note>
+If you haven't run `/product-vision` yet, this command will prompt you to do so first.
+</Note>
+
+## Outputs
+
+Creates or updates:
+- `/product/product-roadmap.md`
+
+## Workflow (New Roadmap)
+
+<Steps>
+  <Step title="Analyze Product Overview">
+    Reads your product overview to understand the product's purpose and features.
+  </Step>
+  
+  <Step title="Generate Sections">
+    Creates 3-5 sections that represent:
+    - Navigation items (main areas of the product UI)
+    - Roadmap phases (logical order for building)
+    - Self-contained feature areas
+  </Step>
+  
+  <Step title="Confirm">
+    Presents the generated roadmap and prompts you to review.
+  </Step>
+</Steps>
+
+## Workflow (Updating Existing)
+
+<Steps>
+  <Step title="Show Current State">
+    Displays your current sections.
+  </Step>
+  
+  <Step title="Gather Feedback">
+    Asks what you'd like to change about the sections.
+  </Step>
+  
+  <Step title="Update File">
+    Immediately updates the roadmap based on your feedback.
+  </Step>
+</Steps>
+
+## Roadmap Format
+
+```markdown
+# Product Roadmap
+
+## Sections
+
+### 1. [Section Title]
+[One sentence description]
+
+### 2. [Section Title]
+[One sentence description]
+
+### 3. [Section Title]
+[One sentence description]
+```
+
+## Section Guidelines
+
+<Accordion title="Best Practices">
+- **Order by priority:** Sections should be listed in development order
+- **Self-contained:** Each section can be designed and built independently
+- **Clear titles:** Section titles become navigation items in your app
+- **Concise descriptions:** Keep to one sentence
+- **Ideal count:** 3-5 sections (not too few, not too many)
+</Accordion>
+
+## Format Requirements
+
+<Warning>
+- The numbered format `### 1. Title` is required for parsing
+- Section descriptions must be one sentence
+- Do not use sub-sections or nested structure
+</Warning>
+
+## Example Output
+
+```markdown
+# Product Roadmap
+
+## Sections
+
+### 1. Dashboard
+Overview of key metrics, recent invoices, and outstanding payments.
+
+### 2. Invoices
+Create, edit, send, and track invoices with detailed line items.
+
+### 3. Clients
+Manage client information, contact details, and invoice history.
+
+### 4. Settings
+Configure business details, payment methods, and notification preferences.
+```
+
+## Example Session (Creating New)
+
+```
+User: /product-roadmap
+
+Assistant: I've created your product roadmap at 
+`/product/product-roadmap.md` with 4 sections:
+
+1. **Dashboard** — Overview of key metrics and recent activity
+2. **Invoices** — Create and manage invoices
+3. **Clients** — Manage client information
+4. **Settings** — Configure business details
+
+Review the sections and let me know if you'd like to adjust anything.
+```
+
+## Example Session (Updating Existing)
+
+```
+User: /product-roadmap
+
+Assistant: Your product roadmap currently has 4 sections:
+
+1. **Dashboard** — Overview of key metrics and recent activity
+2. **Invoices** — Create and manage invoices
+3. **Clients** — Manage client information
+4. **Settings** — Configure business details
+
+What would you like to change about the sections?
+
+User: Add a Reports section between Clients and Settings
+
+Assistant: I've updated the product roadmap with the new Reports section.
+```
+
+## Important Notes
+
+- Auto-proceeds without approval when creating new roadmap
+- Immediately updates when modifying existing roadmap
+- Section titles are used throughout Design OS (navigation, exports, etc.)
+
+## Next Steps
+
+After defining your roadmap:
+
+1. Run `/data-shape` to define core entities (if not done via `/product-vision`)
+2. Run `/design-tokens` to choose visual styling
+3. Run `/shape-section` to start defining individual sections

@@ -1,0 +1,392 @@
+---
+title: Implementation Approaches
+description: Choose between one-shot and incremental implementation strategies
+---
+
+The export package supports two implementation approaches. Choose the one that best fits your project and working style.
+
+## Quick Comparison
+
+<Tabs>
+  <Tab title="One-Shot">
+    **Build everything in one session**
+    
+    Best for:
+    - Simpler products (2-3 sections)
+    - When you want to see the full product quickly
+    - Experienced agents with large context windows
+    
+    Files used:
+    - `prompts/one-shot-prompt.md`
+    - `instructions/one-shot-instructions.md`
+    - `product-overview.md`
+    
+    Time: 1 session
+  </Tab>
+  <Tab title="Incremental">
+    **Build milestone by milestone**
+    
+    Best for:
+    - Larger products (4+ sections)
+    - When you want to review progress incrementally
+    - Learning and refining as you go
+    
+    Files used:
+    - `prompts/section-prompt.md` (per milestone)
+    - `instructions/incremental/01-shell.md`
+    - `instructions/incremental/02-[section].md`
+    - `product-overview.md`
+    
+    Time: Multiple sessions
+  </Tab>
+</Tabs>
+
+## One-Shot Implementation
+
+Build the entire product in a single implementation session.
+
+### How It Works
+
+1. Open `product-plan/prompts/one-shot-prompt.md`
+2. Add any additional notes (tech stack preferences, constraints)
+3. Copy/paste the prompt into your coding agent
+4. Answer the agent's clarifying questions about:
+   - Tech stack and existing codebase conventions
+   - Authentication and user management
+   - Product requirements
+   - Anything else needed before implementing
+5. Agent creates a comprehensive implementation plan
+6. Agent implements all milestones (shell + all sections)
+7. Review and test the complete product
+
+### What the Prompt Does
+
+The one-shot prompt:
+
+- References `product-overview.md` for full context
+- References `instructions/one-shot-instructions.md` (all milestones combined)
+- Guides agent to review all design files before starting
+- Prompts for clarifying questions about tech stack and requirements
+- Asks if you have any additional notes
+- Encourages the agent to create a plan before implementing
+
+<Accordion title="Example one-shot-prompt.md">
+```markdown
+# One-Shot Implementation Prompt
+
+I need you to implement a complete web application based on 
+detailed UI designs and product specifications I'm providing.
+
+## Instructions
+
+Please carefully read and analyze the following files:
+
+1. **@product-plan/product-overview.md** — Product summary
+2. **@product-plan/instructions/one-shot-instructions.md** — 
+   Complete implementation instructions for all milestones
+
+After reading these, also review:
+- **@product-plan/design-system/** — Tokens
+- **@product-plan/data-shapes/** — UI data contracts
+- **@product-plan/shell/** — Application shell components
+- **@product-plan/sections/** — All section components and test specs
+
+## Before You Begin
+
+Review all the provided files, then ask me clarifying questions about:
+
+1. **My tech stack** — Framework, language, tools, conventions
+2. **Authentication & users** — Sign up, log in, permissions
+3. **Product requirements** — Anything that needs clarification
+4. **Anything else** — Whatever you need to know
+
+Lastly, ask me if I have any additional notes.
+
+Once I answer, create a comprehensive implementation plan before coding.
+```
+</Accordion>
+
+### When to Use One-Shot
+
+<CardGroup cols={2}>
+  <Card icon="check">
+    **Good for:**
+    
+    - Simple products (2-3 sections)
+    - Clear requirements
+    - Experienced with AI agents
+    - Want to see results quickly
+  </Card>
+  <Card icon="xmark">
+    **Not ideal for:**
+    
+    - Complex products (5+ sections)
+    - Learning as you go
+    - Tight budget constraints
+    - Need for frequent reviews
+  </Card>
+</CardGroup>
+
+### Advantages
+
+- **Fast** — See the full product in one session
+- **Cohesive** — Agent has full context and can optimize across sections
+- **Less overhead** — No need to manage multiple sessions
+
+### Challenges
+
+- **Large context** — Requires agent to handle all instructions at once
+- **Higher risk** — If something goes wrong, more work to redo
+- **Less control** — Harder to course-correct mid-implementation
+
+<Warning>
+One-shot implementation works best with capable models (Claude 3.5 Sonnet, GPT-4, etc.) and clear requirements. Make sure to answer clarifying questions thoroughly.
+</Warning>
+
+## Incremental Implementation
+
+Build your product milestone by milestone for better control and review opportunities.
+
+### How It Works
+
+Work through the milestones in order:
+
+1. **Shell** (`instructions/incremental/01-shell.md`)
+   - Design tokens and application shell
+   - Foundation for all sections
+
+2. **Section 1** (`instructions/incremental/02-[section-id].md`)
+   - First feature section
+   - Uses the shell and tokens
+
+3. **Section 2** (`instructions/incremental/03-[section-id].md`)
+   - Second feature section
+   - Builds on existing work
+
+4. Continue for all remaining sections
+
+### For Each Milestone
+
+1. Open `product-plan/prompts/section-prompt.md`
+2. Fill in the section variables at the top:
+   ```
+   SECTION_NAME = [Human-readable name]
+   SECTION_ID = [Folder name in sections/]
+   NN = [Milestone number: 01 for shell, 02+ for sections]
+   ```
+3. Add any section-specific notes
+4. Copy/paste the prompt into your coding agent
+5. Answer clarifying questions
+6. Agent implements the milestone
+7. **Review and test** before moving to the next milestone
+
+<Accordion title="Example section-prompt.md">
+```markdown
+# Section Implementation Prompt
+
+## Define Section Variables
+
+- **SECTION_NAME** = [e.g., "Invoices" or "Project Dashboard"]
+- **SECTION_ID** = [e.g., "invoices" or "project-dashboard"]
+- **NN** = [e.g., "02" or "03" — sections start at 02]
+
+---
+
+I need you to implement the **SECTION_NAME** section of my application.
+
+## Instructions
+
+Please carefully read and analyze the following files:
+
+1. **@product-plan/product-overview.md** — Product context
+2. **@product-plan/instructions/incremental/NN-SECTION_ID.md** — 
+   Specific instructions for this section
+
+Also review the section assets:
+- **@product-plan/sections/SECTION_ID/README.md** — Feature overview
+- **@product-plan/sections/SECTION_ID/tests.md** — Test specs
+- **@product-plan/sections/SECTION_ID/components/** — React components
+- **@product-plan/sections/SECTION_ID/types.ts** — TypeScript interfaces
+- **@product-plan/sections/SECTION_ID/sample-data.json** — Test data
+
+## Before You Begin
+
+Review all files, then ask me clarifying questions about:
+
+1. **Integration** — How this connects to existing features
+2. **Product requirements** — Anything that needs clarification
+3. **Anything else** — Whatever you need to know
+
+Lastly, ask me if I have any additional notes.
+
+Once I answer, proceed with implementation.
+```
+</Accordion>
+
+### When to Use Incremental
+
+<CardGroup cols={2}>
+  <Card icon="check">
+    **Good for:**
+    
+    - Complex products (4+ sections)
+    - Learning as you go
+    - Want to review progress frequently
+    - Building with a team
+  </Card>
+  <Card icon="xmark">
+    **Not ideal for:**
+    
+    - Very simple products (1-2 sections)
+    - When speed is critical
+    - One-person quick prototypes
+  </Card>
+</CardGroup>
+
+### Advantages
+
+- **Controlled** — Review and test after each milestone
+- **Lower risk** — Easier to catch and fix issues early
+- **Flexible** — Can adjust approach based on learnings
+- **Better for learning** — Understand each piece before moving on
+
+### Challenges
+
+- **More sessions** — Requires multiple implementation sessions
+- **Session management** — Need to track progress across milestones
+- **Context switching** — Agent doesn't see full picture until later
+
+<Note>
+Incremental implementation is **recommended for most projects**. The ability to review and test after each milestone reduces risk and improves quality.
+</Note>
+
+## Choosing Your Approach
+
+Consider these factors:
+
+### Project Complexity
+
+- **2-3 sections:** Either approach works
+- **4-6 sections:** Incremental recommended
+- **7+ sections:** Incremental strongly recommended
+
+### Team Size
+
+- **Solo developer:** Either approach works
+- **Small team (2-3):** Incremental for better coordination
+- **Larger team:** Incremental with milestone assignments
+
+### Requirements Clarity
+
+- **Very clear requirements:** One-shot can work
+- **Some ambiguity:** Incremental lets you clarify as you go
+- **Exploratory:** Incremental to learn and adjust
+
+### Time Constraints
+
+- **Need full product fast:** One-shot
+- **Prefer steady progress:** Incremental
+- **Long-term project:** Incremental
+
+### Agent Experience
+
+- **Experienced with AI agents:** One-shot feasible
+- **Learning AI-assisted development:** Incremental safer
+- **First time with this agent:** Incremental to calibrate
+
+## Hybrid Approach
+
+You can also mix approaches:
+
+1. **Start with incremental** — Build shell + first section to validate
+2. **Switch to one-shot** — Complete remaining sections in one session
+
+Or:
+
+1. **Group related sections** — Implement 2-3 sections per session
+2. **Review between groups** — Test and adjust before next group
+
+## Example: Incremental Workflow
+
+Here's a real-world incremental implementation:
+
+<Steps>
+  <Step title="Milestone 1: Shell">
+    Implement design tokens and application shell.
+    
+    **Review checklist:**
+    - Design tokens configured correctly
+    - Shell renders with navigation
+    - Navigation links to correct routes
+    - User menu shows user info
+    - Responsive on mobile
+  </Step>
+  
+  <Step title="Milestone 2: Invoices">
+    Implement the invoices section.
+    
+    **Review checklist:**
+    - Invoice list displays with real data
+    - Empty state shows when no invoices
+    - Can create new invoices
+    - Can edit existing invoices
+    - Can delete invoices
+    - Tests pass
+    - Matches visual design
+  </Step>
+  
+  <Step title="Milestone 3: Projects">
+    Implement the projects section.
+    
+    **Review checklist:**
+    - Project list displays with real data
+    - Empty state shows when no projects
+    - Can create new projects
+    - Can link projects to invoices
+    - Tests pass
+    - Matches visual design
+  </Step>
+  
+  <Step title="Continue...">
+    Repeat for remaining sections.
+  </Step>
+</Steps>
+
+## Tips for Success
+
+<AccordionGroup>
+  <Accordion title="Answer clarifying questions thoroughly">
+    Whether one-shot or incremental, the prompts guide your agent to ask clarifying questions. Take time to answer them well—it prevents wasted work.
+  </Accordion>
+  
+  <Accordion title="Always include product-overview.md">
+    Every implementation session (one-shot or incremental) should include `product-overview.md` for context about the full product.
+  </Accordion>
+  
+  <Accordion title="Use tests.md for TDD">
+    Both approaches benefit from writing tests first. Use the `tests.md` instructions to write tests before implementing features.
+  </Accordion>
+  
+  <Accordion title="Review before moving on">
+    For incremental, thoroughly review and test each milestone before starting the next. This catches issues early.
+  </Accordion>
+  
+  <Accordion title="Test with sample data first">
+    Use the provided `sample-data.json` to verify components work before building real APIs. This applies to both approaches.
+  </Accordion>
+  
+  <Accordion title="Trust the components">
+    The UI components are complete and production-ready. Wire them up with your routing and data—don't rebuild them.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Implementation Guide" icon="code" href="/export/implementation-guide">
+    Learn how to implement your designs
+  </Card>
+  <Card title="Export Package" icon="box" href="/export/export-package">
+    Explore what's in the export package
+  </Card>
+</CardGroup>

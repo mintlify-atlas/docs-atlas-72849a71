@@ -1,0 +1,597 @@
+---
+title: 'Design Requirements'
+description: 'Technical requirements and standards for creating screen designs in Design OS'
+---
+
+## Overview
+
+When creating screen designs in Design OS, all components must follow specific technical requirements to ensure they're production-ready, portable, and work across different environments and devices.
+
+<Note>
+These requirements apply to screen designs and components you create with Design OS, not to the Design OS application itself.
+</Note>
+
+## Tailwind CSS v4 Requirements
+
+Design OS uses Tailwind CSS v4 exclusively. This version has significant differences from v3.
+
+<Warning>
+**Critical:** Design OS uses Tailwind CSS v4, NOT v3. Do not reference or create v3 patterns.
+</Warning>
+
+### No tailwind.config.js
+
+Tailwind CSS v4 does not use a configuration file.
+
+**Do NOT:**
+- Create a `tailwind.config.js` file
+- Reference `tailwind.config.js` in documentation or prompts
+- Attempt to configure Tailwind via a config file
+
+**Instead:**
+- Use CSS custom properties for theming
+- Use built-in utility classes
+- Configure via Vite plugin if needed
+
+### Use Built-in Utility Classes
+
+Avoid writing custom CSS. Stick to Tailwind's built-in utility classes.
+
+<Accordion title="Good vs. Bad Examples">
+
+**Bad - Custom CSS:**
+```css
+.my-card {
+  background: linear-gradient(to right, #f00, #00f);
+  border-radius: 12px;
+  padding: 24px;
+}
+```
+
+**Good - Tailwind utilities:**
+```tsx
+<div className="bg-gradient-to-r from-red-500 to-blue-500 rounded-xl p-6">
+```
+
+</Accordion>
+
+### Use Built-in Colors
+
+Do not define custom colors. Use Tailwind's built-in color palette.
+
+**Available palettes:**
+- slate, gray, zinc, neutral, stone
+- red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose
+
+**Usage:**
+```tsx
+// Primary color example (using lime)
+<button className="bg-lime-500 hover:bg-lime-600 text-white">
+
+// Neutral color example (using stone)
+<div className="bg-stone-100 dark:bg-stone-900 text-stone-900 dark:text-stone-100">
+```
+
+<Tip>
+When design tokens are defined, use the chosen palettes. For example, if primary is "lime", use `lime-500`, `lime-600`, etc.
+</Tip>
+
+## Responsive Design Requirements
+
+All screen designs must be fully responsive and work across all device sizes.
+
+### Use Responsive Prefixes
+
+Tailwind provides responsive breakpoints:
+
+- **Base classes** — Apply to all screen sizes (mobile-first)
+- `sm:` — 640px and up (large phones, small tablets)
+- `md:` — 768px and up (tablets)
+- `lg:` — 1024px and up (laptops, small desktops)
+- `xl:` — 1280px and up (large desktops)
+
+### Mobile-First Approach
+
+Start with mobile layout (base classes), then add larger screen variants:
+
+```tsx
+<div className="
+  grid 
+  grid-cols-1        /* Mobile: 1 column */
+  sm:grid-cols-2     /* Tablet: 2 columns */
+  lg:grid-cols-3     /* Desktop: 3 columns */
+  gap-4
+">
+```
+
+### Common Responsive Patterns
+
+<Accordion title="Layout Grid">
+```tsx
+{/* Responsive grid layout */}
+<div className="
+  grid 
+  grid-cols-1 
+  sm:grid-cols-2 
+  lg:grid-cols-3 
+  xl:grid-cols-4 
+  gap-4 
+  lg:gap-6
+">
+  {items.map(item => (
+    <Card key={item.id} {...item} />
+  ))}
+</div>
+```
+</Accordion>
+
+<Accordion title="Flex Container">
+```tsx
+{/* Responsive flex container */}
+<div className="
+  flex 
+  flex-col          /* Stack vertically on mobile */
+  lg:flex-row       /* Side-by-side on desktop */
+  gap-6
+">
+  <div className="flex-1">{/* Main content */}</div>
+  <div className="lg:w-80">{/* Sidebar */}</div>
+</div>
+```
+</Accordion>
+
+<Accordion title="Typography Scaling">
+```tsx
+{/* Responsive text sizes */}
+<h1 className="
+  text-2xl          /* Mobile */
+  sm:text-3xl       /* Tablet */
+  lg:text-4xl       /* Desktop */
+  font-bold
+">
+  Heading
+</h1>
+```
+</Accordion>
+
+<Accordion title="Padding & Spacing">
+```tsx
+{/* Responsive padding */}
+<div className="
+  p-4              /* Mobile: 16px */
+  md:p-6           /* Tablet: 24px */
+  lg:p-8           /* Desktop: 32px */
+">
+  Content
+</div>
+```
+</Accordion>
+
+### Testing Responsive Designs
+
+1. **Resize browser window** — Manually resize to test breakpoints
+2. **Use DevTools device toolbar** — Test different device sizes
+3. **Test on real devices** — When possible, verify on actual phones/tablets
+
+<Tip>
+In browser DevTools, use the device toolbar (Cmd+Shift+M on Mac, Ctrl+Shift+M on Windows) to quickly test different viewport sizes.
+</Tip>
+
+## Dark Mode Requirements
+
+All screen designs must support both light and dark modes with full functionality and readability in both.
+
+### Use dark: Variants
+
+Every color must have a `dark:` variant:
+
+```tsx
+{/* Background colors */}
+<div className="bg-white dark:bg-gray-900">
+
+{/* Text colors */}
+<p className="text-gray-900 dark:text-gray-100">
+
+{/* Border colors */}
+<div className="border border-gray-200 dark:border-gray-800">
+```
+
+### Complete Example
+
+<Accordion title="Card with Dark Mode Support">
+```tsx
+export function ProjectCard({ project }: { project: Project }) {
+  return (
+    <div className="
+      bg-white dark:bg-gray-900
+      border border-gray-200 dark:border-gray-800
+      rounded-lg
+      p-6
+      hover:shadow-lg
+      transition-shadow
+    ">
+      <h3 className="
+        text-xl font-semibold
+        text-gray-900 dark:text-gray-100
+        mb-2
+      ">
+        {project.name}
+      </h3>
+      
+      <p className="
+        text-gray-600 dark:text-gray-400
+        text-sm
+        mb-4
+      ">
+        {project.description}
+      </p>
+      
+      <button className="
+        bg-lime-500 hover:bg-lime-600
+        dark:bg-lime-600 dark:hover:bg-lime-700
+        text-white
+        px-4 py-2
+        rounded
+        text-sm font-medium
+      ">
+        View Project
+      </button>
+    </div>
+  )
+}
+```
+</Accordion>
+
+### Common Dark Mode Patterns
+
+**Neutral backgrounds:**
+```tsx
+className="bg-stone-50 dark:bg-stone-950"
+```
+
+**Card backgrounds:**
+```tsx
+className="bg-white dark:bg-stone-900"
+```
+
+**Primary text:**
+```tsx
+className="text-stone-900 dark:text-stone-100"
+```
+
+**Secondary text:**
+```tsx
+className="text-stone-600 dark:text-stone-400"
+```
+
+**Borders:**
+```tsx
+className="border-stone-200 dark:border-stone-800"
+```
+
+### Testing Dark Mode
+
+1. **Toggle system dark mode** — Change OS appearance settings
+2. **Use browser DevTools** — Add/remove `dark` class on `<html>` element
+3. **Verify all elements** — Check backgrounds, text, borders, icons
+4. **Check contrast** — Ensure text is readable in both modes
+
+<Warning>
+Do not forget interactive states like hover, focus, and active. They need dark variants too:
+```tsx
+className="hover:bg-gray-100 dark:hover:bg-gray-800"
+```
+</Warning>
+
+## Design Tokens
+
+When design tokens are defined via `/design-tokens`, use them consistently across all screen designs.
+
+### Color Palettes
+
+Design tokens define three color palettes:
+
+- **Primary** — Main brand color (e.g., lime)
+- **Secondary** — Accent color (e.g., blue)
+- **Neutral** — Gray scale (e.g., stone)
+
+### Usage Examples
+
+```tsx
+{/* Primary actions */}
+<button className="bg-lime-500 hover:bg-lime-600 text-white">
+
+{/* Secondary actions */}
+<button className="bg-blue-500 hover:bg-blue-600 text-white">
+
+{/* Neutral backgrounds */}
+<div className="bg-stone-100 dark:bg-stone-900">
+```
+
+### Typography
+
+Design tokens define three font families:
+
+- **Heading** — For titles and headings
+- **Body** — For body text and UI
+- **Mono** — For code and monospace text
+
+These are applied via CSS custom properties:
+
+```css
+:root {
+  --font-heading: 'DM Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+```
+
+Tailwind classes use these automatically:
+
+```tsx
+<h1 className="font-sans">  {/* Uses --font-heading */}
+<p className="font-sans">   {/* Uses --font-body */}
+<code className="font-mono"> {/* Uses --font-mono */}
+```
+
+<Note>
+**Design OS UI vs. Product Design:**
+
+- Design OS application always uses stone/lime and DM Sans
+- Your product screen designs use the design tokens you define
+- The shell uses product design tokens to preview the full app experience
+</Note>
+
+## Component Architecture
+
+### Props-Based Components
+
+All screen design components must be props-based and never import data directly.
+
+<Accordion title="Good vs. Bad Examples">
+
+**Bad - Imports data directly:**
+```tsx
+// ❌ Do not do this in exportable components
+import { projects } from '../../../product/sections/projects/data.json'
+
+export function ProjectList() {
+  return (
+    <div>
+      {projects.map(project => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </div>
+  )
+}
+```
+
+**Good - Accepts data via props:**
+```tsx
+// ✅ Do this in exportable components
+import type { Project } from '../../../product/sections/projects/types'
+
+interface ProjectListProps {
+  projects: Project[]
+  onSelectProject: (id: string) => void
+}
+
+export function ProjectList({ projects, onSelectProject }: ProjectListProps) {
+  return (
+    <div>
+      {projects.map(project => (
+        <ProjectCard 
+          key={project.id} 
+          project={project}
+          onClick={() => onSelectProject(project.id)}
+        />
+      ))}
+    </div>
+  )
+}
+```
+
+</Accordion>
+
+### Why Props-Based?
+
+Props-based components are:
+
+- **Portable** — Can be dropped into any React app
+- **Testable** — Easy to test with different data
+- **Flexible** — Work with any data source (API, database, static)
+- **Reusable** — Can be used in multiple contexts
+
+### Callbacks for User Actions
+
+Components should accept callback functions for user interactions:
+
+```tsx
+interface ProjectCardProps {
+  project: Project
+  onEdit: (id: string) => void
+  onDelete: (id: string) => void
+  onView: (id: string) => void
+}
+
+export function ProjectCard({ project, onEdit, onDelete, onView }: ProjectCardProps) {
+  return (
+    <div>
+      <h3>{project.name}</h3>
+      <button onClick={() => onView(project.id)}>View</button>
+      <button onClick={() => onEdit(project.id)}>Edit</button>
+      <button onClick={() => onDelete(project.id)}>Delete</button>
+    </div>
+  )
+}
+```
+
+### Preview Wrappers
+
+Preview wrappers (in `src/sections/[section-name]/[ViewName].tsx`) can import data to pass to components:
+
+```tsx
+// ✅ Preview wrapper can import data
+import { projects } from '../../product/sections/projects/data.json'
+import { ProjectList } from './components'
+
+export function ProjectsView() {
+  const handleSelectProject = (id: string) => {
+    console.log('Selected project:', id)
+  }
+
+  return (
+    <ProjectList 
+      projects={projects}
+      onSelectProject={handleSelectProject}
+    />
+  )
+}
+```
+
+## No Navigation in Section Screens
+
+Section screen designs should not include navigation chrome like headers, sidebars, or menus.
+
+<Warning>
+**The shell handles all navigation.** Section components focus only on the feature-specific UI.
+</Warning>
+
+### What Belongs in Sections
+
+- Feature-specific UI and content
+- Data displays (tables, cards, lists)
+- Forms and input controls
+- Filters and search
+- Modals and dialogs
+- Feature-specific actions and buttons
+
+### What Belongs in Shell
+
+- Main navigation menu
+- User menu and profile
+- Global search
+- Notifications
+- Application header/footer
+- Persistent layout structure
+
+<Tip>
+If you're designing a list view with filters, the filters belong in the section. The main nav belongs in the shell.
+</Tip>
+
+## Empty States
+
+All screen designs should include proper empty states.
+
+### What is an Empty State?
+
+The UI shown when there's no data to display—like a first-time user's experience.
+
+### Good Empty States Include
+
+1. **Clear explanation** — Tell users what would go here
+2. **Call to action** — Button or link to create first item
+3. **Visual element** — Icon or illustration (optional)
+4. **Helpful context** — Why this section is useful
+
+<Accordion title="Empty State Example">
+```tsx
+export function ProjectList({ projects, onCreateProject }: ProjectListProps) {
+  if (projects.length === 0) {
+    return (
+      <div className="
+        flex flex-col items-center justify-center
+        py-12 px-4
+        text-center
+      ">
+        <div className="
+          w-16 h-16 mb-4
+          bg-stone-100 dark:bg-stone-900
+          rounded-full
+          flex items-center justify-center
+        ">
+          <FolderIcon className="w-8 h-8 text-stone-400" />
+        </div>
+        
+        <h3 className="
+          text-lg font-semibold
+          text-stone-900 dark:text-stone-100
+          mb-2
+        ">
+          No projects yet
+        </h3>
+        
+        <p className="
+          text-stone-600 dark:text-stone-400
+          text-sm
+          mb-6
+          max-w-md
+        ">
+          Create your first project to start organizing your work.
+        </p>
+        
+        <button 
+          onClick={onCreateProject}
+          className="
+            bg-lime-500 hover:bg-lime-600
+            text-white
+            px-4 py-2
+            rounded
+            text-sm font-medium
+          "
+        >
+          Create Project
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {projects.map(project => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </div>
+  )
+}
+```
+</Accordion>
+
+## Accessibility
+
+While not strictly enforced, consider basic accessibility:
+
+- Use semantic HTML elements (`button`, `nav`, `header`, `main`)
+- Provide alt text for images
+- Ensure sufficient color contrast
+- Use focus styles for keyboard navigation
+- Add `aria-label` for icon-only buttons
+
+```tsx
+{/* Good semantic HTML */}
+<button onClick={handleClick}>Save</button>
+
+{/* Icon button with label */}
+<button aria-label="Close modal" onClick={onClose}>
+  <XIcon className="w-5 h-5" />
+</button>
+```
+
+## Summary Checklist
+
+Before exporting, verify your screen designs meet all requirements:
+
+- [ ] Uses Tailwind CSS v4 (no tailwind.config.js)
+- [ ] Uses only built-in Tailwind utilities and colors
+- [ ] Fully responsive with mobile-first approach
+- [ ] Supports both light and dark modes
+- [ ] Uses design tokens consistently
+- [ ] Components are props-based (no direct data imports)
+- [ ] Accepts callbacks for user interactions
+- [ ] No navigation chrome in section components
+- [ ] Includes proper empty states
+- [ ] Uses semantic HTML where possible
+
+<Tip>
+Following these requirements ensures your screen designs are production-ready and can be seamlessly integrated into any React application.
+</Tip>
